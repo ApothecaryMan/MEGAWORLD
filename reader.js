@@ -186,12 +186,25 @@ window.addEventListener('scroll', () => {
     if (Store.activeChapterIdx !== currentIdx) {
       Store.activeNovel.activeChapterIdx = currentIdx;
       updateActiveUI();
+      if (typeof stats === 'function') {
+        const currentCh = Store.chapters[currentIdx];
+        if (currentCh) stats(currentCh.content || '');
+      }
     }
   }
 });
 
 function updateActiveUI() {
-  document.querySelectorAll('.tab').forEach((t, idx) => t.classList.toggle('active', idx === Store.activeChapterIdx));
+  const activeIdx = Store.activeChapterIdx;
+  document.querySelectorAll('.tab').forEach((t, idx) => t.classList.toggle('active', idx === activeIdx));
+  
+  const sideList = document.getElementById('sideList');
+  if (sideList) {
+    sideList.querySelectorAll('.list-item-flat').forEach((item, idx) => {
+      item.classList.toggle('active', idx === activeIdx);
+    });
+  }
+  
   updateNavUI();
 }
 
