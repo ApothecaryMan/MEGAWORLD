@@ -413,21 +413,177 @@
           </div>
         </div>
 
-        <!-- 2. Open Dropdown (for demo) -->
-        <div>
-          <label style="font-size: 11px; opacity: 0.6; display: block; margin-bottom: 8px;">خيايرة التصفية (مفتوح)</label>
-          <div class="dropdown-wrap open">
-            <div class="dropdown-trigger">
-              <span>تصفية حسب الحالة</span>
-              <i class="ti ti-chevron-up"></i>
-            </div>
-            <div class="dropdown-menu">
-              <button class="dropdown-item">جميع الفصول <i class="ti ti-list"></i></button>
-              <button class="dropdown-item">غير المقروءة <i class="ti ti-eye-off"></i></button>
-              <button class="dropdown-item">المفضلة <i class="ti ti-star"></i></button>
-              <button class="dropdown-item accent">تحميل الكل <i class="ti ti-download"></i></button>
+
+      </div>
+    </div>
+
+
+    <div class="test-section">
+      <h2>User Profile (Toolbar Style)</h2>
+      <div style="display: flex; flex-direction: column; gap: 20px;">
+        
+        <!-- 1. Standalone Component States -->
+        <div class="flex-row" style="gap: 40px; align-items: center;">
+          <div>
+            <label style="font-size: 11px; opacity: 0.6; display: block; margin-bottom: 8px;">الحالة العادية</label>
+            <div class="toolbar-user">
+              <div class="user-avatar">
+                <img src="public/ChatGPT Image May 7, 2026, 07_38_24 PM.png" alt="User">
+              </div>
+              <span class="user-name">أحمد محمد علي</span>
+              <i class="ti ti-chevron-down user-chevron"></i>
             </div>
           </div>
+
+          <div>
+            <label style="font-size: 11px; opacity: 0.6; display: block; margin-bottom: 8px;">حالة التحويم (Hover)</label>
+            <div class="toolbar-user" style="background: var(--ui-hover-bg); border-color: var(--ui-border);">
+              <div class="user-avatar">
+                <img src="public/ChatGPT Image May 7, 2026, 07_42_42 PM.png" alt="User">
+              </div>
+              <span class="user-name">سارة خالد</span>
+              <i class="ti ti-chevron-down user-chevron"></i>
+            </div>
+          </div>
+
+          <div>
+            <label style="font-size: 11px; opacity: 0.6; display: block; margin-bottom: 8px;">الحالة النشطة (Active)</label>
+            <div class="toolbar-user active">
+              <div class="user-avatar">
+                <i class="ti ti-user" style="opacity: 0.5;"></i>
+              </div>
+              <span class="user-name">زائر مجهول</span>
+              <i class="ti ti-chevron-down user-chevron"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Integration in Toolbar Mockup -->
+        <div>
+          <label style="font-size: 11px; opacity: 0.6; display: block; margin-bottom: 8px;">تكامل في شريط الأدوات</label>
+          <div class="sticky-bar" style="position: relative; border: 1px solid var(--ui-border);">
+            <div class="toolbar-side side-right">
+              <h1 class="site-name" style="font-size: 13px;">MEGAWORLD</h1>
+              <div class="sep"></div>
+              <button class="btn-flat"><i class="ti ti-home"></i> الرئيسية</button>
+            </div>
+            
+            <div class="toolbar-side side-center">
+              <input type="text" class="input-flat" placeholder="بحث عن رواية..." style="width: 250px;">
+            </div>
+
+            <div class="toolbar-side side-left">
+              <div class="toolbar-user">
+                <div class="user-avatar">
+                  <img src="public/ChatGPT Image May 7, 2026, 08_01_54 PM.png" alt="User">
+                </div>
+                <span class="user-name">خالد محمود</span>
+                <i class="ti ti-chevron-down user-chevron"></i>
+              </div>
+              <div class="sep"></div>
+              <button class="btn-icon"><i class="ti ti-bell"></i></button>
+              <button class="btn-icon"><i class="ti ti-settings"></i></button>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="test-section">
+      <h2>User Profile Menu (Full Design)</h2>
+      <div style="display: flex; gap: 40px; align-items: flex-start;">
+        
+        <!-- 1. Menu Component -->
+        <div class="profile-menu" style="position: static; box-shadow: none;">
+          <div class="profile-header">
+            <div class="profile-avatar-big">
+              <img src="public/ChatGPT Image May 7, 2026, 07_38_24 PM.png" alt="User">
+            </div>
+            <div class="profile-info-main">
+              <div class="profile-display-name">أحمد محمد علي</div>
+              <div class="profile-status">
+                <span>عضو ذهبي</span>
+                <span class="profile-level">ليفل 45</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="profile-menu-body">
+            <button class="profile-menu-item">
+              <i class="ti ti-user-circle"></i>
+              <span class="item-label">ملفي الشخصي</span>
+            </button>
+            <button class="profile-menu-item">
+              <i class="ti ti-bookmarks"></i>
+              <span class="item-label">المكتبة الخاصة</span>
+              <span class="item-badge">12</span>
+            </button>
+            <button class="profile-menu-item">
+              <i class="ti ti-history"></i>
+              <span class="item-label">سجل القراءة</span>
+            </button>
+            
+            <div class="profile-menu-sep"></div>
+            
+            <button class="profile-menu-item">
+              <i class="ti ti-settings"></i>
+              <span class="item-label">إعدادات الحساب</span>
+            </button>
+            <button class="profile-menu-item">
+              <i class="ti ti-help-circle"></i>
+              <span class="item-label">مركز المساعدة</span>
+            </button>
+          </div>
+          
+          <div class="profile-footer">
+            <button class="btn-flat" style="border-color: #ff5f5f; color: #ff5f5f;">تسجيل الخروج</button>
+            <button class="btn-flat">تبديل الحساب</button>
+          </div>
+        </div>
+
+        <!-- 2. Integration Demo -->
+        <div style="flex: 1;">
+          <label style="font-size: 11px; opacity: 0.6; display: block; margin-bottom: 8px;">معاينة الظهور عند الضغط</label>
+          <div class="sticky-bar" style="position: relative; border: 1px solid var(--ui-border); height: 48px; display: flex; align-items: center; justify-content: flex-end; padding: 0 15px; overflow: visible;">
+            
+            <div class="toolbar-user active" id="userTrigger">
+              <div class="user-avatar">
+                <img src="public/ChatGPT Image May 7, 2026, 07_38_24 PM.png" alt="User">
+              </div>
+              <span class="user-name">أحمد محمد علي</span>
+              <i class="ti ti-chevron-up user-chevron"></i>
+
+              <!-- The actual popup -->
+              <div class="profile-menu">
+                <div class="profile-header">
+                  <div class="profile-avatar-big">
+                    <img src="public/ChatGPT Image May 7, 2026, 07_38_24 PM.png" alt="User">
+                  </div>
+                  <div class="profile-info-main">
+                    <div class="profile-display-name">أحمد محمد علي</div>
+                    <div class="profile-status">
+                      <span>عضو ذهبي</span>
+                      <span class="profile-level">ليفل 45</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="profile-menu-body">
+                  <button class="profile-menu-item"><i class="ti ti-user"></i> <span class="item-label">الملف الشخصي</span></button>
+                  <button class="profile-menu-item"><i class="ti ti-settings"></i> <span class="item-label">الإعدادات</span></button>
+                  <div class="profile-menu-sep"></div>
+                  <button class="profile-menu-item" style="color: #ff5f5f;"><i class="ti ti-logout"></i> <span class="item-label">تسجيل الخروج</span></button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <p style="font-size: 11px; opacity: 0.5; margin-top: 15px; line-height: 1.6;">
+            * تم تصميم النافذة لتكون "Pure Flat" بالكامل.<br>
+            * تم استخدام متغيرات الألوان من النظام لضمان التوافق مع الوضع الليلي.<br>
+            * النافذة تظهر فوق جميع العناصر الأخرى (z-index: 2100).
+          </p>
         </div>
 
       </div>
@@ -600,6 +756,7 @@
 
   </div>
 </div>
+
 
 <script>
   function setTheme(theme) {
