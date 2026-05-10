@@ -360,8 +360,7 @@ function applyGlobalUI() {
   const settings = Store.state.settings;
   
   // تطبيق الثيم
-  const allThemes = ['bg-def', 'bg-blue', 'bg-ivory', 'bg-mint', 'bg-pink', 'bg-gray', 'bg-sky', 'bg-night', 'bg-dark', 'bg-oled'];
-  allThemes.forEach(cls => root.classList.remove(cls));
+  Store.palettes.forEach(p => root.classList.remove(p.id));
   root.classList.add(settings.theme);
 
   // تحديث الأزرار (مع استثناء التبويبات)

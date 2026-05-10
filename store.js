@@ -27,7 +27,10 @@ const Store = {
     { id: 'bg-sky', label: 'سماوي', bg: '#eff6ff', text: '#1e2f4a' },
     { id: 'bg-night', label: 'ليلي', bg: '#1a1a2e', text: '#e0d8c8' },
     { id: 'bg-dark', label: 'داكن', bg: '#212121', text: '#d4c9b0' },
-    { id: 'bg-oled', label: '(OLED)', bg: '#000000', text: '#ffffff' }
+    { id: 'bg-oled', label: '(OLED)', bg: '#000000', text: '#ffffff' },
+    { id: 'bg-forest', label: 'غابة', bg: '#0d1f17', text: '#b8e8c8' },
+    { id: 'bg-abyss', label: 'هاوية', bg: '#0a0f1e', text: '#c4cfe8' },
+    { id: 'bg-ember', label: 'جمر', bg: '#1c1208', text: '#e8c89a' }
   ],
 
   // --- التهيئة (Initialization) ---
