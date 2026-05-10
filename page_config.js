@@ -29,28 +29,17 @@ const MEGA_PAGES = {
       {
         type: 'top5',
         title: 'أشهــــر 3 روايات',
-        items: [
-          { rank: 1, title: 'سيد الأسرار: العودة', desc: 'رحلة ملحمية في عالم السحر والغموض. استكشف العوالم الخفية وواجه الأسرار القديمة.', cover: 'public/ChatGPT Image May 7, 2026, 07_38_24 PM.png' },
-          { rank: 2, title: 'ظل الإمبراطور', meta: '1.8M مشاهدة', cover: 'public/ChatGPT Image May 7, 2026, 07_42_42 PM.png' },
-          { rank: 3, title: 'نجم الشمال', meta: '1.2M مشاهدة', cover: 'public/ChatGPT Image May 7, 2026, 08_01_54 PM.png' },
-     
-        ]
+        items: []
       },
       {
         type: 'trending',
         title: 'القائمــــة الرائجـة حاليــــاً',
-        items: [
-          { rank: 6, title: 'القدر المحتوم', author: 'محمود بكري', meta: '700K مشاهدة', cover: 'public/ChatGPT Image May 7, 2026, 07_42_42 PM.png' },
-          { rank: 7, title: 'عالم موازي', author: 'ليلى حسن', meta: '650K مشاهدة', cover: 'public/ChatGPT Image May 7, 2026, 08_01_54 PM.png' }
-        ]
+        items: []
       },
       {
         type: 'grid',
         title: 'أحـدث الإضافــــات',
-        items: [
-          { title: 'مملكة الأسرار', author: 'أحمد خالد', cover: 'public/ChatGPT Image May 7, 2026, 07_38_24 PM.png' },
-          { title: 'ظل الإمبراطور', author: 'سارة سليم', cover: 'public/ChatGPT Image May 7, 2026, 07_42_42 PM.png' }
-        ]
+        items: []
       },
       { type: 'footer', text: '&copy; 2026 MEGAWORLD Design Language.' }
     ]
@@ -68,6 +57,7 @@ const MEGA_PAGES = {
         html: `<div class="stat"><span id="wc">0</span>&nbsp;كلمة</div><div class="stats-divider"></div>
                <div class="stat"><span id="cc">0</span>&nbsp;حرف</div><div class="stats-divider"></div>
                <div class="stat"><span id="rt">0</span>&nbsp;<span id="rt-lbl">دقيقة</span></div><div class="stats-divider"></div>
+               <div class="stat"><i class="ti ti-eye" style="font-size:12px; opacity:0.6;"></i>&nbsp;<span id="vc">0</span></div><div class="stats-divider"></div>
                <div class="stat" id="navInfo">1 / 1</div>`
       },
       {

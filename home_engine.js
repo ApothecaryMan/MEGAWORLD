@@ -6,24 +6,56 @@ const HomeEngine = {
   containerId: null,
   schema: [],
 
-  init(containerId, schema) {
-    this.containerId = containerId;
-    this.schema = schema;
-    this.render();
-  },
-
-  render() {
-    const container = document.getElementById(this.containerId);
+  init(containerId, config) {
+    const container = document.getElementById(containerId);
     if (!container) return;
-    container.innerHTML = '';
-
-    this.schema.forEach(section => {
-      const el = this.createSection(section);
-      if (el) container.appendChild(el);
-    });
+    this.container = container;
+    this.render(config);
   },
 
-  createSection(section) {
+  render(config) {
+    this.container.innerHTML = '';
+    const allRealNovels = Store.state.novels || [];
+    
+    // ترتيب الروايات حسب المشاهدات (ترتيب منفصل للرائج)
+    const sortedByViews = [...allRealNovels].sort((a, b) => this.getViews(b) - this.getViews(a));
+
+    config.forEach(section => {
+      let node;
+      if (['top5', 'trending', 'grid'].includes(section.type)) {
+        if (section.type === 'top5') {
+          const top3 = sortedByViews.slice(0, 3);
+          if (top3.length > 0) {
+            node = this.makeTop5({ title: section.title, items: top3 });
+          }
+        } else if (section.type === 'trending') {
+          // الروايات التي تلي المراكز الثلاثة الأولى في ترتيب المشاهدات
+          const trending = sortedByViews.slice(0, 10);
+          if (trending.length > 0) {
+            node = this.makeTrending({ title: section.title, items: trending.map((n, i) => ({ ...n, rank: i + 1 })) });
+          }
+        } else if (section.type === 'grid') {
+          if (allRealNovels.length > 0) {
+            node = this.makeGrid({ title: section.title, items: allRealNovels });
+          }
+        }
+      } else {
+        node = this.renderSection(section);
+      }
+
+      if (node) this.container.appendChild(node);
+    });
+
+    if (allRealNovels.length === 0) {
+      this.container.innerHTML = `<div style="text-align:center; padding:100px; opacity:0.5;">
+        <i class="ti ti-book-off" style="font-size:48px;"></i>
+        <h2 style="margin-top:20px;">مكتبتك فارغة حالياً</h2>
+        <p>ابدأ بإضافة رواياتك المفضلة من صفحة القارئ لتظهر هنا.</p>
+      </div>`;
+    }
+  },
+
+  renderSection(section) {
     switch (section.type) {
       case 'top5': return this.makeTop5(section);
       case 'trending': return this.makeTrending(section);
@@ -49,35 +81,35 @@ const HomeEngine = {
         <!-- Rank 1: Full Luxury (Hero) -->
         <div class="rank-tier-1">
           <div class="rank-badge">1</div>
-          <img src="${hero.cover}" class="novel-cover">
+          <img src="${hero.cover || 'public/ChatGPT Image May 7, 2026, 07_38_24 PM.png'}" class="novel-cover">
           <div class="rank-tier-1-info" style="flex: 1;">
             <div style="font-size: 11px; opacity: 0.5; text-transform: uppercase; letter-spacing: 3px; font-weight: 800; margin-bottom: 5px;">رواية الشهر الأولى</div>
-            <h3>${hero.title}</h3>
+            <h3>${hero.title || '---'}</h3>
             
             <div class="rank-meta-row">
-              <span class="rank-author">بواسطة: ${hero.author || 'كاتب مجهول'}</span>
+              <span class="rank-author">بواسطة: ${hero.author || '---'}</span>
               <span class="rank-sep">•</span>
-              <span class="rank-status">مكتملة</span>
+              <span class="rank-status">${hero.status || '---'}</span>
             </div>
 
             <div class="rank-meta-tags">
-              ${(hero.tags || ['خيال', 'سحر', 'أكشن']).map(tag => `<span class="rank-tag">${tag}</span>`).join('')}
+              ${(hero.genres || ['---']).map(tag => `<span class="rank-tag">${tag}</span>`).join('')}
             </div>
 
-            <p class="rank-desc">${hero.desc}</p>
+            <p class="rank-desc">${hero.description || 'لا يوجد وصف متاح حالياً.'}</p>
             
             <div class="rank-stats-row">
               <div class="rank-stat">
                 <i class="ti ti-eye"></i>
-                <span>1.2M مشاهدة</span>
+                <span>${this.formatNum(this.getViews(hero))} مشاهدة</span>
               </div>
               <div class="rank-stat">
                 <i class="ti ti-list"></i>
-                <span>850 فصل</span>
+                <span>${hero.chapters ? hero.chapters.length : '---'} فصل</span>
               </div>
               <div class="rank-stat">
                 <i class="ti ti-star"></i>
-                <span>4.8 التقييم</span>
+                <span>${hero.rating || '---'} التقييم</span>
               </div>
             </div>
 
@@ -96,22 +128,21 @@ const HomeEngine = {
           ${featured.map((item, i) => `
             <div class="rank-item-m" style="position: relative; cursor: pointer;" onclick="window.location.href='novel.html?id=${this.getNovelId(item.title)}'">
               <div class="rank-badge">${i + 2}</div>
-              <img src="${item.cover}" class="rank-item-m-cover">
+              <img src="${item.cover || 'public/ChatGPT Image May 7, 2026, 07_38_24 PM.png'}" class="rank-item-m-cover">
               <div class="rank-item-m-info">
                 <div>
-                  <div class="rank-item-m-title">${item.title}</div>
-                  <div class="rank-item-m-author">بواسطة: ${item.author || 'كاتب مجهول'}</div>
+                  <div class="rank-item-m-title">${item.title || '---'}</div>
+                  <div class="rank-item-m-author">بواسطة: ${item.author || '---'}</div>
                 </div>
                 
                 <div class="rank-item-m-stats">
-                  <span><i class="ti ti-eye"></i> 1.8M</span>
-                  <span><i class="ti ti-list"></i> 450 فصل</span>
-                  <span><i class="ti ti-star"></i> 4.7</span>
+                  <span><i class="ti ti-eye"></i> ${this.formatNum(this.getViews(item))}</span>
+                  <span><i class="ti ti-list"></i> ${item.chapters ? item.chapters.length : '---'} فصل</span>
+                  <span><i class="ti ti-star"></i> ${item.rating || '---'}</span>
                 </div>
 
                 <div class="rank-item-m-tags">
-                  <span class="rank-tag-mini">أكشن</span>
-                  <span class="rank-tag-mini">دراما</span>
+                  ${(item.genres || ['---']).slice(0, 2).map(tag => `<span class="rank-tag-mini">${tag}</span>`).join('')}
                 </div>
 
                 <div class="rank-item-m-actions">
@@ -141,14 +172,14 @@ const HomeEngine = {
         ${data.items.map(item => `
           <div class="novel-card" onclick="window.location.href='novel.html?id=${this.getNovelId(item.title)}'">
             <div class="rank-badge" style="top: 8px; right: 8px; width: 30px; height: 30px; font-size: 14px;">${item.rank}</div>
-            <img src="${item.cover}" class="novel-card-poster">
+            <img src="${item.cover || 'public/ChatGPT Image May 7, 2026, 07_38_24 PM.png'}" class="novel-card-poster">
             <div class="novel-card-info">
-              <div class="novel-card-title">${item.title}</div>
-              <div class="novel-card-author">${item.author || ''}</div>
+              <div class="novel-card-title">${item.title || '---'}</div>
+              <div class="novel-card-author">${item.author || '---'}</div>
               <div class="novel-card-stats">
-                <span>1.8M <i class="ti ti-eye"></i></span>
-                <span>450 فصل <i class="ti ti-list"></i></span>
-                <span>4.7 <i class="ti ti-star"></i></span>
+                <span>${this.formatNum(this.getViews(item))} <i class="ti ti-eye"></i></span>
+                <span>${item.chapters ? item.chapters.length : '---'} فصل <i class="ti ti-list"></i></span>
+                <span>${item.rating || '---'} <i class="ti ti-star"></i></span>
               </div>
             </div>
           </div>
@@ -171,14 +202,14 @@ const HomeEngine = {
       <div class="novel-grid">
         ${data.items.map(item => `
           <div class="novel-card" onclick="window.location.href='novel.html?id=${this.getNovelId(item.title)}'">
-            <img src="${item.cover}" class="novel-card-poster">
+            <img src="${item.cover || 'public/ChatGPT Image May 7, 2026, 07_38_24 PM.png'}" class="novel-card-poster">
             <div class="novel-card-info">
-              <div class="novel-card-title">${item.title}</div>
-              <div class="novel-card-author">${item.author || ''}</div>
+              <div class="novel-card-title">${item.title || '---'}</div>
+              <div class="novel-card-author">${item.author || '---'}</div>
               <div class="novel-card-stats">
-                <span>1.2M <i class="ti ti-eye"></i></span>
-                <span>380 فصل <i class="ti ti-list"></i></span>
-                <span>4.5 <i class="ti ti-star"></i></span>
+                <span>${this.formatNum(this.getViews(item))} <i class="ti ti-eye"></i></span>
+                <span>${item.chapters ? item.chapters.length : '---'} فصل <i class="ti ti-list"></i></span>
+                <span>${item.rating || '---'} <i class="ti ti-star"></i></span>
               </div>
             </div>
           </div>
@@ -205,5 +236,18 @@ const HomeEngine = {
     if (!Store || !Store.state || !Store.state.novels) return 0;
     const idx = Store.state.novels.findIndex(n => n.title === title);
     return idx !== -1 ? idx : 0;
+  },
+
+  getViews(item) {
+    if (!item.chapters || item.chapters.length === 0) return 0;
+    const views = item.chapters.map(ch => ch.views || 0);
+    return Math.max(...views);
+  },
+
+  formatNum(num) {
+    if (!num || isNaN(num)) return 0;
+    if (num >= 1000000) return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+    if (num >= 1000) return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
+    return num.toLocaleString();
   }
 };

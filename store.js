@@ -52,12 +52,12 @@ const Store = {
     return this.activeNovel ? this.activeNovel.activeChapterIdx : 0;
   },
 
-  addNovel(title = 'رواية جديدة', author = 'مؤلف مجهول', chapters = null) {
+  addNovel(title = 'رواية جديدة', author = 'مؤلف مجهول', cover = 'public/ChatGPT Image May 7, 2026, 07_38_24 PM.png', chapters = null) {
     const novel = {
       title,
       author,
       description: 'لا يوجد وصف متاح حالياً لهذه الرواية.',
-      cover: 'public/ChatGPT Image May 7, 2026, 07_38_24 PM.png', // غلاف افتراضي
+      cover,
       status: 'مستمرة',
       genres: ['عام'],
       chapters: chapters || [{ title: 'فصل 1', content: '' }],
@@ -85,6 +85,14 @@ const Store = {
     }
   },
 
+  updateNovelCover(idx, cover) {
+    if (this.state.novels[idx]) {
+      this.state.novels[idx].cover = cover;
+      this.save();
+      this.notify();
+    }
+  },
+
   deleteNovel(idx) {
     if (this.state.novels.length > 1) {
       this.state.novels.splice(idx, 1);
@@ -101,11 +109,20 @@ const Store = {
     if (this.activeNovel) {
       const idx = this.activeNovel.chapters.push({
         title: 'فصل ' + (this.activeNovel.chapters.length + 1),
-        content: ''
+        content: '',
+        views: 0
       }) - 1;
       this.activeNovel.activeChapterIdx = idx;
       this.save();
       this.notify('chapter-added');
+    }
+  },
+
+  incrementChapterViews(idx) {
+    if (this.activeNovel && this.activeNovel.chapters[idx]) {
+      const ch = this.activeNovel.chapters[idx];
+      ch.views = (ch.views || 0) + 1;
+      this.save();
     }
   },
 
@@ -137,7 +154,7 @@ const Store = {
     if (this.activeNovel && idx >= 0 && idx < this.activeNovel.chapters.length) {
       this.activeNovel.activeChapterIdx = idx;
       this.save();
-      this.notify();
+      this.notify('chapter-changed');
     }
   },
 

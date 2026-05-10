@@ -32,6 +32,7 @@ function renderLibrary() {
       ContextMenu.show(e, [
         { label: 'فتح الرواية', icon: 'ti-book', action: () => Store.switchNovel(i) },
         { label: 'تغيير الاسم', icon: 'ti-edit', action: () => renameNovel(i) },
+        { label: 'تغيير صورة الغلاف', icon: 'ti-photo', action: () => changeNovelCover(i) },
         { label: 'إضافة فصل للرواية', icon: 'ti-plus', action: () => { Store.switchNovel(i); Store.addChapter(); } },
         { sep: true },
         { label: 'إضافة رواية نموذجية', icon: 'ti-package', action: () => importExampleNovel() },
@@ -67,7 +68,28 @@ function renderLibrary() {
 }
 
 function addNovel() {
-  Store.addNovel();
+  const title = prompt('أدخل اسم الرواية الجديدة:', 'رواية جديدة');
+  if (!title) return;
+  
+  const picker = document.getElementById('coverPicker');
+  if (picker) {
+    picker.onchange = (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (re) => {
+          Store.addNovel(title.trim(), 'مؤلف مجهول', re.target.result);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        Store.addNovel(title.trim());
+      }
+      picker.value = ''; // Reset
+    };
+    picker.click();
+  } else {
+    Store.addNovel(title.trim());
+  }
 }
 
 function switchNovel(i) {
@@ -85,6 +107,24 @@ function renameNovel(i) {
     Store.state.novels[i].title = n.trim();
     Store.save();
     Store.notify();
+  }
+}
+
+function changeNovelCover(i) {
+  const picker = document.getElementById('coverPicker');
+  if (picker) {
+    picker.onchange = (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (re) => {
+          Store.updateNovelCover(i, re.target.result);
+        };
+        reader.readAsDataURL(file);
+      }
+      picker.value = ''; // Reset
+    };
+    picker.click();
   }
 }
 

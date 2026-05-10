@@ -353,32 +353,6 @@ function buildSwatches() {
   c.appendChild(btn);
 }
 
-function stats(text) {
-  const w = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
-  const ch = text.replace(/\s/g, '').length;
-  const m = Math.max(1, Math.round(w / 200));
-  
-  const shortNum = (n) => {
-    if (n >= 1000) {
-      const val = (n / 1000).toFixed(1).replace(/\.0$/, '');
-      return val + '<small style="font-size:6px; opacity:0.7;">ألف</small>';
-    }
-    return n.toLocaleString('ar-EG');
-  };
-  
-  const wc = document.getElementById('wc');
-  const cc = document.getElementById('cc');
-  const rt = document.getElementById('rt');
-  const rtLbl = document.getElementById('rt-lbl');
-
-  if (wc) wc.innerHTML = shortNum(w);
-  if (cc) cc.innerHTML = shortNum(ch);
-  if (rt && rtLbl) {
-    if (m === 1) { rt.textContent = ''; rtLbl.textContent = 'دقيقة واحدة'; }
-    else if (m === 2) { rt.textContent = ''; rtLbl.textContent = 'دقيقتان'; }
-    else { rt.innerHTML = shortNum(m); rtLbl.textContent = (m >= 3 && m <= 10) ? 'دقائق' : 'دقيقة'; }
-  }
-}
 
 function applyGlobalUI() {
   const root = document.getElementById('root');
