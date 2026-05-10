@@ -262,7 +262,7 @@ function applyGlobalUI() {
   const settings = Store.state.settings;
   
   // تطبيق الثيم
-  const allThemes = ['bg-def', 'bg-ivory', 'bg-mint', 'bg-pink', 'bg-gray', 'bg-sky', 'bg-night', 'bg-dark'];
+  const allThemes = ['bg-def', 'bg-blue', 'bg-ivory', 'bg-mint', 'bg-pink', 'bg-gray', 'bg-sky', 'bg-night', 'bg-dark', 'bg-oled'];
   allThemes.forEach(cls => root.classList.remove(cls));
   root.classList.add(settings.theme);
 

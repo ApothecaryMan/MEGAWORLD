@@ -21,14 +21,83 @@
 }
 
 /* تعريف الثيمات */
-.root.bg-def   { --color-background-primary: #f5f3f0; --color-text-primary: #2d2d2d; --color-theme: #0078d4; --color-on-theme: #ffffff; }
-.root.bg-ivory { --color-background-primary: #fdf6e3; --color-text-primary: #3b3020; --color-theme: #3b3020; --color-on-theme: #fdf6e3; }
+.root.bg-def { 
+  --color-background-primary: #f5f3f0; 
+  --color-text-primary: #2d2d2d; 
+  --color-theme: #2d2d2d; /* لون طبيعي محايد */
+  --color-on-theme: #f5f3f0;
+  --ui-border: rgba(0, 0, 0, 0.15); 
+  --ui-border-light: rgba(0, 0, 0, 0.05); 
+  --ui-hover-bg: rgba(0, 0, 0, 0.05); 
+  --ui-active-bg: rgba(0, 0, 0, 0.1); 
+  --ui-input-bg: rgba(0, 0, 0, 0.03); 
+}
+
+.root.bg-ivory { 
+  --color-background-primary: #fdf6e3; 
+  --color-text-primary: #3b3020; 
+  --color-theme: #3b3020; 
+  --color-on-theme: #fdf6e3;
+  --ui-border: rgba(59, 48, 32, 0.2); 
+  --ui-border-light: rgba(59, 48, 32, 0.1); 
+  --ui-hover-bg: rgba(59, 48, 32, 0.05); 
+  --ui-active-bg: rgba(59, 48, 32, 0.1); 
+  --ui-input-bg: rgba(0, 0, 0, 0.02); 
+}
+
+.root.bg-night { 
+  --color-background-primary: #1a1a2e; 
+  --color-text-primary: #e0d8c8; 
+  --color-theme: #e0d8c8; 
+  --color-on-theme: #1a1a2e;
+  --ui-border: rgba(224, 216, 200, 0.2); 
+  --ui-border-light: rgba(224, 216, 200, 0.1); 
+  --ui-hover-bg: rgba(224, 216, 200, 0.08); 
+  --ui-active-bg: rgba(224, 216, 200, 0.15); 
+  --ui-input-bg: rgba(255, 255, 255, 0.05); 
+}
+
+.root.bg-dark { 
+  --color-background-primary: #212121; 
+  --color-text-primary: #d4c9b0; 
+  --color-theme: #d4c9b0; 
+  --color-on-theme: #212121;
+  --ui-border: rgba(212, 201, 176, 0.2); 
+  --ui-border-light: rgba(212, 201, 176, 0.1); 
+  --ui-hover-bg: rgba(212, 201, 176, 0.08); 
+  --ui-active-bg: rgba(212, 201, 176, 0.15); 
+  --ui-input-bg: rgba(255, 255, 255, 0.05); 
+}
+
+.root.bg-blue { 
+  --color-background-primary: #f5f3f0; 
+  --color-text-primary: #2d2d2d; 
+  --color-theme: #0078d4; 
+  --color-on-theme: #ffffff;
+  --ui-border: rgba(0, 120, 212, 0.2); 
+  --ui-border-light: rgba(0, 120, 212, 0.1); 
+  --ui-hover-bg: rgba(0, 120, 212, 0.05); 
+  --ui-active-bg: rgba(0, 120, 212, 0.1); 
+  --ui-input-bg: rgba(0, 0, 0, 0.03); 
+}
+
+.root.bg-oled { 
+  --color-background-primary: #000000; 
+  --color-text-primary: #e0e0e0; 
+  --color-theme: #ffffff; 
+  --color-on-theme: #000000;
+  --ui-border: rgba(255, 255, 255, 0.15); 
+  --ui-border-light: rgba(255, 255, 255, 0.05); 
+  --ui-hover-bg: rgba(255, 255, 255, 0.1); 
+  --ui-active-bg: rgba(255, 255, 255, 0.15); 
+  --ui-input-bg: rgba(255, 255, 255, 0.05); 
+}
+
+/* باقي الثيمات تستخدم الافتراضي من :root حالياً */
 .root.bg-pink  { --color-background-primary: #fdf0f0; --color-text-primary: #3a1e1e; --color-theme: #b91c1c; --color-on-theme: #ffffff; }
 .root.bg-mint  { --color-background-primary: #f0fdf5; --color-text-primary: #1a3326; --color-theme: #059669; --color-on-theme: #ffffff; }
 .root.bg-sky   { --color-background-primary: #eff6ff; --color-text-primary: #1e2f4a; --color-theme: #2563eb; --color-on-theme: #ffffff; }
 .root.bg-gray  { --color-background-primary: #f4f4f2; --color-text-primary: #2a2a2a; --color-theme: #2a2a2a; --color-on-theme: #f4f4f2; }
-.root.bg-night { --color-background-primary: #1a1a2e; --color-text-primary: #e0d8c8; --color-theme: #e0d8c8; --color-on-theme: #1a1a2e; }
-.root.bg-dark  { --color-background-primary: #212121; --color-text-primary: #d4c9b0; --color-theme: #d4c9b0; --color-on-theme: #212121; }
 
 .root.bg-def   ::selection { background: rgba(0,120,215,0.2); }
 .root.bg-ivory ::selection { background: #e9e0cf; }
@@ -67,14 +136,14 @@ body {
   line-height: 1; outline: none;
 }
 .btn-flat:hover { 
-  background: var(--color-text-primary); 
-  color: var(--color-background-primary); 
-  border-color: var(--color-text-primary); 
+  background: var(--color-theme); 
+  color: var(--color-on-theme); 
+  border-color: var(--color-theme); 
 }
 .btn-flat.active { 
-  background: var(--color-text-primary); 
-  color: var(--color-background-primary); 
-  border-color: var(--color-text-primary); 
+  background: var(--color-theme); 
+  color: var(--color-on-theme); 
+  border-color: var(--color-theme); 
 }
 
 .btn-icon {
@@ -86,8 +155,8 @@ body {
 }
 .btn-icon:hover { 
   opacity: 1; 
-  color: var(--color-background-primary);
-  background: var(--color-text-primary); 
+  color: var(--color-on-theme);
+  background: var(--color-theme); 
 }
 
 .input-flat {
@@ -105,8 +174,8 @@ body {
   color: inherit; background: transparent; border: none;
   cursor: pointer; text-align: right; opacity: 0.7;
 }
-.list-item-flat:hover { background: var(--ui-hover-bg); opacity: 1; }
-.list-item-flat.active { background: var(--ui-active-bg); opacity: 1; font-weight: bold; }
+.list-item-flat:hover { background: var(--ui-hover-bg); opacity: 1; color: var(--color-theme); }
+.list-item-flat.active { background: var(--ui-active-bg); opacity: 1; font-weight: bold; color: var(--color-theme); border-right: 3px solid var(--color-theme); }
 
 
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -163,11 +232,11 @@ body {
 /* Ornamental Divider */
 .orn{display:flex;flex-direction:column;align-items:center;margin:14px 0;}
 .orn-line{width:100%;max-width:400px;height:1px;background:currentColor;opacity:.15;}
-.orn-dot{width:6px;height:6px;border:1px solid currentColor;opacity:.22;transform:rotate(45deg);margin:4px auto;}
+.orn-dot{width:6px;height:6px;border:1px solid var(--color-theme);opacity:.5;transform:rotate(45deg);margin:4px auto;}
 
 /* Progress Bar */
 .progress-wrap{position:fixed;bottom:0;right:0;width:100%;height:3px;background:rgba(128,128,128,.08);z-index:999;}
-.progress-bar{height:100%;width:0%;background:currentColor;opacity:.35;}
+.progress-bar{height:100%;width:0%;background:var(--color-theme);opacity:1;}
 
 /* Sticky & Tabs */
 .sticky-bar {
