@@ -527,3 +527,118 @@
   background: #ff5f5f;
   color: white;
 }
+
+/* --- Top 5 Hierarchy (التصنيف الهرمي) --- */
+.top5-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Rank 1: The Hero */
+.rank-tier-1 {
+  display: flex;
+  gap: 25px;
+  padding: 30px;
+  background: var(--ui-input-bg);
+  border: 1px solid var(--color-theme);
+  position: relative;
+}
+.rank-tier-1 .rank-badge-huge {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  font-size: 80px;
+  font-weight: 900;
+  opacity: 0.1;
+  line-height: 1;
+}
+.rank-tier-1-info h3 {
+  font-size: 32px;
+  margin-bottom: 10px;
+  color: var(--color-theme);
+}
+
+/* Rank 2: The Featured */
+.rank-tier-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.rank-item-m {
+  display: flex;
+  gap: 15px;
+  padding: 15px;
+  border: 1px solid var(--ui-border);
+  background: var(--ui-input-bg);
+}
+
+/* Rank 3, 4, 5: The List */
+.rank-tier-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 15px;
+}
+.rank-item-s {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border: 1px solid var(--ui-border-light);
+}
+.rank-num-s {
+  font-weight: bold;
+  font-size: 18px;
+  color: var(--color-theme);
+  width: 25px;
+}
+
+/* --- Mobile Responsiveness for Top 5 --- */
+@media (max-width: 768px) {
+  .rank-tier-1 {
+    flex-direction: column;
+    padding: 20px;
+    align-items: center;
+    text-align: center;
+  }
+  .rank-tier-1 img {
+    width: 100% !important;
+    max-width: 200px;
+    height: auto !important;
+  }
+  .rank-tier-1 .rank-badge-huge {
+    left: 50%;
+    transform: translateX(-50%);
+    top: 0;
+  }
+  .rank-tier-2 {
+    grid-template-columns: 1fr;
+  }
+  .rank-tier-3 {
+    grid-template-columns: 1fr;
+  }
+  .rank-tier-1-info h3 {
+    font-size: 24px;
+  }
+  .novel-hero {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .trending-grid {
+    grid-template-columns: 1fr;
+  }
+  .novel-grid {
+    grid-template-columns: 1fr 1fr; /* Two cards per row on mobile */
+    gap: 15px;
+  }
+  .test-container {
+    padding: 15px;
+  }
+  .flex-row {
+    gap: 8px;
+  }
+  .dropdown-wrap {
+    width: 100%; /* Full width dropdowns on mobile */
+  }
+}
