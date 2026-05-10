@@ -1,0 +1,223 @@
+.test-container {
+  padding: 40px;
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+.test-section {
+  border: 1px solid var(--ui-border);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.test-section h2 {
+  font-size: 14px;
+  opacity: 0.5;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.flex-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.theme-switcher {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+  display: flex;
+  gap: 5px;
+}
+
+/* --- Slider Playground (Experimental Styles) --- */
+
+/* 1. Flat Slider (.slider-flat) */
+.slider-flat {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 4px;
+  background: var(--ui-border-light);
+  outline: none;
+  margin: 10px 0;
+  border-radius: 0;
+}
+.slider-flat::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  background: var(--color-theme);
+  cursor: pointer;
+  border: 1px solid var(--color-background-primary);
+  border-radius: 0;
+}
+.slider-flat::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  background: var(--color-theme);
+  cursor: pointer;
+  border: 1px solid var(--color-background-primary);
+  border-radius: 0;
+}
+
+/* 2. Fillable Slider (.slider-fill) */
+.slider-fill {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 4px;
+  background-color: var(--ui-border-light); /* المسار خفيف */
+  background-image: linear-gradient(var(--color-theme), var(--color-theme)); /* التعبئة بلون الثيم */
+  background-repeat: no-repeat;
+  background-size: var(--fill, 0%) 100%;
+  background-position: right;
+  outline: none;
+  margin: 10px 0;
+  border-radius: 0;
+  cursor: pointer;
+}
+.slider-fill::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  background: var(--color-text-primary); /* المقبض بلون النص (أعلى تباين) */
+  cursor: pointer;
+  border: 1px solid var(--color-background-primary);
+  border-radius: 0;
+}
+.slider-fill::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  background: var(--color-text-primary);
+  cursor: pointer;
+  border: 1px solid var(--color-background-primary);
+  border-radius: 0;
+}
+
+/* 3. Thin Slider (.slider-thin) */
+.slider-thin {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 1px;
+  background: var(--ui-border-light);
+  outline: none;
+  margin: 15px 0;
+}
+.slider-thin::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 8px;
+  height: 20px;
+  background: var(--color-theme);
+  cursor: pointer;
+  border: none;
+  border-radius: 0;
+}
+.slider-thin::-moz-range-thumb {
+  width: 8px;
+  height: 20px;
+  background: var(--color-theme);
+  cursor: pointer;
+  border: none;
+  border-radius: 0;
+}
+.slider-thin:hover { opacity: 1; }
+
+/* --- Novel Home Page Components --- */
+
+/* 1. Novel Hero (Header) */
+.novel-hero {
+  display: flex;
+  gap: 25px;
+  padding: 30px;
+  background: rgba(128, 128, 128, 0.05);
+  border: 1px solid var(--ui-border-light);
+}
+.novel-cover {
+  width: 150px;
+  height: 220px;
+  background: var(--ui-active-bg);
+  border: 1px solid var(--ui-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: var(--color-text-primary);
+  opacity: 0.6;
+}
+.novel-info-main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+}
+.novel-title-big {
+  font-family: var(--ui-font-sans);
+  font-size: 32px;
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+.novel-meta {
+  display: flex;
+  gap: 15px;
+  font-size: 12px;
+  opacity: 0.5;
+  font-family: var(--ui-font-sans);
+  font-weight: 400;
+}
+
+/* 2. Chapter Row */
+.chapter-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  border: 1px solid var(--ui-border-light);
+  background: transparent;
+  cursor: pointer;
+  width: 100%;
+  text-align: right;
+  margin-bottom: -1px; /* Overlap borders */
+}
+.chapter-row:hover {
+  background: var(--ui-hover-bg);
+  border-color: var(--ui-border);
+  z-index: 1;
+}
+.chapter-num {
+  font-weight: bold;
+  font-size: 14px;
+  width: 40px;
+}
+.chapter-name {
+  flex: 1;
+  margin-right: 15px;
+}
+.chapter-date {
+  font-size: 11px;
+  opacity: 0.4;
+}
+
+/* 3. Genre Tags */
+.genre-tag {
+  padding: 5px 12px;
+  border: 1px solid var(--ui-border);
+  font-size: 11px;
+  font-family: var(--ui-font-sans);
+  background: var(--ui-input-bg);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  font-weight: 500;
+}
+.genre-tag:hover {
+  background: var(--color-theme);
+  color: var(--color-on-theme);
+  border-color: var(--color-theme);
+}

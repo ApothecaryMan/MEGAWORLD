@@ -21,14 +21,14 @@
 }
 
 /* تعريف الثيمات */
-.root.bg-def   { --color-background-primary: #f5f3f0; --color-text-primary: #2d2d2d; }
-.root.bg-ivory { --color-background-primary: #fdf6e3; --color-text-primary: #3b3020; }
-.root.bg-pink  { --color-background-primary: #fdf0f0; --color-text-primary: #3a1e1e; }
-.root.bg-mint  { --color-background-primary: #f0fdf5; --color-text-primary: #1a3326; }
-.root.bg-sky   { --color-background-primary: #eff6ff; --color-text-primary: #1e2f4a; }
-.root.bg-gray  { --color-background-primary: #f4f4f2; --color-text-primary: #2a2a2a; }
-.root.bg-night { --color-background-primary: #1a1a2e; --color-text-primary: #e0d8c8; }
-.root.bg-dark  { --color-background-primary: #212121; --color-text-primary: #d4c9b0; }
+.root.bg-def   { --color-background-primary: #f5f3f0; --color-text-primary: #2d2d2d; --color-theme: #0078d4; --color-on-theme: #ffffff; }
+.root.bg-ivory { --color-background-primary: #fdf6e3; --color-text-primary: #3b3020; --color-theme: #3b3020; --color-on-theme: #fdf6e3; }
+.root.bg-pink  { --color-background-primary: #fdf0f0; --color-text-primary: #3a1e1e; --color-theme: #b91c1c; --color-on-theme: #ffffff; }
+.root.bg-mint  { --color-background-primary: #f0fdf5; --color-text-primary: #1a3326; --color-theme: #059669; --color-on-theme: #ffffff; }
+.root.bg-sky   { --color-background-primary: #eff6ff; --color-text-primary: #1e2f4a; --color-theme: #2563eb; --color-on-theme: #ffffff; }
+.root.bg-gray  { --color-background-primary: #f4f4f2; --color-text-primary: #2a2a2a; --color-theme: #2a2a2a; --color-on-theme: #f4f4f2; }
+.root.bg-night { --color-background-primary: #1a1a2e; --color-text-primary: #e0d8c8; --color-theme: #e0d8c8; --color-on-theme: #1a1a2e; }
+.root.bg-dark  { --color-background-primary: #212121; --color-text-primary: #d4c9b0; --color-theme: #d4c9b0; --color-on-theme: #212121; }
 
 .root.bg-def   ::selection { background: rgba(0,120,215,0.2); }
 .root.bg-ivory ::selection { background: #e9e0cf; }
