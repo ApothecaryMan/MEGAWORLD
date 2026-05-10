@@ -90,9 +90,11 @@
     display:flex;flex-wrap:nowrap;align-items:stretch;
     border-bottom:1px solid rgba(128,128,128,0.2);
     overflow-x:auto;scrollbar-width:none;
-    direction:rtl;
-    transition:background .25s;
+    transition: background .25s, margin-inline-start 0.2s ease;
     min-height:34px;
+  }
+  .root.side-open .tabs-bar {
+    margin-inline-start: 240px;
   }
   .tabs-bar::-webkit-scrollbar{display:none;}
   .root.bg-def   .tabs-bar{background:var(--color-background-primary);}
@@ -139,7 +141,7 @@
   }
   .tab-add:hover{opacity:.8;}
 
-  .body-wrap{padding:24px 20px;min-height:380px;}
+  .body-wrap{padding:24px 20px;min-height:calc(100vh - 80px);flex:1;}
 
   .paste-zone{
     display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -641,8 +643,12 @@ function toggleSidebar(){
 function applySidebarState(){
   const sb = document.getElementById('sidebar');
   const btn = document.getElementById('sideToggleBtn');
+  const root = document.getElementById('root');
   if(sb){
     sb.classList.toggle('hidden', !sidebarVisible);
+  }
+  if(root){
+    root.classList.toggle('side-open', sidebarVisible);
   }
   if(btn){
     btn.classList.toggle('on', sidebarVisible);
@@ -841,7 +847,10 @@ if(!c.content)return;
   function addChapter(){
     chapters.push({title:'فصل '+(chapters.length+1),content:''});
     activeIdx=chapters.length-1;
-    renderTabs();renderBody();save();
+    renderTabs();renderBody();
+    window.scrollTo({top:0});
+    openModal();
+    save();
   }
 
   function goTo(i){
