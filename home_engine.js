@@ -40,13 +40,15 @@ const HomeEngine = {
 
     section.innerHTML = `
       <div class="section-header">
-        <h2 class="section-title">${data.title}</h2>
+        <div class="section-title-wrap">
+          <span class="section-subtitle">ترشيحاتنا المختارة</span>
+          <h2 class="section-title">${data.title}</h2>
+        </div>
       </div>
       <div class="top5-container">
         <!-- Rank 1: Full Luxury (Hero) -->
         <div class="rank-tier-1">
           <div class="rank-badge">1</div>
-          <div class="rank-badge-huge">1</div>
           <img src="${hero.cover}" class="novel-cover">
           <div class="rank-tier-1-info" style="flex: 1;">
             <div style="font-size: 11px; opacity: 0.5; text-transform: uppercase; letter-spacing: 3px; font-weight: 800; margin-bottom: 5px;">رواية الشهر الأولى</div>
@@ -130,17 +132,24 @@ const HomeEngine = {
     const section = this.makeWrapper();
     section.innerHTML = `
       <div class="section-header">
-        <h2 class="section-title">${data.title}</h2>
+        <div class="section-title-wrap">
+          <span class="section-subtitle">الأكثر قراءة الآن</span>
+          <h2 class="section-title">${data.title}</h2>
+        </div>
       </div>
-      <div class="trending-grid">
+      <div class="novel-grid">
         ${data.items.map(item => `
-          <div class="trending-card">
-            <div class="rank-badge">${item.rank}</div>
-            <img src="${item.cover}" class="trending-cover">
-            <div class="trending-info">
-              <div class="trending-title">${item.title}</div>
-              <div class="trending-meta" style="font-size: 12px; opacity: 0.6;">${item.meta || ''}</div>
-              <div class="trending-desc" style="font-size: 12px; opacity: 0.7; margin-top: 5px; line-height: 1.4;">${item.desc || ''}</div>
+          <div class="novel-card" onclick="window.location.href='novel.html?id=${this.getNovelId(item.title)}'">
+            <div class="rank-badge" style="top: 8px; right: 8px; width: 30px; height: 30px; font-size: 14px;">${item.rank}</div>
+            <img src="${item.cover}" class="novel-card-poster">
+            <div class="novel-card-info">
+              <div class="novel-card-title">${item.title}</div>
+              <div class="novel-card-author">${item.author || ''}</div>
+              <div class="novel-card-stats">
+                <span>1.8M <i class="ti ti-eye"></i></span>
+                <span>450 فصل <i class="ti ti-list"></i></span>
+                <span>4.7 <i class="ti ti-star"></i></span>
+              </div>
             </div>
           </div>
         `).join('')}
@@ -153,7 +162,10 @@ const HomeEngine = {
     const section = this.makeWrapper();
     section.innerHTML = `
       <div class="section-header">
-        <h2 class="section-title">${data.title}</h2>
+        <div class="section-title-wrap">
+          <span class="section-subtitle">تصفح المكتبة</span>
+          <h2 class="section-title">${data.title}</h2>
+        </div>
         <div class="flex-row"><button class="btn-flat" style="font-size: 11px;">تصفية <i class="ti ti-filter"></i></button></div>
       </div>
       <div class="novel-grid">
@@ -161,8 +173,13 @@ const HomeEngine = {
           <div class="novel-card" onclick="window.location.href='novel.html?id=${this.getNovelId(item.title)}'">
             <img src="${item.cover}" class="novel-card-poster">
             <div class="novel-card-info">
-              <div class="novel-card-title" style="font-size: 14px; font-weight: bold;">${item.title}</div>
-              <div class="novel-card-author" style="font-size: 11px; opacity: 0.6;">${item.author || ''}</div>
+              <div class="novel-card-title">${item.title}</div>
+              <div class="novel-card-author">${item.author || ''}</div>
+              <div class="novel-card-stats">
+                <span>1.2M <i class="ti ti-eye"></i></span>
+                <span>380 فصل <i class="ti ti-list"></i></span>
+                <span>4.5 <i class="ti ti-star"></i></span>
+              </div>
             </div>
           </div>
         `).join('')}

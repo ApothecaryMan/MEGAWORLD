@@ -28,18 +28,17 @@ const MEGA_PAGES = {
     content: [
       {
         type: 'top5',
-        title: 'أشهر 5 روايات',
+        title: 'أشهــــر 3 روايات',
         items: [
           { rank: 1, title: 'سيد الأسرار: العودة', desc: 'رحلة ملحمية في عالم السحر والغموض. استكشف العوالم الخفية وواجه الأسرار القديمة.', cover: 'public/ChatGPT Image May 7, 2026, 07_38_24 PM.png' },
           { rank: 2, title: 'ظل الإمبراطور', meta: '1.8M مشاهدة', cover: 'public/ChatGPT Image May 7, 2026, 07_42_42 PM.png' },
           { rank: 3, title: 'نجم الشمال', meta: '1.2M مشاهدة', cover: 'public/ChatGPT Image May 7, 2026, 08_01_54 PM.png' },
-          { rank: 4, title: 'الهروب من المستقبل', cover: 'public/ChatGPT Image May 7, 2026, 08_05_10 PM.png' },
-          { rank: 5, title: 'مملكة الأسرار', cover: 'public/ChatGPT Image May 7, 2026, 07_38_24 PM.png' }
+     
         ]
       },
       {
         type: 'trending',
-        title: 'القائمة الرائجة حالياً',
+        title: 'القائمــــة الرائجـة حاليــــاً',
         items: [
           { rank: 6, title: 'القدر المحتوم', meta: '700K مشاهدة', cover: 'public/ChatGPT Image May 7, 2026, 07_42_42 PM.png' },
           { rank: 7, title: 'عالم موازي', meta: '650K مشاهدة', cover: 'public/ChatGPT Image May 7, 2026, 08_01_54 PM.png' }
@@ -47,7 +46,7 @@ const MEGA_PAGES = {
       },
       {
         type: 'grid',
-        title: 'أحدث الإضافات',
+        title: 'أحـدث الإضافــــات',
         items: [
           { title: 'مملكة الأسرار', author: 'أحمد خالد', cover: 'public/ChatGPT Image May 7, 2026, 07_38_24 PM.png' },
           { title: 'ظل الإمبراطور', author: 'سارة سليم', cover: 'public/ChatGPT Image May 7, 2026, 07_42_42 PM.png' }
