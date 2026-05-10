@@ -300,19 +300,41 @@ font-size:10px;
 
 
 .stats-box{
-display:flex;
-align-items:center;
-gap:10px;
-padding:0 10px;
-height:28px;
-border:1px solid rgba(128,128,128,0.35);
-flex-shrink:0;
+  display: flex;
+  align-items: center;
+  width: 190px;
+  padding: 0;
+  height: 28px;
+  border: 1px solid rgba(128,128,128,0.35);
+  flex-shrink: 0;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .stats-divider{
-width:1px;
-height:100%;
-background:rgba(128,128,128,0.35);
+  width: 1px;
+  height: 100%;
+  background: rgba(128,128,128, 0.35);
+  flex-shrink: 0;
+}
+
+.stat{
+  flex: 1;
+  min-width: 0;
+  padding: 0 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* التريكو لضمان ظهور النقاط الثلاث في نظام الفليكس */
+.stats-box > *:last-child {
+  flex-shrink: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .swatch{
@@ -722,8 +744,13 @@ function buildSwatches(){
     const ch=text.replace(/\s/g,'').length;
     const m=Math.max(1,Math.round(w/200));
     
-    document.getElementById('wc').textContent=w.toLocaleString('ar-EG');
-    document.getElementById('cc').textContent=ch.toLocaleString('ar-EG');
+    const shortNum = (n) => {
+      if(n >= 1000) return (n/1000).toLocaleString('ar-EG', {maximumFractionDigits:1}) + ' <small style="font-size:0.8em; opacity:0.8;">ألف</small>';
+      return n.toLocaleString('ar-EG');
+    };
+
+    document.getElementById('wc').innerHTML=shortNum(w);
+    document.getElementById('cc').innerHTML=shortNum(ch);
     
     const rtEl = document.getElementById('rt');
     const rtLbl = document.getElementById('rt-lbl');
@@ -827,7 +854,7 @@ if(!c.content)return;
         `;
       });
       wrap.innerHTML=full;
-      stats(chapters.map(x=>x.content).join(' '));
+      stats(chapters[activeIdx].content);
     } else {
       wrap.innerHTML=`
       ${activeIdx!==0?'<div class="orn"><div class="orn-line"></div><div class="orn-dot"></div><div class="orn-line"></div></div>':''}
@@ -1061,6 +1088,7 @@ window.addEventListener('scroll',()=>{
     if(!isNaN(currentIdx) && activeIdx !== currentIdx){
       activeIdx = currentIdx;
       updateActiveUI();
+      stats(chapters[activeIdx].content);
     }
   }
 });
