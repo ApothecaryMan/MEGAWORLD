@@ -40,8 +40,8 @@ const MEGA_PAGES = {
         type: 'trending',
         title: 'القائمــــة الرائجـة حاليــــاً',
         items: [
-          { rank: 6, title: 'القدر المحتوم', meta: '700K مشاهدة', cover: 'public/ChatGPT Image May 7, 2026, 07_42_42 PM.png' },
-          { rank: 7, title: 'عالم موازي', meta: '650K مشاهدة', cover: 'public/ChatGPT Image May 7, 2026, 08_01_54 PM.png' }
+          { rank: 6, title: 'القدر المحتوم', author: 'محمود بكري', meta: '700K مشاهدة', cover: 'public/ChatGPT Image May 7, 2026, 07_42_42 PM.png' },
+          { rank: 7, title: 'عالم موازي', author: 'ليلى حسن', meta: '650K مشاهدة', cover: 'public/ChatGPT Image May 7, 2026, 08_01_54 PM.png' }
         ]
       },
       {
