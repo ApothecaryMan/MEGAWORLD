@@ -52,10 +52,15 @@ const Store = {
     return this.activeNovel ? this.activeNovel.activeChapterIdx : 0;
   },
 
-  addNovel(title = 'رواية جديدة') {
+  addNovel(title = 'رواية جديدة', author = 'مؤلف مجهول', chapters = null) {
     const novel = {
       title,
-      chapters: [{ title: 'فصل 1', content: '' }],
+      author,
+      description: 'لا يوجد وصف متاح حالياً لهذه الرواية.',
+      cover: 'public/ChatGPT Image May 7, 2026, 07_38_24 PM.png', // غلاف افتراضي
+      status: 'مستمرة',
+      genres: ['عام'],
+      chapters: chapters || [{ title: 'فصل 1', content: '' }],
       activeChapterIdx: 0
     };
     this.state.novels.push(novel);
@@ -165,7 +170,7 @@ const Store = {
   },
 
   migrate() {
-    // ترحيل البيانات من الإصدارات القديمة (v8 وما قبلها)
+    // 1. ترحيل البيانات من الإصدارات القديمة (v8 وما قبلها)
     const oldData = localStorage.getItem('novel_reader_v8');
     if (oldData && this.state.novels.length === 1 && this.state.novels[0].title === 'رواية افتراضية' && this.state.novels[0].chapters[0].content === '') {
       try {
@@ -174,13 +179,21 @@ const Store = {
           this.state.novels = legacy.novels;
           this.state.activeNovelIdx = legacy.activeNovelIdx || 0;
         } else if (legacy.chapters) {
-          // ترحيل من نظام الرواية الواحدة القديم جداً
           this.state.novels[0].chapters = legacy.chapters;
           this.state.novels[0].activeChapterIdx = legacy.activeIdx || 0;
         }
-        this.save();
       } catch (e) { console.error('Migration failed', e); }
     }
+
+    // 2. تحديث هيكلية الروايات الحالية لتشمل الحقول الجديدة
+    this.state.novels.forEach(n => {
+      if (!n.author) n.author = 'مؤلف مجهول';
+      if (!n.description) n.description = 'لا يوجد وصف متاح حالياً لهذه الرواية.';
+      if (!n.status) n.status = 'مستمرة';
+      if (!n.genres) n.genres = ['عام'];
+      if (!n.cover) n.cover = 'public/ChatGPT Image May 7, 2026, 07_38_24 PM.png';
+    });
+    this.save();
   },
 
   autoSave() {

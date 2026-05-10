@@ -37,7 +37,6 @@ const HomeEngine = {
     const section = this.makeWrapper();
     const hero = data.items[0];
     const featured = data.items.slice(1, 3);
-    const simple = data.items.slice(3, 5);
 
     section.innerHTML = `
       <div class="section-header">
@@ -46,15 +45,16 @@ const HomeEngine = {
       <div class="top5-container">
         <!-- Rank 1: Full Luxury (Hero) -->
         <div class="rank-tier-1">
+          <div class="rank-badge">1</div>
           <div class="rank-badge-huge">1</div>
-          <img src="${hero.cover}" class="novel-cover" style="width: 200px; height: 280px; border-color: var(--color-theme);">
+          <img src="${hero.cover}" class="novel-cover">
           <div class="rank-tier-1-info" style="flex: 1;">
-            <div style="font-size: 12px; opacity: 0.6; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px;">رواية الشهر الأولى</div>
-            <h3 style="font-size: 28px; font-weight: bold;">${hero.title}</h3>
-            <p style="font-size: 15px; opacity: 0.8; line-height: 1.8; margin: 15px 0; max-width: 600px;">${hero.desc}</p>
-            <div class="flex-row" style="margin-top: 25px;">
-              <a href="reader.html" class="btn-flat active" style="padding: 0 30px; height: 38px; display: flex; align-items: center; text-decoration: none;">ابدأ القراءة الآن</a>
-              <button class="btn-flat">تفاصيل العمل</button>
+            <div style="font-size: 12px; opacity: 0.6; text-transform: uppercase; letter-spacing: 2px;">رواية الشهر الأولى</div>
+            <h3>${hero.title}</h3>
+            <p style="font-size: 14px; opacity: 0.8; line-height: 1.6; max-width: 500px;">${hero.desc}</p>
+            <div class="flex-row" style="margin-top: 20px;">
+              <a href="reader.html" class="btn-flat active" style="text-decoration: none; padding: 0 25px;" onclick="Store.switchNovel(${this.getNovelId(hero.title)})">ابدأ القراءة الآن</a>
+              <button class="btn-flat" onclick="window.location.href='novel.html?id=${this.getNovelId(hero.title)}'">تفاصيل العمل</button>
             </div>
           </div>
         </div>
@@ -62,27 +62,15 @@ const HomeEngine = {
         <!-- Rank 2 & 3: Medium Luxury -->
         <div class="rank-tier-2">
           ${featured.map((item, i) => `
-            <div class="rank-item-m">
+            <div class="rank-item-m" style="position: relative; cursor: pointer;" onclick="window.location.href='novel.html?id=${this.getNovelId(item.title)}'">
+              <div class="rank-badge">${i + 2}</div>
               <img src="${item.cover}" style="width: 80px; height: 120px; object-fit: cover; border: 1px solid var(--ui-border);">
               <div class="trending-info">
-                <div style="color: var(--color-theme); font-weight: bold; font-size: 24px; line-height: 1;">${i + 2}</div>
                 <div class="trending-title" style="font-size: 16px; font-weight: bold;">${item.title}</div>
                 <div class="trending-meta" style="font-size: 12px; opacity: 0.6;">${item.meta || ''}</div>
               </div>
             </div>
           `).join('')}
-        </div>
-
-        <!-- Rank 4 & 5: Simple List -->
-        <div class="rank-tier-3">
-          ${simple.map((item, i) => `
-            <div class="rank-item-s">
-              <div class="rank-num-s" style="font-weight: bold; font-size: 18px; color: var(--color-theme); width: 30px;">${i + 4}</div>
-              <img src="${item.cover}" style="width: 40px; height: 60px; object-fit: cover; border: 1px solid var(--ui-border-light);">
-              <div class="trending-title" style="font-size: 14px;">${item.title}</div>
-            </div>
-          `).join('')}
-          <div style="opacity: 0.5; font-size: 11px; display: flex; align-items: center; cursor: pointer; padding: 10px;">شاهد القائمة الكاملة...</div>
         </div>
       </div>
     `;
@@ -121,7 +109,7 @@ const HomeEngine = {
       </div>
       <div class="novel-grid">
         ${data.items.map(item => `
-          <div class="novel-card" onclick="window.location.href='reader.html'">
+          <div class="novel-card" onclick="window.location.href='novel.html?id=${this.getNovelId(item.title)}'">
             <img src="${item.cover}" class="novel-card-poster">
             <div class="novel-card-info">
               <div class="novel-card-title" style="font-size: 14px; font-weight: bold;">${item.title}</div>
@@ -145,5 +133,11 @@ const HomeEngine = {
     const div = document.createElement('section');
     div.className = 'home-container';
     return div;
+  },
+
+  getNovelId(title) {
+    if (!Store || !Store.state || !Store.state.novels) return 0;
+    const idx = Store.state.novels.findIndex(n => n.title === title);
+    return idx !== -1 ? idx : 0;
   }
 };

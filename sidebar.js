@@ -34,6 +34,8 @@ function renderLibrary() {
         { label: 'تغيير الاسم', icon: 'ti-edit', action: () => renameNovel(i) },
         { label: 'إضافة فصل للرواية', icon: 'ti-plus', action: () => { Store.switchNovel(i); Store.addChapter(); } },
         { sep: true },
+        { label: 'إضافة رواية نموذجية', icon: 'ti-package', action: () => importExampleNovel() },
+        { sep: true },
         { label: 'حذف الرواية', icon: 'ti-trash', danger: true, action: () => Store.deleteNovel(i) }
       ]);
     };
@@ -84,6 +86,32 @@ function renameNovel(i) {
     Store.save();
     Store.notify();
   }
+}
+
+function importExampleNovel() {
+  const exampleData = {
+    title: 'سيد الأسرار: العودة',
+    author: 'ج. ر. ر. تولكين',
+    description: 'رحلة ملحمية في عالم السحر والغموض. استكشف العوالم الخفية وواجه الأسرار القديمة.',
+    cover: 'public/ChatGPT Image May 7, 2026, 07_38_24 PM.png',
+    status: 'مكتملة',
+    genres: ['خيال', 'مغامرة', 'ملحمي'],
+    chapters: [
+      { title: 'رحلة غير متوقعة', content: 'تبدأ القصة في قرية هادئة حيث يلتقي الأصدقاء القدامى...' },
+      { title: 'ظل الماضي', content: 'تتكشف أسرار قديمة تهدد أمن العالم وسلامته...' },
+      { title: 'ثلاثة هم الصحبة', content: 'ينطلق الأبطال في رحلة طويلة وشاقة عبر الجبال...' }
+    ]
+  };
+
+  const novel = {
+    ...exampleData,
+    activeChapterIdx: 0
+  };
+
+  Store.state.novels.push(novel);
+  Store.state.activeNovelIdx = Store.state.novels.length - 1;
+  Store.save();
+  Store.notify();
 }
 
 // Initialize Library on Load

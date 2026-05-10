@@ -1,0 +1,144 @@
+/* 
+  MEGAWORLD Novel Details Styles
+  Pure Flat (No shadows), Instant (No transitions)
+*/
+
+.novel-page-container {
+  padding: 40px;
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* 1. Novel Hero (Header) */
+.novel-hero {
+  display: flex;
+  gap: 30px;
+  padding: 40px;
+  background: var(--ui-input-bg);
+  border: 1px solid var(--ui-border-light);
+}
+
+.novel-cover-large {
+  width: 180px;
+  height: 260px;
+  object-fit: cover;
+  border: 1px solid var(--ui-border);
+  background: var(--ui-active-bg);
+}
+
+.novel-info-main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 15px;
+  flex: 1;
+}
+
+.novel-title-big {
+  font-size: 32px;
+  font-weight: bold;
+  margin: 0;
+  color: var(--color-text-primary);
+}
+
+.novel-meta {
+  display: flex;
+  gap: 15px;
+  font-size: 13px;
+  opacity: 0.6;
+}
+
+.novel-description {
+  font-size: 15px;
+  line-height: 1.8;
+  opacity: 0.8;
+  max-width: 700px;
+}
+
+/* 2. Chapter List */
+.chapter-list-section {
+  margin-top: 20px;
+}
+
+.section-label {
+  font-size: 14px;
+  opacity: 0.5;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--ui-border-light);
+  padding-bottom: 8px;
+}
+
+.chapter-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 20px;
+  border: 1px solid var(--ui-border-light);
+  background: var(--color-background-primary);
+  cursor: pointer;
+  width: 100%;
+  text-align: right;
+  margin-bottom: -1px;
+}
+
+.chapter-row:hover {
+  background: var(--ui-hover-bg);
+  border-color: var(--color-theme);
+  z-index: 1;
+}
+
+.chapter-num {
+  font-weight: bold;
+  font-size: 16px;
+  width: 40px;
+  color: var(--color-theme);
+}
+
+.chapter-name {
+  flex: 1;
+  margin-right: 15px;
+  font-size: 15px;
+}
+
+.chapter-date {
+  font-size: 12px;
+  opacity: 0.4;
+}
+
+/* 3. Genre Tags */
+.genre-tags-flex {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.genre-tag {
+  padding: 6px 15px;
+  border: 1px solid var(--ui-border);
+  font-size: 12px;
+  background: var(--ui-input-bg);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.genre-tag:hover {
+  background: var(--color-theme);
+  color: var(--color-on-theme);
+  border-color: var(--color-theme);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .novel-page-container { padding: 20px; }
+  .novel-hero { flex-direction: column; align-items: center; text-align: center; padding: 30px; }
+  .novel-cover-large { width: 150px; height: 220px; }
+  .novel-meta { justify-content: center; flex-wrap: wrap; }
+  .genre-tags-flex { justify-content: center; }
+}
