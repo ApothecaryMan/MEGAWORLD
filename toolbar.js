@@ -199,26 +199,44 @@ function buildSwatches() {
   if (!c) return;
   c.innerHTML = '';
   const palettes = [
-    { cls: 'bg-def', s: '#f5f3f0' },
-    { cls: 'bg-ivory', s: '#fdf6e3' },
-    { cls: 'bg-mint', s: '#f0fdf5' },
-    { cls: 'bg-pink', s: '#fdf0f0' },
-    { cls: 'bg-gray', s: '#f4f4f2' },
-    { cls: 'bg-sky', s: '#eff6ff' },
-    { cls: 'bg-night', s: '#1a1a2e' },
-    { cls: 'bg-dark', s: '#212121' }
+    { label: 'ورقي', cls: 'bg-def', s: '#f5f3f0' },
+    { label: 'عاجي', cls: 'bg-ivory', s: '#fdf6e3' },
+    { label: 'نعناعي', cls: 'bg-mint', s: '#f0fdf5' },
+    { label: 'زهري', cls: 'bg-pink', s: '#fdf0f0' },
+    { label: 'رمادي', cls: 'bg-gray', s: '#f4f4f2' },
+    { label: 'سماوي', cls: 'bg-sky', s: '#eff6ff' },
+    { label: 'ليلي', cls: 'bg-night', s: '#1a1a2e' },
+    { label: 'داكن', cls: 'bg-dark', s: '#212121' }
   ];
-  palettes.forEach(p => {
-    const b = document.createElement('button');
-    b.className = 'swatch' + (p.cls === Store.state.settings.theme ? ' on' : '');
-    b.style.background = p.s;
-    b.dataset.theme = p.cls; // تخزين اسم الثيم في الزر
-    b.onclick = () => {
-      Store.updateSettings('theme', p.cls);
-      applyGlobalUI();
-    };
-    c.appendChild(b);
-  });
+
+  const current = palettes.find(p => p.cls === Store.state.settings.theme) || palettes[0];
+  
+  // زر الثيم الحالي (على شكل كبسولة)
+  const btn = document.createElement('button');
+  btn.className = 'btn-flat theme-picker-btn';
+  btn.title = 'تغيير الثيم';
+  
+  btn.innerHTML = `
+    <div class="swatch on" style="background:${current.s}; width:12px; height:12px; border-radius:50%; border:1px solid rgba(128,128,128,0.2);"></div>
+    <span style="font-size:12px; font-weight:500;">${current.label}</span>
+  `;
+  
+  btn.onclick = (e) => {
+    const menuItems = palettes.map(p => ({
+      label: `<div style="display:flex;align-items:center;gap:12px;">
+                <div style="width:18px;height:18px;background:${p.s};border:1px solid rgba(128,128,128,0.3);border-radius:50%;"></div>
+                ${p.label}
+              </div>`,
+      icon: p.cls === Store.state.settings.theme ? 'ti-check' : '',
+      action: () => {
+        Store.updateSettings('theme', p.cls);
+        applyGlobalUI();
+      }
+    }));
+    ContextMenu.show(e, menuItems);
+  };
+  
+  c.appendChild(btn);
 }
 
 function stats(text) {
@@ -271,10 +289,8 @@ function applyGlobalUI() {
   const contBtn = document.getElementById('contBtn');
   if (contBtn) contBtn.classList.toggle('active', settings.continuousMode);
   
-  // تحديث دوائر الألوان لحظياً
-  document.querySelectorAll('.swatch').forEach(s => {
-    s.classList.toggle('on', s.dataset.theme === settings.theme);
-  });
+  // تحديث زر الألوان الديناميكي
+  if (typeof buildSwatches === 'function') buildSwatches();
 }
 
 function exportTxt() {

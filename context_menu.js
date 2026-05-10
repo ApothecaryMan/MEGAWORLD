@@ -47,7 +47,7 @@ const ContextMenu = {
       
       btn.innerHTML = `
         <span>${item.label}</span>
-        <i class="ti ${item.icon || 'ti-chevron-left'}"></i>
+        ${item.icon ? `<i class="ti ${item.icon}"></i>` : ''}
       `;
       
       btn.onclick = () => {

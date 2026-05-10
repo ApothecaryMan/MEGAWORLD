@@ -49,6 +49,12 @@
   z-index: 100;
   transition: none !important;
 }
+.theme-picker-btn {
+  padding: 0 10px !important;
+  gap: 8px !important;
+  border-radius: 16px !important;
+  min-width: 80px;
+}
 
 .sep{
   width: 1px;
