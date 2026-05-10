@@ -247,7 +247,7 @@ function stats(text) {
   const shortNum = (n) => {
     if (n >= 1000) {
       const val = (n / 1000).toFixed(1).replace(/\.0$/, '');
-      return val + ' <small style="font-size:10px; opacity:0.8;">ألف</small>';
+      return val + '<small style="font-size:6px; opacity:0.7;">ألف</small>';
     }
     return n.toLocaleString('ar-EG');
   };
