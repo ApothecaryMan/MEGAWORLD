@@ -1,4 +1,7 @@
 // محرك القراءة والتبويبات (Reader Engine)
+function addChapter() {
+  Store.addChapter();
+}
 
 function renderTabs() {
   const bar = document.getElementById('tabsBar');

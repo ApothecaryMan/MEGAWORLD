@@ -138,6 +138,35 @@ function applyGlobalUI() {
   });
 }
 
+function exportTxt() {
+  const n = Store.activeNovel;
+  if (!n) return;
+  let txt = n.title + "\n\n";
+  n.chapters.forEach(ch => {
+    txt += "== " + ch.title + " ==\n\n" + ch.content + "\n\n";
+  });
+  const blob = new Blob([txt], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = n.title + '.txt';
+  a.click();
+}
+
+function doSearch(val) {
+  const wrap = document.getElementById('bodyWrap');
+  if (!wrap || !val.trim()) {
+    if (typeof renderBody === 'function') renderBody();
+    return;
+  }
+  
+  // بحث بسيط بتظليل النص
+  const text = wrap.innerHTML;
+  const clean = text.replace(/<mark>|<\/mark>/g, '');
+  const regex = new RegExp('(' + val.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+  wrap.innerHTML = clean.replace(regex, '<mark>$1</mark>');
+}
+
 // --- تعريف البار الرئيسي ---
 const MainToolbarSchema = [
   { type: 'button', label: 'الرئيسية', action: () => location.reload() },
