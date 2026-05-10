@@ -588,6 +588,7 @@ display:block;
 إغلاق وضع التركيز
 </button>
 
+<script src="storage.js"></script>
 <script>
 
   
@@ -601,10 +602,10 @@ function toggleContinuousMode(){
 }
 
 
-const STORE_KEY = 'ar_reader_v7';
   let font='fn', sz=22, align='ar', activeIdx=0;
   let chapters=[];
   let dragSrcIdx=null;
+  let sidebarVisible = true;
 
   const palettes=[
     {cls:'bg-def',  s:'#e8e6e0', bg:'var(--color-background-primary)', fg:'var(--color-text-primary)'},
@@ -618,64 +619,6 @@ const STORE_KEY = 'ar_reader_v7';
   ];
   let activePalette=palettes[0];
 
-  
-function save(){
-
-try{
-
-const payload={
-chapters,
-activeIdx,
-font,
-sz,
-align,
-sidebarVisible,
-paletteCls:activePalette.cls
-};
-
-localStorage.setItem(
-STORE_KEY,
-JSON.stringify(payload)
-);
-
-}catch(e){
-console.error('save error',e);
-}
-
-}
-
-function load(){
-
-try{
-
-const raw=
-localStorage.getItem(STORE_KEY);
-
-if(!raw)return;
-
-const d=JSON.parse(raw);
-
-if(!d)return;
-
-chapters=d.chapters||[];
-activeIdx=d.activeIdx||0;
-font=d.font||'fn';
-sz=d.sz||22;
-align=d.align||'ar';
-sidebarVisible=d.sidebarVisible!==undefined?d.sidebarVisible:true;
-
-const p=palettes.find(
-x=>x.cls===d.paletteCls
-);
-
-if(p)activePalette=p;
-
-}catch(e){
-console.error('load error',e);
-}
-}
-
-let sidebarVisible = true;
 function toggleSidebar(){
   sidebarVisible = !sidebarVisible;
   applySidebarState();
@@ -728,8 +671,13 @@ function buildSwatches(){
     ['f1','f2','f3'].forEach(x=>document.getElementById(x).classList.remove('on'));
     const fi={fn:'f1',fn2:'f2',fn3:'f3'}[font];
     if(fi)document.getElementById(fi).classList.add('on');
-    ['ar','ac','aj'].forEach(x=>document.getElementById(x).classList.remove('on'));
-    document.getElementById(align).classList.add('on');
+    ['ar','ac','aj'].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el)el.classList.toggle('on',align===id);
+    });
+
+    const contBtn = document.getElementById('contBtn');
+    if(contBtn) contBtn.classList.toggle('on', continuousMode);
     document.querySelectorAll('.swatch').forEach(s=>{
       s.classList.toggle('on', s.title===activePalette.cls);
     });
