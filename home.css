@@ -364,6 +364,20 @@
   border: 1px solid var(--ui-border-light);
   object-fit: cover;
 }
+.novel-poster-placeholder {
+  background: var(--ui-input-bg);
+  border: 1px solid var(--ui-border-light);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-primary);
+  opacity: 0.15;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.novel-poster-placeholder i { font-size: 32px; }
+.novel-poster-placeholder span { font-size: 10px; font-weight: bold; }
 .novel-card-info {
   position: absolute;
   bottom: 0;

@@ -144,6 +144,7 @@ function changeNovelCover(i) {
 function removeNovelCover(i) {
   if (confirm('هل أنت متأكد من حذف الغلاف؟')) {
     Store.updateNovelCover(i, '');
+    renderNovelData(); // تحديث فوري للمعاينة
   }
 }
 
@@ -173,6 +174,11 @@ function importExampleNovel() {
   Store.notify();
 }
 
+function formatSeparators(text) {
+  if (!text) return '';
+  return text.replace(/-/g, '<span class="separator-dash">-</span>');
+}
+
 // وظائف تعديل بيانات الرواية (Novel Data Edit)
 function renderNovelData() {
   const container = document.getElementById('novelDataList');
@@ -181,7 +187,13 @@ function renderNovelData() {
   
   container.innerHTML = `
     <div class="side-cover-container">
-      <img src="${n.cover || 'public/ChatGPT Image May 7, 2026, 07_38_24 PM.png'}" class="side-cover-full" id="side-cover-preview">
+      ${n.cover ? 
+        `<img src="${n.cover}" class="side-cover-full" id="side-cover-preview">` :
+        `<div class="side-cover-placeholder">
+           <i class="ti ti-camera"></i>
+           <span>غلاف الرواية</span>
+         </div>`
+      }
       <button class="side-cover-delete" onclick="removeNovelCover(${Store.state.activeNovelIdx})" title="حذف الغلاف">×</button>
       <button class="side-cover-btn" onclick="changeNovelCover(${Store.state.activeNovelIdx})">تغيير الغلاف</button>
     </div>
@@ -210,7 +222,7 @@ function renderNovelData() {
     </div>
     <div class="side-item-group">
       <label class="side-label">التصنيفات (افصل بـ <span style="color:var(--color-theme); font-weight:bold; font-size:14px;">-</span>)</label>
-      <div class="input-flat side-input side-tags-input" id="side-genres" contenteditable="true" oninput="highlightSeparators(this)">${(n.genres || []).join(' - ')}</div>
+      <div class="input-flat side-input side-tags-input" id="side-genres" contenteditable="true" oninput="highlightSeparators(this)">${formatSeparators((n.genres || []).join(' - '))}</div>
     </div>
     <div class="side-item-group">
       <label class="side-label">الوصف</label>
@@ -242,9 +254,10 @@ function setNovelStatus(status) {
 }
 
 function highlightSeparators(el) {
-  // حفظ موقع الكرسر بدقة قبل التحديث
   const selection = window.getSelection();
   if (!selection.rangeCount) return;
+
+  // حفظ الموقع النصي للمؤشر
   const range = selection.getRangeAt(0);
   const preRange = range.cloneRange();
   preRange.selectNodeContents(el);
@@ -252,12 +265,13 @@ function highlightSeparators(el) {
   const offset = preRange.toString().length;
 
   const text = el.innerText;
-  const highlighted = text.replace(/-/g, '<span style="color:var(--color-theme); font-weight:bold;">$&</span>');
+  const highlighted = text.replace(/-/g, '<span class="separator-dash">-</span>');
   
-  if (el.innerHTML !== highlighted) {
+  // تحديث المحتوى فقط إذا كان هناك تغيير حقيقي (تجنب الوميض)
+  if (el.innerHTML.replace(/"/g, "'") !== highlighted.replace(/"/g, "'")) {
     el.innerHTML = highlighted;
     
-    // استعادة موقع الكرسر بالتنقل عبر العقد
+    // استعادة المؤشر
     const newRange = document.createRange();
     let charCount = 0;
     let nodeFound = false;
@@ -265,12 +279,13 @@ function highlightSeparators(el) {
     function traverse(node) {
       if (nodeFound) return;
       if (node.nodeType === 3) { // نص
-        if (charCount + node.length >= offset) {
+        const nextCount = charCount + node.length;
+        if (nextCount >= offset) {
           newRange.setStart(node, offset - charCount);
           newRange.collapse(true);
           nodeFound = true;
         } else {
-          charCount += node.length;
+          charCount = nextCount;
         }
       } else {
         for (let child of node.childNodes) traverse(child);
@@ -278,6 +293,13 @@ function highlightSeparators(el) {
     }
     
     traverse(el);
+    if (!nodeFound && el.childNodes.length > 0) {
+      // إذا لم نجد العقدة (مثلاً في نهاية النص تماماً)
+      const last = el.lastChild;
+      newRange.setStartAfter(last);
+      newRange.collapse(true);
+    }
+    
     selection.removeAllRanges();
     selection.addRange(newRange);
   }

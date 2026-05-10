@@ -128,6 +128,23 @@
   overflow: hidden;
   margin-bottom: 5px;
 }
+.side-cover-placeholder {
+  width: 100%;
+  height: 100%;
+  background: rgba(128, 128, 128, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: var(--color-text-primary);
+  opacity: 0.3;
+  font-weight: bold;
+  font-size: 14px;
+}
+.side-cover-placeholder i {
+  font-size: 32px;
+}
 .side-cover-full {
   width: 100%;
   height: 100%;
@@ -243,4 +260,8 @@
 .dropdown-item i {
   font-size: 12px;
   opacity: 0.7;
+}
+.separator-dash {
+  color: #ff4d4d;
+  font-weight: bold;
 }

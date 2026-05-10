@@ -16,6 +16,18 @@ const HomeEngine = {
 
   trendingDays: 7, // الافتراضي أسبوع
 
+  renderPoster(cover, className = 'novel-card-poster') {
+    if (cover) {
+      return `<img src="${cover}" class="${className}">`;
+    }
+    return `
+      <div class="${className} novel-poster-placeholder">
+        <i class="ti ti-camera"></i>
+        <span>بدون غلاف</span>
+      </div>
+    `;
+  },
+
   render(config) {
     this.container.innerHTML = '';
     const allRealNovels = Store.state.novels || [];
@@ -88,7 +100,7 @@ const HomeEngine = {
         <!-- Rank 1: Full Luxury (Hero) -->
         <div class="rank-tier-1">
           <div class="rank-badge">1</div>
-          <img src="${hero.cover || 'public/ChatGPT Image May 7, 2026, 07_38_24 PM.png'}" class="novel-cover">
+          ${this.renderPoster(hero.cover, 'novel-cover')}
           <div class="rank-tier-1-info" style="flex: 1;">
             <div style="font-size: 11px; opacity: 0.5; text-transform: uppercase; letter-spacing: 3px; font-weight: 800; margin-bottom: 5px;">رواية الشهر الأولى</div>
             <h3>${hero.title || '---'}</h3>
@@ -135,7 +147,7 @@ const HomeEngine = {
           ${featured.map((item, i) => `
             <div class="rank-item-m" style="position: relative; cursor: pointer;" onclick="window.location.href='novel.html?id=${this.getNovelId(item.title)}'">
               <div class="rank-badge">${i + 2}</div>
-              <img src="${item.cover || 'public/ChatGPT Image May 7, 2026, 07_38_24 PM.png'}" class="rank-item-m-cover">
+              ${this.renderPoster(item.cover, 'rank-item-m-cover')}
               <div class="rank-item-m-info">
                 <div>
                   <div class="rank-item-m-title">${item.title || '---'}</div>
@@ -184,7 +196,7 @@ const HomeEngine = {
         ${data.items.map(item => `
           <div class="novel-card" onclick="window.location.href='novel.html?id=${this.getNovelId(item.title)}'">
             <div class="rank-badge" style="top: 8px; right: 8px; width: 30px; height: 30px; font-size: 14px; border-radius: 0;">${item.rank}</div>
-            <img src="${item.cover || 'public/ChatGPT Image May 7, 2026, 07_38_24 PM.png'}" class="novel-card-poster">
+            ${this.renderPoster(item.cover, 'novel-card-poster')}
             <div class="novel-card-info">
               <div class="novel-card-title">${item.title || '---'}</div>
               <div class="novel-card-author">${item.author || '---'}</div>
@@ -214,7 +226,7 @@ const HomeEngine = {
       <div class="novel-grid">
         ${data.items.map(item => `
           <div class="novel-card" onclick="window.location.href='novel.html?id=${this.getNovelId(item.title)}'">
-            <img src="${item.cover || 'public/ChatGPT Image May 7, 2026, 07_38_24 PM.png'}" class="novel-card-poster">
+            ${this.renderPoster(item.cover, 'novel-card-poster')}
             <div class="novel-card-info">
               <div class="novel-card-title">${item.title || '---'}</div>
               <div class="novel-card-author">${item.author || '---'}</div>

@@ -55,7 +55,7 @@ const Store = {
     return this.activeNovel ? this.activeNovel.activeChapterIdx : 0;
   },
 
-  addNovel(title = 'رواية جديدة', author = 'مؤلف مجهول', cover = 'public/ChatGPT Image May 7, 2026, 07_38_24 PM.png', chapters = null) {
+  addNovel(title = 'رواية جديدة', author = 'مؤلف مجهول', cover = '', chapters = null) {
     const novel = {
       title,
       author,
@@ -227,7 +227,7 @@ const Store = {
       if (!n.description) n.description = 'لا يوجد وصف متاح حالياً لهذه الرواية.';
       if (!n.status) n.status = 'مستمرة';
       if (!n.genres) n.genres = ['عام'];
-      if (!n.cover) n.cover = 'public/ChatGPT Image May 7, 2026, 07_38_24 PM.png';
+      if (n.cover === undefined) n.cover = '';
       n.chapters.forEach(ch => {
         if (!ch.views) ch.views = 0;
         if (!ch.viewLog) ch.viewLog = {};
