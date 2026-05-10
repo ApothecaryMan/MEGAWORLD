@@ -131,6 +131,7 @@
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  white-space: pre-wrap;
 }
 
 .rank-stats-row {
@@ -340,6 +341,7 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   line-height: 1.4;
+  white-space: pre-wrap;
 }
 
 /* --- Novel Grid Card (Poster + Overlay Info) --- */

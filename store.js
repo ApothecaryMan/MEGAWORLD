@@ -13,7 +13,8 @@ const Store = {
       align: 'ar',
       continuousMode: false,
       theme: 'bg-def',
-      sidebarVisible: true
+      sidebarVisible: true,
+      chapterSortOrder: 'asc'
     }
   },
 
@@ -82,6 +83,14 @@ const Store = {
   updateNovelTitle(title) {
     if (this.activeNovel) {
       this.activeNovel.title = title;
+      this.save();
+      this.notify();
+    }
+  },
+
+  updateNovel(idx, data) {
+    if (this.state.novels[idx]) {
+      this.state.novels[idx] = { ...this.state.novels[idx], ...data };
       this.save();
       this.notify();
     }

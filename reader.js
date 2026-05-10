@@ -12,6 +12,11 @@ function renderTabs() {
 
   const chapters = Store.chapters;
   const activeIdx = Store.activeChapterIdx;
+  const sortOrder = Store.state.settings.chapterSortOrder || 'asc';
+  
+  // تحديث تسمية الفلتر
+  const filterLabel = document.getElementById('filterLabel');
+  if (filterLabel) filterLabel.textContent = sortOrder === 'asc' ? 'الأقدم أولاً' : 'الأحدث أولاً';
 
   chapters.forEach((ch, i) => {
     // التبويبات العلوية
@@ -70,8 +75,16 @@ function renderTabs() {
     t.appendChild(cl);
     bar.appendChild(t);
 
-    // قائمة الفصول في الجنب
-    if (side) {
+  });
+
+  // قائمة الفصول في الجنب (تتأثر بالترتيب)
+  if (side) {
+    side.innerHTML = '';
+    const displayChapters = chapters.map((ch, i) => ({ ...ch, originalIdx: i }));
+    if (sortOrder === 'desc') displayChapters.reverse();
+
+    displayChapters.forEach((ch) => {
+      const i = ch.originalIdx;
       const s = document.createElement('button');
       s.className = 'list-item-flat' + (i === activeIdx ? ' active' : '');
       s.textContent = ch.title || ('فصل ' + (i + 1));
@@ -83,8 +96,8 @@ function renderTabs() {
         { label: 'حذف الفصل', icon: 'ti-trash', danger: true, action: () => Store.deleteChapter(i) }
       ]);
       side.appendChild(s);
-    }
-  });
+    });
+  }
 
   const add = document.createElement('button');
   add.className = 'btn-icon'; add.textContent = '+'; add.onclick = () => Store.addChapter();
@@ -173,6 +186,12 @@ function escHtml(t) {
 
 function goTo(i) {
   Store.setChapter(i);
+}
+
+function sortChapters(order) {
+  Store.updateSettings('chapterSortOrder', order);
+  document.getElementById('chaptersFilter').classList.remove('open');
+  renderTabs();
 }
 
 // التمرير الذكي (Scrolling Logic)
