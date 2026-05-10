@@ -28,9 +28,20 @@ function renderLibrary() {
 
   novels.forEach((novel, i) => {
     const item = document.createElement('button');
-    item.className = 'side-item' + (i === activeNovelIdx ? ' active' : '');
+    item.className = 'list-item-flat' + (i === activeNovelIdx ? ' active' : '');
     item.textContent = novel.title || 'رواية بدون عنوان';
     item.onclick = () => switchNovel(i);
+    
+    // القائمة المنبثقة للرواية (الاستدعاء الجديد الموحد)
+    item.oncontextmenu = (e) => {
+      ContextMenu.show(e, [
+        { label: 'فتح الرواية', icon: 'ti-book', action: () => switchNovel(i) },
+        { label: 'تغيير الاسم', icon: 'ti-edit', action: () => renameNovel(i) },
+        { label: 'إضافة فصل للرواية', icon: 'ti-plus', action: () => { switchNovel(i); addChapter(); } },
+        { sep: true },
+        { label: 'حذف الرواية', icon: 'ti-trash', danger: true, action: () => deleteNovel(i) }
+      ]);
+    };
     
     // تعديل اسم الرواية بالضغط مرتين
     item.ondblclick = () => {
@@ -93,6 +104,27 @@ function updateNovelTitle(val) {
   }
 }
 
+// وظائف التعديل والحذف المستدعاة من المنيو
+function renameNovel(i) {
+  const n = prompt('اسم الرواية الجديد:', novels[i].title);
+  if (n && n.trim()) {
+    novels[i].title = n.trim();
+    renderLibrary();
+    save();
+  }
+}
+
+function deleteNovel(i) {
+  if (novels.length === 1) return alert('لا يمكن حذف آخر رواية.');
+  if (confirm(`حذف رواية "${novels[i].title}" نهائياً؟`)) {
+    novels.splice(i, 1);
+    if (activeNovelIdx >= novels.length) activeNovelIdx = novels.length - 1;
+    syncStateFromActiveNovel();
+    renderLibrary(); renderTabs(); renderBody();
+    save();
+  }
+}
+
 // Helper to keep legacy variables in sync
 function syncStateFromActiveNovel() {
   if (novels[activeNovelIdx]) {
@@ -105,7 +137,6 @@ function syncStateFromActiveNovel() {
 window.addEventListener('DOMContentLoaded', () => {
   renderLibrary();
   
-  // تفعيل التعديل بالضغط مرتين لعنوان الرواية في البار العلوي
   const titleField = document.getElementById('novelTitleInput');
   if (titleField) {
     titleField.readOnly = true;

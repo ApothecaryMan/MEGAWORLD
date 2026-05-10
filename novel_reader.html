@@ -15,50 +15,9 @@
 
 <div class="root bg-def" id="root">
 
-  <!-- القائمة العلوية -->
-  <div class="sticky-bar">
-    <button class="btn" title="الرئيسية">الرئيسية</button>
-    <button class="btn" onclick="toggleSidebar()" id="sideToggleBtn">القائمة</button>
-    <span class="lbl">الدليل</span>
-    <div class="stats-box">
-      <div class="stat"><b id="wc">0</b>&nbsp;كلمة</div>
-      <div class="stats-divider"></div>
-      <div class="stat"><b id="cc">0</b>&nbsp;حرف</div>
-      <div class="stats-divider"></div>
-      <div class="stat"><b id="rt">0</b>&nbsp;<span id="rt-lbl">دقيقة</span></div>
-    </div>
-    <span class="lbl">خط</span>
-    <button class="btn" id="f1" onclick="setFont('fn','f1')">أميـري</button>
-    <button class="btn" id="f2" onclick="setFont('fn2','f2')">نـسخ</button>
-    <button class="btn" id="f3" onclick="setFont('fn3','f3')">نـظام</button>
-    <div class="sep"></div>
-    <span class="lbl">الحجم</span>
-    <button class="btn" onclick="chSz(-2)">−</button>
-    <span class="lbl" id="szlbl" style="min-width:22px;text-align:center;">22</span>
-    <button class="btn" onclick="chSz(2)">+</button>
-    <div class="sep"></div>
-    <span class="lbl">محاذاة</span>
-    <button class="btn" id="ar" onclick="setAl('ar','ar')" aria-label="يمين">يمين</button>
-    <button class="btn" id="ac" onclick="setAl('ac','ac')" aria-label="وسط">وسط</button>
-    <button class="btn" id="aj" onclick="setAl('aj','aj')" aria-label="ضبط">ضبط</button>
-    <div class="sep"></div>
-    <button class="btn" id="contBtn" onclick="toggleContinuousMode()">متواصل</button>
-
-    <span class="lbl">خلفية</span>
-    <div class="swatch-wrap" id="swatches"></div>
-    
-    <input type="text" class="search-input" id="sq" placeholder="بحث عن..." oninput="doSearch(this.value)">
-
-    <button class="btn" onclick="toggleFocus()">تركيز</button>
-    <button class="btn" onclick="exportTxt()">تصدير</button>
-
-    <div class="spacer"></div>
-    <button class="btn" onclick="openModal()" id="editBtn">تعديل</button>
-    <button class="btn" onclick="deleteChapter()">حذف</button>
-    
-    <div class="site-name">
-      <input type="text" id="novelTitleInput" class="novel-title-field" placeholder="اسم الرواية..." oninput="updateNovelTitle(this.value)">
-    </div>
+  <!-- القائمة العلوية المكوناتية -->
+  <div class="sticky-bar" id="mainToolbar">
+    <!-- يتم بناؤها ديناميكياً بواسطة Toolbar Engine -->
   </div>
 
   <div class="main-layout">
@@ -67,7 +26,7 @@
       <div class="sidebar-section">
         <div class="sidebar-title">
           <span>المكتبة</span>
-          <button class="tab-add" onclick="addNovel()" title="رواية جديدة">+</button>
+          <button class="btn-icon" onclick="addNovel()" title="رواية جديدة">+</button>
         </div>
         <div class="side-list" id="libraryList"></div>
       </div>
@@ -77,7 +36,7 @@
       <div class="sidebar-section">
         <div class="sidebar-title">
           <span>قائمة الفصول</span>
-          <button class="tab-add" onclick="addChapter()" title="إضافة فصل">+</button>
+          <button class="btn-icon" onclick="addChapter()" title="إضافة فصل">+</button>
         </div>
         <div class="side-list" id="sideList"></div>
       </div>
@@ -85,73 +44,46 @@
 
     <div class="body-area" style="flex:1; min-width:0;">
       <!-- شريط التبويبات -->
-      <div class="tabs-bar" id="tabsBar">
-        <button class="tab-add" onclick="addChapter()" title="فصل جديد">+</button>
-      </div>
+      <div class="tabs-bar" id="tabsBar"></div>
+      
+      <!-- منطقة المحتوى -->
       <div class="body-wrap" id="bodyWrap"></div>
     </div>
   </div>
 
-</div>
+  <!-- Progress Bar -->
+  <div class="progress-wrap">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
 
-<!-- القائمة المنيو (المنبثقة) -->
-<div class="context-menu" id="contextMenu">
-  <div class="context-title">القائمة السريعة</div>
-  <button class="context-item" onclick="openModal()">
-    <span>تعديل الفصل</span>
-    <small>Ctrl + E</small>
-  </button>
-  <button class="context-item" onclick="addChapter()">
-    <span>فصل جديد</span>
-    <small>+</small>
-  </button>
-  <button class="context-item" onclick="deleteChapter()">
-    <span>حذف الفصل</span>
-    <small>Del</small>
-  </button>
-  <div class="context-sep"></div>
-  <button class="context-item" onclick="goTo(activeIdx-1)"><span>الفصل السابق</span></button>
-  <button class="context-item" onclick="goTo(activeIdx+1)"><span>الفصل التالي</span></button>
-  <div class="context-sep"></div>
-  <button class="context-item" onclick="searchInChapter()">
-    <span>بحث داخل الفصل</span>
-    <small>Ctrl + F</small>
-  </button>
-  <button class="context-item" onclick="exportTxt()"><span>تصدير TXT</span></button>
-  <div class="context-sep"></div>
-  <button class="context-item" onclick="setThemeQuick('bg-def')"><span>الثيم الافتراضي</span></button>
-  <button class="context-item" onclick="setThemeQuick('bg-night')"><span>الثيم الليلي</span></button>
-  <button class="context-item" onclick="setThemeQuick('bg-ivory')"><span>الثيم الورقي</span></button>
-  <div class="context-sep"></div>
-  <button class="context-item" onclick="toggleFocus()"><span>وضع التركيز</span></button>
-</div>
+  <!-- القائمة المنبثقة الذكية -->
+  <div class="context-menu" id="contextMenu"></div>
 
-<!-- المحرر (Modal) -->
-<div class="modal-bg" id="modalBg">
-  <div class="modal" id="modal">
-    <div class="modal-hdr">
-      <span class="modal-title">اسم الفصل:</span>
-      <input class="modal-title-input" id="titleInput" placeholder="الفصل الأول...">
-    </div>
-    <textarea class="ta" id="ta" placeholder="الصق نص الفصل هنا..."></textarea>
-    <div class="modal-btns">
-      <button class="btn" onclick="applyText()">حفظ</button>
-      <button class="btn" onclick="closeModal()">إلغاء</button>
+  <!-- النافذة المنبثقة للمحرر -->
+  <div class="modal-bg" id="modalBg">
+    <div class="modal" id="modal">
+      <div class="modal-hdr">
+        <div class="modal-title">اسم الفصل:</div>
+        <input class="input-flat" style="flex:1; background:transparent; border:none; border-bottom:1px solid var(--ui-border-light);" id="titleInput" placeholder="الفصل الأول...">
+      </div>
+      <textarea class="ta" id="ta" placeholder="الصق نص الفصل هنا..."></textarea>
+      <div class="modal-btns">
+        <button class="btn-flat" onclick="closeModal()">إلغاء</button>
+        <button class="btn-flat active" onclick="applyText()">حفظ</button>
+      </div>
     </div>
   </div>
+
 </div>
 
-<button class="focus-exit" onclick="toggleFocus()">إغلاق وضع التركيز</button>
-<div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
-
-<!-- استيراد الموديولات بالترتيب الصحيح -->
+<!-- Scripts -->
 <script src="config.js"></script>
 <script src="storage.js"></script>
-<script src="reader.js"></script>
 <script src="toolbar.js"></script>
 <script src="sidebar.js"></script>
 <script src="context_menu.js"></script>
 <script src="editor.js"></script>
+<script src="reader.js"></script>
 
 </body>
 </html>

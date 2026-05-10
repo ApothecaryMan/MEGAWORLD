@@ -9,7 +9,6 @@ function renderTabs() {
   bar.innerHTML = '';
   if (side) side.innerHTML = '';
 
-  // Ensure we are using the latest data from the active novel
   if (novels[activeNovelIdx]) {
     chapters = novels[activeNovelIdx].chapters;
     activeIdx = novels[activeNovelIdx].activeChapterIdx;
@@ -18,12 +17,21 @@ function renderTabs() {
   chapters.forEach((ch, i) => {
     // Top Tabs
     const t = document.createElement('button');
-    t.className = 'tab' + (i === activeIdx ? ' active' : '');
+    t.className = 'btn-flat tab' + (i === activeIdx ? ' active' : '');
     t.textContent = ch.title || ('فصل ' + (i + 1));
     t.draggable = true;
     t.onclick = () => goTo(i);
     
-    // تعديل الاسم بالضغط مرتين
+    // القائمة المنبثقة للتبويبات (المحرك الجديد)
+    t.oncontextmenu = (e) => {
+      ContextMenu.show(e, [
+        { label: 'تعديل النص', icon: 'ti-edit', action: () => { goTo(i); openModal(); } },
+        { label: 'إضافة فصل جديد', icon: 'ti-plus', action: () => addChapter() },
+        { sep: true },
+        { label: 'حذف الفصل', icon: 'ti-trash', danger: true, action: () => { activeIdx = i; deleteChapter(); } }
+      ]);
+    };
+    
     t.ondblclick = () => {
       const input = document.createElement('input');
       input.className = 'inline-edit-input';
@@ -78,11 +86,20 @@ function renderTabs() {
     // Sidebar Item
     if (side) {
       const s = document.createElement('button');
-      s.className = 'side-item' + (i === activeIdx ? ' active' : '');
+      s.className = 'list-item-flat' + (i === activeIdx ? ' active' : '');
       s.textContent = ch.title || ('فصل ' + (i + 1));
       s.onclick = () => goTo(i);
       
-      // تعديل اسم الفصل في القائمة الجانبية بالضغط مرتين
+      // القائمة المنبثقة لقائمة الجنب
+      s.oncontextmenu = (e) => {
+        ContextMenu.show(e, [
+          { label: 'فتح الفصل', icon: 'ti-external-link', action: () => goTo(i) },
+          { label: 'تعديل النص', icon: 'ti-edit', action: () => { goTo(i); openModal(); } },
+          { sep: true },
+          { label: 'حذف الفصل', icon: 'ti-trash', danger: true, action: () => { activeIdx = i; deleteChapter(); } }
+        ]);
+      };
+
       s.ondblclick = () => {
         const input = document.createElement('input');
         input.className = 'inline-edit-input';
@@ -107,7 +124,7 @@ function renderTabs() {
   });
 
   const add = document.createElement('button');
-  add.className = 'tab-add'; add.textContent = '+'; add.title = 'فصل جديد';
+  add.className = 'btn-icon'; add.textContent = '+'; add.title = 'فصل جديد';
   add.onclick = addChapter;
   bar.appendChild(add);
 }
@@ -215,9 +232,6 @@ function goTo(i) {
 function updateActiveUI() {
   document.querySelectorAll('.tab').forEach((t, idx) => {
     t.classList.toggle('active', idx === activeIdx);
-  });
-  document.querySelectorAll('.side-item').forEach((s, idx) => {
-    s.classList.toggle('active', idx === activeIdx);
   });
   const info = document.getElementById('navInfo');
   if (info) info.textContent = (activeIdx + 1) + ' / ' + chapters.length;
