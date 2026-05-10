@@ -128,6 +128,108 @@
     </div>
 
     <div class="test-section">
+      <h2>Novel Home Page (Edit Mode)</h2>
+      
+      <!-- 1. Hero Card Edit -->
+      <div class="novel-hero">
+        <div class="novel-cover" style="position: relative;">
+          غلاف الرواية
+          <button class="cover-edit-btn">تغيير الغلاف</button>
+        </div>
+        <div class="novel-info-main" style="flex: 1;">
+          <input type="text" class="input-hero" value="سيد الخواتم: رفقة الخاتم">
+          <div class="novel-meta">
+            <span>المؤلف: <input type="text" class="input-flat borderless" style="font-size:12px; width:120px; padding:0;" value="ج. ر. ر. تولكين"></span>
+            <span>|</span>
+            <span>الحالة: <select class="input-flat borderless" style="font-size:12px; padding:0;"><option>مكتملة</option><option>مستمرة</option></select></span>
+          </div>
+          <div class="flex-row" style="margin-top: 10px;">
+            <button class="genre-tag">خيال <span class="tag-remove">×</span></button>
+            <button class="genre-tag">مغامرة <span class="tag-remove">×</span></button>
+            <button class="btn-flat" style="padding: 2px 8px; font-size: 10px;">+ إضافة وسم</button>
+          </div>
+          <div class="flex-row" style="margin-top: 15px;">
+            <button class="btn-flat active" style="background: #059669; color: white; border: none; padding: 0 25px;">حفظ التغييرات</button>
+            <button class="btn-flat">إلغاء</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Chapter List Edit -->
+      <div style="margin-top: 25px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+          <h3 style="font-size: 14px; opacity: 0.7;">تعديل قائمة الفصول</h3>
+          <button class="btn-flat" style="font-size: 11px;">+ إضافة فصل</button>
+        </div>
+        <div style="display: flex; flex-direction: column;">
+          <div class="chapter-row">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <i class="ti ti-menu-order" style="opacity: 0.3; cursor: grab;"></i>
+              <span class="chapter-num">1</span>
+              <span class="chapter-name">رحلة غير متوقعة</span>
+            </div>
+            <div style="display: flex; gap: 5px;">
+              <button class="action-icon-btn edit"><i class="ti ti-edit"></i></button>
+              <button class="action-icon-btn danger"><i class="ti ti-trash"></i></button>
+            </div>
+          </div>
+          <div class="chapter-row">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <i class="ti ti-menu-order" style="opacity: 0.3; cursor: grab;"></i>
+              <span class="chapter-num">2</span>
+              <span class="chapter-name">ظل الماضي</span>
+            </div>
+            <div style="display: flex; gap: 5px;">
+              <button class="action-icon-btn edit"><i class="ti ti-edit"></i></button>
+              <button class="action-icon-btn danger"><i class="ti ti-trash"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="test-section">
+      <h2>Dropdowns & Filters</h2>
+      <div class="flex-row" style="gap: 50px; align-items: flex-start;">
+        
+        <!-- 1. Closed Dropdown -->
+        <div>
+          <label style="font-size: 11px; opacity: 0.6; display: block; margin-bottom: 8px;">فلترة الفصول (مغلق)</label>
+          <div class="dropdown-wrap" id="drop1">
+            <div class="dropdown-trigger" onclick="this.parentElement.classList.toggle('open')">
+              <span>ترتيب حسب الأحدث</span>
+              <i class="ti ti-chevron-down"></i>
+            </div>
+            <div class="dropdown-menu">
+              <button class="dropdown-item">الأحدث أولاً <i class="ti ti-arrow-down"></i></button>
+              <button class="dropdown-item">الأقدم أولاً <i class="ti ti-arrow-up"></i></button>
+              <button class="dropdown-item">الأكثر قراءة <i class="ti ti-flame"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Open Dropdown (for demo) -->
+        <div>
+          <label style="font-size: 11px; opacity: 0.6; display: block; margin-bottom: 8px;">خيايرة التصفية (مفتوح)</label>
+          <div class="dropdown-wrap open">
+            <div class="dropdown-trigger">
+              <span>تصفية حسب الحالة</span>
+              <i class="ti ti-chevron-up"></i>
+            </div>
+            <div class="dropdown-menu">
+              <button class="dropdown-item">جميع الفصول <i class="ti ti-list"></i></button>
+              <button class="dropdown-item">غير المقروءة <i class="ti ti-eye-off"></i></button>
+              <button class="dropdown-item">المفضلة <i class="ti ti-star"></i></button>
+              <button class="dropdown-item accent">تحميل الكل <i class="ti ti-download"></i></button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="test-section">
       <h2>Typography (Amiri)</h2>
       <div class="chapter-text ar">
         هذا نص تجريبي بخط أميري، مصمم لتوفير أفضل تجربة قراءة ممكنة. 
