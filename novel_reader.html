@@ -293,14 +293,13 @@ gap:10px;
 padding:0 10px;
 height:28px;
 border:1px solid rgba(128,128,128,0.35);
-background:rgba(128,128,128,.04);
 flex-shrink:0;
 }
 
 .stats-divider{
 width:1px;
-height:14px;
-background:rgba(128,128,128,.22);
+height:100%;
+background:rgba(128,128,128,0.35);
 }
 
 .swatch{
@@ -338,57 +337,124 @@ font-size:12px;
 display:block;
 }
 
+.search-input{
+  background:rgba(128,128,128,0.05);
+  border:1px solid rgba(128,128,128,0.35);
+  color:inherit;
+  padding:0 10px;
+  font-size:12px;
+  height:28px;
+  width:120px;
+  outline:none;
+  font-family:var(--font-sans);
+}
+.search-input:focus{
+  border-color:rgba(128,128,128,0.65);
+  background:rgba(128,128,128,0.1);
+}
+
+.main-layout{display:flex;direction:rtl;}
+.sidebar{
+  width:240px;
+  border-left:1px solid rgba(128,128,128,0.15);
+  padding:16px 12px;
+  background:rgba(128,128,128,0.02);
+  flex-shrink:0;
+  overflow-y:auto;
+  max-height:calc(100vh - 50px);
+  position:sticky;top:45px;
+  transition:background .25s;
+}
+.sidebar-title{
+  font-size:13px;font-weight:bold;margin-bottom:12px;opacity:0.5;
+  border-bottom:1px solid rgba(128,128,128,0.1);padding-bottom:8px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.side-list{display:flex;flex-direction:column;gap:2px;}
+.side-item{
+  display:block;width:100%;text-align:right;
+  padding:8px 12px;font-size:13px;border:none;background:transparent;
+  color:inherit;cursor:pointer;border-radius:0;
+  transition:background 0.1s, color 0.1s;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.side-item:hover{background:rgba(128,128,128,0.08);}
+.side-item.active{
+  background:rgba(128,128,128,0.12);
+  font-weight:bold;
+  border-right:3px solid currentColor;
+}
+
+@media (max-width: 800px) {
+  .sidebar { display: none; }
+}
+
 </style>
 
 <div class="root bg-def" id="root">
 
   <div class="sticky-bar">
-    <div class="stat"><i class="ti ti-letter-case" aria-hidden="true"></i><b id="wc">0</b>&nbsp;كلمة</div>
-    <div class="stat"><i class="ti ti-text-size" aria-hidden="true"></i><b id="cc">0</b>&nbsp;حرف</div>
-    <div class="stat"><i class="ti ti-clock" aria-hidden="true"></i><b id="rt">0</b>&nbsp;د</div>
-    <div class="sep"></div>
+    <span class="lbl">الدليل</span>
+    <div class="stats-box">
+      <div class="stat"><b id="wc">0</b>&nbsp;كلمة</div>
+      <div class="stats-divider"></div>
+      <div class="stat"><b id="cc">0</b>&nbsp;حرف</div>
+      <div class="stats-divider"></div>
+      <div class="stat"><b id="rt">0</b>&nbsp;<span id="rt-lbl">دقيقة</span></div>
+    </div>
     <span class="lbl">خط</span>
-    <button class="btn on" id="f1" onclick="setFont('fn','f1')"><span class="local-icon">A1</span></button>
-    <button class="btn" id="f2" onclick="setFont('fn2','f2')"><span class="local-icon">A2</span></button>
-    <button class="btn" id="f3" onclick="setFont('fn3','f3')"><span class="local-icon">A3</span></button>
+    <button class="btn on" id="f1" onclick="setFont('fn','f1')">أميـري</button>
+    <button class="btn" id="f2" onclick="setFont('fn2','f2')">نـسخ</button>
+    <button class="btn" id="f3" onclick="setFont('fn3','f3')">نـظام</button>
     <div class="sep"></div>
+    <span class="lbl">الحجم</span>
     <button class="btn" onclick="chSz(-2)">−</button>
     <span class="lbl" id="szlbl" style="min-width:22px;text-align:center;">22</span>
     <button class="btn" onclick="chSz(2)">+</button>
     <div class="sep"></div>
     <span class="lbl">محاذاة</span>
-    <button class="btn on" id="ar" onclick="setAl('ar','ar')" aria-label="يمين"><span class="local-icon">⇥</span></button>
-    <button class="btn" id="ac" onclick="setAl('ac','ac')" aria-label="وسط"><span class="local-icon">≡</span></button>
-    <button class="btn" id="aj" onclick="setAl('aj','aj')" aria-label="ضبط"><span class="local-icon">☰</span></button>
+    <button class="btn on" id="ar" onclick="setAl('ar','ar')" aria-label="يمين">يمين</button>
+    <button class="btn" id="ac" onclick="setAl('ac','ac')" aria-label="وسط">وسط</button>
+    <button class="btn" id="aj" onclick="setAl('aj','aj')" aria-label="ضبط">ضبط</button>
     <div class="sep"></div>
-    <button class="btn" onclick="toggleContinuousMode()"><span class="local-icon">▤</span></button>
+    <button class="btn" onclick="toggleContinuousMode()">متواصل</button>
 
 <span class="lbl">خلفية</span>
     <div class="swatch-wrap" id="swatches"></div>
     
-<button class="btn" onclick="searchInChapter()"><span class="local-icon">⌕</span></button>
+<input type="text" class="search-input" id="sq" placeholder="بحث عن..." oninput="doSearch(this.value)">
 
-<button class="btn" onclick="toggleFocus()"><span class="local-icon">◉</span></button>
+<button class="btn" onclick="toggleFocus()">تركيز</button>
 
-<button class="btn" onclick="exportTxt()"><span class="local-icon">⇩</span></button>
+<button class="btn" onclick="exportTxt()">تصدير</button>
 
 <div class="sep"></div>
 
 
 
 
-<div class="spacer"></div>
-    <button class="btn" onclick="openModal()" id="editBtn"><span class="local-icon">✎</span></button>
-    <button class="btn" onclick="deleteChapter()"><span class="local-icon">✕</span></button>
+    <button class="btn" onclick="toggleSidebar()" id="sideToggleBtn">القائمة</button>
+    <div class="spacer"></div>
+    <button class="btn" onclick="openModal()" id="editBtn">تعديل</button>
+    <button class="btn" onclick="deleteChapter()">حذف</button>
   </div>
 
-  <div class="tabs-bar" id="tabsBar">
-    <button class="tab-add" onclick="addChapter()" title="فصل جديد">+</button>
+  <div class="main-layout">
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-title">
+        <span>قائمة الفصول</span>
+        <button class="tab-add" onclick="addChapter()" style="padding:0;height:auto;font-size:14px;" title="إضافة فصل">+</button>
+      </div>
+      <div class="side-list" id="sideList"></div>
+    </div>
+
+    <div class="body-area" style="flex:1; min-width:0;">
+      <div class="tabs-bar" id="tabsBar">
+        <button class="tab-add" onclick="addChapter()" title="فصل جديد">+</button>
+      </div>
+      <div class="body-wrap" id="bodyWrap"></div>
+    </div>
   </div>
-
-  
-
-  <div class="body-wrap" id="bodyWrap"></div>
 
 </div>
 
@@ -517,6 +583,7 @@ activeIdx,
 font,
 sz,
 align,
+sidebarVisible,
 paletteCls:activePalette.cls
 };
 
@@ -549,6 +616,7 @@ activeIdx=d.activeIdx||0;
 font=d.font||'fn';
 sz=d.sz||22;
 align=d.align||'ar';
+sidebarVisible=d.sidebarVisible!==undefined?d.sidebarVisible:true;
 
 const p=palettes.find(
 x=>x.cls===d.paletteCls
@@ -559,7 +627,24 @@ if(p)activePalette=p;
 }catch(e){
 console.error('load error',e);
 }
+}
 
+let sidebarVisible = true;
+function toggleSidebar(){
+  sidebarVisible = !sidebarVisible;
+  applySidebarState();
+  save();
+}
+
+function applySidebarState(){
+  const sb = document.getElementById('sidebar');
+  const btn = document.getElementById('sideToggleBtn');
+  if(sb){
+    sb.classList.toggle('hidden', !sidebarVisible);
+  }
+  if(btn){
+    btn.classList.toggle('on', sidebarVisible);
+  }
 }
 
 window.addEventListener('beforeunload',save);
@@ -612,15 +697,33 @@ function buildSwatches(){
     const w=text.trim()===''?0:text.trim().split(/\s+/).length;
     const ch=text.replace(/\s/g,'').length;
     const m=Math.max(1,Math.round(w/200));
+    
     document.getElementById('wc').textContent=w.toLocaleString('ar-EG');
     document.getElementById('cc').textContent=ch.toLocaleString('ar-EG');
-    document.getElementById('rt').textContent=m;
+    
+    const rtEl = document.getElementById('rt');
+    const rtLbl = document.getElementById('rt-lbl');
+    
+    if (m === 1) {
+      rtEl.textContent = '';
+      rtLbl.textContent = 'دقيقة واحدة';
+    } else if (m === 2) {
+      rtEl.textContent = '';
+      rtLbl.textContent = 'دقيقتان';
+    } else {
+      rtEl.textContent = m.toLocaleString('ar-EG');
+      rtLbl.textContent = (m >= 3 && m <= 10) ? 'دقائق' : 'دقيقة';
+    }
   }
 
   function renderTabs(){
     const bar=document.getElementById('tabsBar');
+    const side=document.getElementById('sideList');
     bar.innerHTML='';
+    if(side) side.innerHTML='';
+
     chapters.forEach((ch,i)=>{
+      // Top Tabs
       const t=document.createElement('button');
       t.className='tab'+(i===activeIdx?' active':'');
       t.textContent=ch.title||('فصل '+(i+1));
@@ -644,7 +747,17 @@ function buildSwatches(){
       cl.onclick=(e)=>{e.stopPropagation();if(chapters.length===1){chapters[0].content='';chapters[0].title='فصل 1';}else{chapters.splice(i,1);if(activeIdx>=chapters.length)activeIdx=chapters.length-1;}renderTabs();renderBody();save();};
       t.appendChild(cl);
       bar.appendChild(t);
+
+      // Sidebar Item
+      if(side){
+        const s = document.createElement('button');
+        s.className = 'side-item' + (i===activeIdx?' active':'');
+        s.textContent = ch.title || ('فصل ' + (i+1));
+        s.onclick = () => goTo(i);
+        side.appendChild(s);
+      }
     });
+
     const add=document.createElement('button');
     add.className='tab-add';add.textContent='+';add.title='فصل جديد';
     add.onclick=addChapter;
@@ -681,40 +794,32 @@ chapters.forEach((c,i)=>{
 
 if(!c.content)return;
 
-full+=`
-${i!==0?'<div class="orn"><div class="orn-line"></div><div class="orn-dot"></div><div class="orn-line"></div></div>':''}
-
-<div class="chapter-text '+font+' '+align+'" style="font-size:${sz}px;">
-${escHtml(c.content)}
-</div>
-`;
-
-});
-
-wrap.innerHTML=full;
-
-stats(chapters.map(x=>x.content).join(' '));
-
-}else{
-
-wrap.innerHTML=`
-${activeIdx!==0?'<div class="orn"><div class="orn-line"></div><div class="orn-dot"></div><div class="orn-line"></div></div>':''}
-
-<div class="chapter-text ${font} ${align}" id="chapterText" style="font-size:${sz}px;">${escHtml(ch.content)}</div>
-
-<div class="orn" style="margin-top:2rem;"><div class="orn-line"></div><div class="orn-dot"></div><div class="orn-line"></div></div>`;
-
-stats(ch.content);
-
-}
+        full+=`
+        <h2 class="chapter-text ${font} ${align}" style="font-size:${sz}px; font-weight:bold; margin-top:2rem; margin-bottom:16px;">${escHtml(c.title)}</h2>
+        <div class="chapter-text ${font} ${align}" style="font-size:${sz}px;">
+        ${escHtml(c.content)}
+        </div>
+        <div class="orn" style="margin-top:3rem; margin-bottom:3rem;"><div class="orn-line"></div><div class="orn-dot"></div><div class="orn-line"></div></div>
+        `;
+      });
+      wrap.innerHTML=full;
+      stats(chapters.map(x=>x.content).join(' '));
+    } else {
+      wrap.innerHTML=`
+      ${activeIdx!==0?'<div class="orn"><div class="orn-line"></div><div class="orn-dot"></div><div class="orn-line"></div></div>':''}
+      <h2 class="chapter-text ${font} ${align}" style="font-size:${sz}px; font-weight:bold; margin-bottom:16px;">${escHtml(ch.title)}</h2>
+      <div class="chapter-text ${font} ${align}" id="chapterText" style="font-size:${sz}px;">${escHtml(ch.content)}</div>
+      <div class="orn" style="margin-top:2rem;"><div class="orn-line"></div><div class="orn-dot"></div><div class="orn-line"></div></div>`;
+      stats(ch.content);
+    }
 
     }
     const prev=document.getElementById('prevBtn');
     const next=document.getElementById('nextBtn');
     const info=document.getElementById('navInfo');
-    prev.disabled=activeIdx===0;
-    next.disabled=activeIdx===chapters.length-1;
-    info.textContent=(activeIdx+1)+' / '+chapters.length;
+    if(prev) prev.disabled=activeIdx===0;
+    if(next) next.disabled=activeIdx===chapters.length-1;
+    if(info) info.textContent=(activeIdx+1)+' / '+chapters.length;
   }
 
   function escHtml(t){
@@ -768,15 +873,20 @@ document.getElementById('modalBg')
 
 
   function applyText(){
-    const text=document.getElementById('ta').value.trim();
-    const title=document.getElementById('titleInput').value.trim();
-    if(!chapters[activeIdx])return;
-    chapters[activeIdx].content=text;
-    if(title)chapters[activeIdx].title=title;
-    renderTabs();
-renderBody();
-save();
-closeModal();
+    try {
+      const text=document.getElementById('ta').value.trim();
+      const title=document.getElementById('titleInput').value.trim();
+      if(!chapters[activeIdx])return;
+      chapters[activeIdx].content=text;
+      if(title)chapters[activeIdx].title=title;
+      renderTabs();
+      renderBody();
+      save();
+    } catch(e) {
+      console.error('applyText error', e);
+    } finally {
+      closeModal();
+    }
   }
 
   document.getElementById('modalBg').addEventListener('click',e=>{
@@ -816,27 +926,30 @@ load();
   if(activeIdx>=chapters.length)activeIdx=0;
   buildSwatches();
   applyGlobalUI();
+  applySidebarState();
   renderTabs();
   renderBody();
 
+function doSearch(q){
+  const el=document.getElementById('chapterText');
+  if(!el)return;
+  const txt=chapters[activeIdx].content;
+  if(!txt)return;
+  if(!q){
+    el.innerHTML=escHtml(txt);
+    return;
+  }
+  try {
+    const rg=new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),'gi');
+    el.innerHTML=escHtml(txt).replace(rg,m=>`<mark>${m}</mark>`);
+  } catch(e) {}
+}
+
 function searchInChapter(){
-
-const q=prompt('ابحث عن:');
-
-if(!q)return;
-
-const el=document.getElementById('chapterText');
-
-if(!el)return;
-
-const txt=chapters[activeIdx].content;
-
-const rg=new RegExp(q,'gi');
-
-el.innerHTML=
-escHtml(txt)
-.replace(rg,m=>`<mark>${m}</mark>`);
-
+  // This function is kept for context menu or shortcuts if needed, 
+  // but now redirects to focusing the input.
+  const input = document.getElementById('sq');
+  if(input) input.focus();
 }
 
 function exportTxt(){
