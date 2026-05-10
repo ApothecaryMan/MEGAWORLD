@@ -202,5 +202,10 @@ body {
 .focus-mode .sticky-bar, .focus-mode .tabs-bar, .focus-mode .nav-bar {
   opacity:0; pointer-events:none;
 }
-
+.focus-mode .sidebar {
+  display: none !important;
+}
+.focus-mode .body-area {
+  margin-inline-start: 0 !important;
+}
 .hidden { display: none !important; }

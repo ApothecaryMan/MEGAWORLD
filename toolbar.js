@@ -126,8 +126,8 @@ function applyGlobalUI() {
   allThemes.forEach(cls => root.classList.remove(cls));
   root.classList.add(settings.theme);
 
-  // تحديث الأزرار
-  document.querySelectorAll('.btn-flat').forEach(b => b.classList.remove('active'));
+  // تحديث الأزرار (مع استثناء التبويبات)
+  document.querySelectorAll('.btn-flat:not(.tab)').forEach(b => b.classList.remove('active'));
   [settings.font, settings.align].forEach(id => {
     const btn = document.getElementById(id);
     if (btn) btn.classList.add('active');
