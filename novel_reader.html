@@ -1,6 +1,6 @@
 
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Cinzel+Decorative:wght@700&display=swap');
   *{box-sizing:border-box;margin:0;padding:0;}
 
   .root{direction:rtl;font-family:var(--font-sans);transition:background .25s,color .25s;}
@@ -389,11 +389,23 @@ display:block;
   .sidebar { display: none; }
 }
 
+.site-name{
+  font-family: 'Cinzel Decorative', serif;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 1px;
+  margin-right: 15px;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+
 </style>
 
 <div class="root bg-def" id="root">
 
   <div class="sticky-bar">
+    <button class="btn" title="الرئيسية">الرئيسية</button>
+    <button class="btn" onclick="toggleSidebar()" id="sideToggleBtn">القائمة</button>
     <span class="lbl">الدليل</span>
     <div class="stats-box">
       <div class="stat"><b id="wc">0</b>&nbsp;كلمة</div>
@@ -417,7 +429,7 @@ display:block;
     <button class="btn" id="ac" onclick="setAl('ac','ac')" aria-label="وسط">وسط</button>
     <button class="btn" id="aj" onclick="setAl('aj','aj')" aria-label="ضبط">ضبط</button>
     <div class="sep"></div>
-    <button class="btn" onclick="toggleContinuousMode()">متواصل</button>
+    <button class="btn" id="contBtn" onclick="toggleContinuousMode()">متواصل</button>
 
 <span class="lbl">خلفية</span>
     <div class="swatch-wrap" id="swatches"></div>
@@ -433,10 +445,10 @@ display:block;
 
 
 
-    <button class="btn" onclick="toggleSidebar()" id="sideToggleBtn">القائمة</button>
     <div class="spacer"></div>
     <button class="btn" onclick="openModal()" id="editBtn">تعديل</button>
     <button class="btn" onclick="deleteChapter()">حذف</button>
+    <div class="site-name">MEGAWORLD Novel</div>
   </div>
 
   <div class="main-layout">
@@ -547,11 +559,10 @@ display:block;
 let continuousMode=false;
 
 function toggleContinuousMode(){
-
-continuousMode=!continuousMode;
-
-renderBody();
-
+  continuousMode=!continuousMode;
+  const btn = document.getElementById('contBtn');
+  if(btn) btn.classList.toggle('on', continuousMode);
+  renderBody();
 }
 
 
@@ -1022,19 +1033,21 @@ window.addEventListener('scroll',()=>{
   }
   lastScrollY=current;
 
-  // Chapter Sync
+  // Improved Chapter Sync (Detects both directions)
   if(continuousMode){
     const markers = document.querySelectorAll('.ch-marker');
+    let currentIdx = activeIdx;
     for(let m of markers){
       const rect = m.getBoundingClientRect();
-      if(rect.top > -20 && rect.top < 120){
-        const idx = parseInt(m.getAttribute('data-index'));
-        if(!isNaN(idx) && activeIdx !== idx){
-          activeIdx = idx;
-          updateActiveUI();
-        }
-        break;
+      if(rect.top <= 120){
+        currentIdx = parseInt(m.getAttribute('data-index'));
+      } else {
+        break; // Titles below this are definitely not active yet
       }
+    }
+    if(!isNaN(currentIdx) && activeIdx !== currentIdx){
+      activeIdx = currentIdx;
+      updateActiveUI();
     }
   }
 });
