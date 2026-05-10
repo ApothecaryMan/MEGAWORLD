@@ -49,12 +49,42 @@ const HomeEngine = {
           <div class="rank-badge-huge">1</div>
           <img src="${hero.cover}" class="novel-cover">
           <div class="rank-tier-1-info" style="flex: 1;">
-            <div style="font-size: 12px; opacity: 0.6; text-transform: uppercase; letter-spacing: 2px;">رواية الشهر الأولى</div>
+            <div style="font-size: 11px; opacity: 0.5; text-transform: uppercase; letter-spacing: 3px; font-weight: 800; margin-bottom: 5px;">رواية الشهر الأولى</div>
             <h3>${hero.title}</h3>
-            <p style="font-size: 14px; opacity: 0.8; line-height: 1.6; max-width: 500px;">${hero.desc}</p>
-            <div class="flex-row" style="margin-top: 20px;">
-              <a href="reader.html" class="btn-flat active" style="text-decoration: none; padding: 0 25px;" onclick="Store.switchNovel(${this.getNovelId(hero.title)})">ابدأ القراءة الآن</a>
-              <button class="btn-flat" onclick="window.location.href='novel.html?id=${this.getNovelId(hero.title)}'">تفاصيل العمل</button>
+            
+            <div class="rank-meta-row">
+              <span class="rank-author">بواسطة: ${hero.author || 'كاتب مجهول'}</span>
+              <span class="rank-sep">•</span>
+              <span class="rank-status">مكتملة</span>
+            </div>
+
+            <div class="rank-meta-tags">
+              ${(hero.tags || ['خيال', 'سحر', 'أكشن']).map(tag => `<span class="rank-tag">${tag}</span>`).join('')}
+            </div>
+
+            <p class="rank-desc">${hero.desc}</p>
+            
+            <div class="rank-stats-row">
+              <div class="rank-stat">
+                <i class="ti ti-eye"></i>
+                <span>1.2M مشاهدة</span>
+              </div>
+              <div class="rank-stat">
+                <i class="ti ti-list"></i>
+                <span>850 فصل</span>
+              </div>
+              <div class="rank-stat">
+                <i class="ti ti-star"></i>
+                <span>4.8 التقييم</span>
+              </div>
+            </div>
+
+            <div class="flex-row" style="margin-top: 25px; gap: 12px;">
+              <a href="reader.html" class="btn-flat active" style="text-decoration: none; padding: 0 25px; height: 38px; display: flex; align-items: center;" onclick="Store.switchNovel(${this.getNovelId(hero.title)})">ابدأ القراءة الآن</a>
+              <button class="btn-flat" style="height: 38px; padding: 0 20px;" onclick="window.location.href='novel.html?id=${this.getNovelId(hero.title)}'">تفاصيل العمل</button>
+              <button class="btn-flat" style="height: 38px; width: 38px; padding: 0; justify-content: center;" title="حفظ في المكتبة">
+                <i class="ti ti-bookmark" style="font-size: 18px;"></i>
+              </button>
             </div>
           </div>
         </div>
@@ -64,10 +94,29 @@ const HomeEngine = {
           ${featured.map((item, i) => `
             <div class="rank-item-m" style="position: relative; cursor: pointer;" onclick="window.location.href='novel.html?id=${this.getNovelId(item.title)}'">
               <div class="rank-badge">${i + 2}</div>
-              <img src="${item.cover}" style="width: 80px; height: 120px; object-fit: cover; border: 1px solid var(--ui-border);">
-              <div class="trending-info">
-                <div class="trending-title" style="font-size: 16px; font-weight: bold;">${item.title}</div>
-                <div class="trending-meta" style="font-size: 12px; opacity: 0.6;">${item.meta || ''}</div>
+              <img src="${item.cover}" class="rank-item-m-cover">
+              <div class="rank-item-m-info">
+                <div>
+                  <div class="rank-item-m-title">${item.title}</div>
+                  <div class="rank-item-m-author">بواسطة: ${item.author || 'كاتب مجهول'}</div>
+                </div>
+                
+                <div class="rank-item-m-stats">
+                  <span><i class="ti ti-eye"></i> 1.8M</span>
+                  <span><i class="ti ti-list"></i> 450 فصل</span>
+                  <span><i class="ti ti-star"></i> 4.7</span>
+                </div>
+
+                <div class="rank-item-m-tags">
+                  <span class="rank-tag-mini">أكشن</span>
+                  <span class="rank-tag-mini">دراما</span>
+                </div>
+
+                <div class="rank-item-m-actions">
+                  <button class="btn-flat active mini" onclick="event.stopPropagation(); Store.switchNovel(${this.getNovelId(item.title)}); window.location.href='reader.html'">إقرأ</button>
+                  <button class="btn-flat mini" onclick="event.stopPropagation(); window.location.href='novel.html?id=${this.getNovelId(item.title)}'">تفاصيل</button>
+                  <button class="btn-flat mini-icon" title="حفظ"><i class="ti ti-bookmark"></i></button>
+                </div>
               </div>
             </div>
           `).join('')}

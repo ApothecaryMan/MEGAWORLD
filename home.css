@@ -60,10 +60,81 @@
   color: var(--color-theme);
 }
 .rank-tier-1 img.novel-cover {
-  width: 180px;
-  height: 260px;
+  width: 200px;
+  height: 294px;
   object-fit: cover;
   border: 1px solid var(--color-theme);
+  flex-shrink: 0;
+}
+
+.rank-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  opacity: 0.7;
+  margin-bottom: 12px;
+}
+
+.rank-author {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.rank-status {
+  color: var(--color-theme);
+  font-weight: bold;
+}
+
+.rank-meta-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.rank-tag {
+  font-size: 10px;
+  font-weight: bold;
+  padding: 3px 10px;
+  border: 1px solid var(--ui-border);
+  background: var(--ui-hover-bg);
+  color: var(--color-text-primary);
+  opacity: 0.7;
+}
+
+.rank-desc {
+  font-size: 14px;
+  opacity: 0.8;
+  line-height: 1.6;
+  max-width: 600px;
+  margin-bottom: 20px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.rank-stats-row {
+  display: flex;
+  gap: 25px;
+  padding: 15px 0;
+  border-top: 1px solid var(--ui-border-light);
+  border-bottom: 1px solid var(--ui-border-light);
+}
+
+.rank-stat {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  opacity: 0.8;
+}
+
+.rank-stat i {
+  font-size: 16px;
+  color: var(--color-theme);
 }
 
 /* Rank 2 & 3: Featured */
@@ -74,10 +145,90 @@
 }
 .rank-item-m {
   display: flex;
-  gap: 15px;
-  padding: 20px;
+  gap: 30px;
+  padding: 25px;
   border: 1px solid var(--ui-border);
   background: var(--ui-input-bg);
+  align-items: stretch;
+  height: 200px;
+}
+
+.rank-item-m-cover {
+  width: 110px;
+  height: 100%;
+  object-fit: cover;
+  border: 1px solid var(--ui-border);
+  flex-shrink: 0;
+}
+
+.rank-item-m-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  justify-content: center;
+}
+
+.rank-item-m-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 2px;
+  line-height: 1.2;
+}
+
+.rank-item-m-author {
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+.rank-item-m-stats {
+  display: flex;
+  gap: 15px;
+  font-size: 11px;
+  opacity: 0.8;
+  font-weight: 600;
+}
+
+.rank-item-m-stats i {
+  color: var(--color-theme);
+}
+
+.rank-item-m-tags {
+  display: flex;
+  gap: 8px;
+}
+
+.rank-tag-mini {
+  font-size: 10px;
+  font-weight: bold;
+  padding: 3px 10px;
+  background: var(--ui-active-bg);
+  border: 1px solid var(--ui-border-light);
+  opacity: 0.9;
+}
+
+.rank-item-m-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.btn-flat.mini {
+  height: 32px;
+  font-size: 12px;
+  padding: 0 15px;
+}
+
+.btn-flat.mini-icon {
+  height: 32px;
+  width: 32px;
+  padding: 0;
+  justify-content: center;
+}
+
+.btn-flat.mini-icon i {
+  font-size: 16px;
 }
 
 /* Rank 4 & 5: List */
@@ -116,19 +267,28 @@
 }
 .rank-badge {
   position: absolute;
-  top: -10px;
-  right: -10px;
-  width: 32px;
-  height: 32px;
+  top: -15px;
+  right: -15px;
+  width: 50px;
+  height: 50px;
   background: var(--color-theme);
   color: var(--color-on-theme);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
-  font-size: 14px;
+  font-weight: 900;
+  font-size: 24px;
   border: 1px solid var(--color-theme);
   z-index: 5;
+}
+
+/* Smaller badges for Rank 2 and 3 */
+.rank-item-m .rank-badge {
+  width: 34px;
+  height: 34px;
+  font-size: 14px;
+  top: -8px;
+  right: -8px;
 }
 .trending-cover {
   width: 75px;

@@ -280,3 +280,4 @@ body {
   margin-inline-start: 0 !important;
 }
 .hidden { display: none !important; }
+.flex-row { display: flex; align-items: center; gap: 10px; }
