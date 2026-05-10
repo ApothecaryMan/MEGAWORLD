@@ -45,7 +45,6 @@
   outline-offset: -2px;
   background: var(--color-text-primary) !important;
   color: var(--color-background-primary) !important;
-  box-shadow: 0 0 12px var(--color-text-primary);
   z-index: 100;
   transition: none !important;
 }

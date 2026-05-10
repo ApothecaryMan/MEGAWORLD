@@ -98,7 +98,6 @@ document.addEventListener('contextmenu', (e) => {
       ContextMenu.show(e, [
         { label: 'نسخ النص', icon: 'ti-copy', action: () => navigator.clipboard.writeText(sel) },
         { label: 'حفظ كاقتباس', icon: 'ti-photo', action: () => { if (typeof exportQuoteQuick === 'function') exportQuoteQuick(sel); } },
-        { label: 'تخصيص الاقتباس...', icon: 'ti-palette', action: () => { if (typeof openQuoteEditor === 'function') openQuoteEditor(sel); } },
         { label: 'البحث عن النص', icon: 'ti-search', action: () => { if (typeof doSearch === 'function') doSearch(sel); } },
         { sep: true },
         { label: `الكلمات المحددة: ${wordCount}`, icon: 'ti-text-size' },
