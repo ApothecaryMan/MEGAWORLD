@@ -1,4 +1,4 @@
-const STORE_KEY = 'ar_reader_v7';
+const STORE_KEY = 'ar_reader_v8'; // Bumped version for multi-novel system
 
 /**
  * وظيفة لحفظ كافة بيانات التطبيق الحالية
@@ -6,8 +6,8 @@ const STORE_KEY = 'ar_reader_v7';
 function save() {
   try {
     const payload = {
-      chapters,
-      activeIdx,
+      novels,
+      activeNovelIdx,
       font,
       sz,
       align,
@@ -27,11 +27,32 @@ function save() {
 function load() {
   try {
     const raw = localStorage.getItem(STORE_KEY);
-    if (!raw) return;
-    const d = JSON.parse(raw);
     
-    if (d.chapters) chapters = d.chapters;
-    if (d.activeIdx !== undefined) activeIdx = d.activeIdx;
+    if (!raw) {
+      // محاولة استيراد البيانات من النسخة القديمة v7
+      const oldRaw = localStorage.getItem('ar_reader_v7');
+      if (oldRaw) {
+        const d = JSON.parse(oldRaw);
+        novels = [{
+          title: 'رواية افتراضية',
+          chapters: d.chapters || [{ title: 'فصل 1', content: '' }],
+          activeChapterIdx: d.activeIdx || 0
+        }];
+        activeNovelIdx = 0;
+        syncStateFromActiveNovel();
+        return;
+      }
+      
+      // إذا لم توجد بيانات قديمة، إنشاء رواية أولى فارغة
+      novels = [{ title: 'رواية جديدة', chapters: [{ title: 'فصل 1', content: '' }], activeChapterIdx: 0 }];
+      activeNovelIdx = 0;
+      syncStateFromActiveNovel();
+      return;
+    }
+
+    const d = JSON.parse(raw);
+    if (d.novels) novels = d.novels;
+    if (d.activeNovelIdx !== undefined) activeNovelIdx = d.activeNovelIdx;
     if (d.font) font = d.font;
     if (d.sz) sz = d.sz;
     if (d.align) align = d.align;
@@ -42,8 +63,20 @@ function load() {
       const p = palettes.find(x => x.cls === d.paletteCls);
       if (p) activePalette = p;
     }
+
+    syncStateFromActiveNovel();
   } catch (e) {
     console.error('فشل تحميل البيانات:', e);
+  }
+}
+
+/**
+ * مزامنة المتغيرات العالمية مع الرواية النشطة حالياً
+ */
+function syncStateFromActiveNovel() {
+  if (novels[activeNovelIdx]) {
+    chapters = novels[activeNovelIdx].chapters;
+    activeIdx = novels[activeNovelIdx].activeChapterIdx;
   }
 }
 

@@ -3,10 +3,17 @@ let continuousMode = false;
 let font = 'fn';
 let sz = 22;
 let align = 'ar';
+let sidebarVisible = true;
+
+// Multi-Novel System
+let novels = [];
+let activeNovelIdx = 0;
+
+// Current Chapter Reference (will be updated dynamically)
 let activeIdx = 0;
 let chapters = [];
+
 let dragSrcIdx = null;
-let sidebarVisible = true;
 
 const palettes = [
   { cls: 'bg-def', s: '#e8e6e0', bg: 'var(--color-background-primary)', fg: 'var(--color-text-primary)' },

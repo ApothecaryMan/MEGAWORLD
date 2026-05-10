@@ -55,17 +55,32 @@
     <div class="spacer"></div>
     <button class="btn" onclick="openModal()" id="editBtn">تعديل</button>
     <button class="btn" onclick="deleteChapter()">حذف</button>
-    <div class="site-name">MEGAWORLD Novel</div>
+    
+    <div class="site-name">
+      <input type="text" id="novelTitleInput" class="novel-title-field" placeholder="اسم الرواية..." oninput="updateNovelTitle(this.value)">
+    </div>
   </div>
 
   <div class="main-layout">
     <!-- القائمة الجانبية -->
     <div class="sidebar" id="sidebar">
-      <div class="sidebar-title">
-        <span>قائمة الفصول</span>
-        <button class="tab-add" onclick="addChapter()" style="padding:0;height:auto;font-size:14px;" title="إضافة فصل">+</button>
+      <div class="sidebar-section">
+        <div class="sidebar-title">
+          <span>المكتبة</span>
+          <button class="tab-add" onclick="addNovel()" title="رواية جديدة">+</button>
+        </div>
+        <div class="side-list" id="libraryList"></div>
       </div>
-      <div class="side-list" id="sideList"></div>
+
+      <div class="sidebar-sep"></div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">
+          <span>قائمة الفصول</span>
+          <button class="tab-add" onclick="addChapter()" title="إضافة فصل">+</button>
+        </div>
+        <div class="side-list" id="sideList"></div>
+      </div>
     </div>
 
     <div class="body-area" style="flex:1; min-width:0;">

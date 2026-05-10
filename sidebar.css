@@ -12,25 +12,45 @@
   z-index:15;
   user-select:none;-webkit-user-select:none;
 }
-.sidebar-title{
-  font-size:13px;font-weight:bold;margin-bottom:12px;opacity:0.5;
-  border-bottom:1px solid rgba(128,128,128,0.1);padding-bottom:8px;
-  display:flex;align-items:center;justify-content:space-between;
+
+.sidebar-section{
+  margin-bottom:20px;
 }
+
+.sidebar-title{
+  font-size:11px;font-weight:bold;margin-bottom:10px;
+  border-bottom:1px solid rgba(128,128,128,0.1);padding-bottom:6px;
+  display:flex;align-items:center;justify-content:space-between;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+/* نصوص العناوين هي التي تأخذ الشفافية فقط */
+.sidebar-title span {
+  opacity: 0.4;
+}
+
+.sidebar-sep{
+  height:1px;
+  background:rgba(128,128,128,0.1);
+  margin:15px 0;
+}
+
 .side-list{display:flex;flex-direction:column;gap:2px;}
 .side-item{
   display:block;width:100%;
-  padding:8px 12px;font-size:13px;border:none;background:transparent;
+  padding:6px 12px;font-size:12px;border:none;background:transparent;
   color:inherit;cursor:pointer;border-radius:0;
   transition:none;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
   text-align: right;
+  opacity: 0.7;
 }
-.side-item:hover{background:rgba(128,128,128,0.08);}
+.side-item:hover{background:rgba(128,128,128,0.08); opacity: 1;}
 .side-item.active{
-  background:rgba(128,128,128,0.12);
+  background:rgba(128,128,128,0.1);
   font-weight:bold;
   border-inline-start:3px solid currentColor;
+  opacity: 1;
 }
 
 @media (max-width: 800px) {

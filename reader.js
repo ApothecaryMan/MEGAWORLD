@@ -9,6 +9,12 @@ function renderTabs() {
   bar.innerHTML = '';
   if (side) side.innerHTML = '';
 
+  // Ensure we are using the latest data from the active novel
+  if (novels[activeNovelIdx]) {
+    chapters = novels[activeNovelIdx].chapters;
+    activeIdx = novels[activeNovelIdx].activeChapterIdx;
+  }
+
   chapters.forEach((ch, i) => {
     // Top Tabs
     const t = document.createElement('button');
@@ -16,6 +22,27 @@ function renderTabs() {
     t.textContent = ch.title || ('فصل ' + (i + 1));
     t.draggable = true;
     t.onclick = () => goTo(i);
+    
+    // تعديل الاسم بالضغط مرتين
+    t.ondblclick = () => {
+      const input = document.createElement('input');
+      input.className = 'inline-edit-input';
+      input.value = t.textContent.replace('×', '').trim();
+      t.textContent = '';
+      t.appendChild(input);
+      input.focus();
+      input.onblur = () => {
+        if (input.value.trim()) {
+          chapters[i].title = input.value.trim();
+          renderTabs();
+          save();
+        } else {
+          renderTabs();
+        }
+      };
+      input.onkeydown = (e) => { if (e.key === 'Enter') input.blur(); };
+    };
+
     t.addEventListener('dragstart', e => { dragSrcIdx = i; t.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; });
     t.addEventListener('dragend', () => document.querySelectorAll('.tab').forEach(x => x.classList.remove('dragging', 'drag-over')));
     t.addEventListener('dragover', e => { e.preventDefault(); t.classList.add('drag-over'); });
@@ -26,12 +53,25 @@ function renderTabs() {
       const moved = chapters.splice(dragSrcIdx, 1)[0];
       chapters.splice(i, 0, moved);
       activeIdx = i;
+      if (novels[activeNovelIdx]) novels[activeNovelIdx].activeChapterIdx = i;
       dragSrcIdx = null;
       renderTabs(); renderBody(); save();
     });
+    
     const cl = document.createElement('button');
     cl.className = 'tab-close'; cl.textContent = '×'; cl.title = 'حذف';
-    cl.onclick = (e) => { e.stopPropagation(); if (chapters.length === 1) { chapters[0].content = ''; chapters[0].title = 'فصل 1'; } else { chapters.splice(i, 1); if (activeIdx >= chapters.length) activeIdx = chapters.length - 1; } renderTabs(); renderBody(); save(); };
+    cl.onclick = (e) => { 
+      e.stopPropagation(); 
+      if (chapters.length === 1) { 
+        chapters[0].content = ''; 
+        chapters[0].title = 'فصل 1'; 
+      } else { 
+        chapters.splice(i, 1); 
+        if (activeIdx >= chapters.length) activeIdx = chapters.length - 1; 
+      } 
+      if (novels[activeNovelIdx]) novels[activeNovelIdx].activeChapterIdx = activeIdx;
+      renderTabs(); renderBody(); save(); 
+    };
     t.appendChild(cl);
     bar.appendChild(t);
 
@@ -41,6 +81,27 @@ function renderTabs() {
       s.className = 'side-item' + (i === activeIdx ? ' active' : '');
       s.textContent = ch.title || ('فصل ' + (i + 1));
       s.onclick = () => goTo(i);
+      
+      // تعديل اسم الفصل في القائمة الجانبية بالضغط مرتين
+      s.ondblclick = () => {
+        const input = document.createElement('input');
+        input.className = 'inline-edit-input';
+        input.value = s.textContent;
+        s.textContent = '';
+        s.appendChild(input);
+        input.focus();
+        input.onblur = () => {
+          if (input.value.trim()) {
+            chapters[i].title = input.value.trim();
+            renderTabs();
+            save();
+          } else {
+            renderTabs();
+          }
+        };
+        input.onkeydown = (e) => { if (e.key === 'Enter') input.blur(); };
+      };
+      
       side.appendChild(s);
     }
   });
@@ -54,6 +115,12 @@ function renderTabs() {
 function renderBody() {
   const wrap = document.getElementById('bodyWrap');
   if (!wrap) return;
+  
+  if (novels[activeNovelIdx]) {
+    chapters = novels[activeNovelIdx].chapters;
+    activeIdx = novels[activeNovelIdx].activeChapterIdx;
+  }
+  
   const ch = chapters[activeIdx];
   if (!ch) { wrap.innerHTML = ''; return; }
   
@@ -119,6 +186,7 @@ function escHtml(t) {
 function addChapter() {
   chapters.push({ title: 'فصل ' + (chapters.length + 1), content: '' });
   activeIdx = chapters.length - 1;
+  if (novels[activeNovelIdx]) novels[activeNovelIdx].activeChapterIdx = activeIdx;
   renderTabs(); renderBody();
   window.scrollTo({ top: 0 });
   if (typeof openModal === 'function') openModal();
@@ -128,6 +196,7 @@ function addChapter() {
 function goTo(i) {
   if (i < 0 || i >= chapters.length) return;
   activeIdx = i;
+  if (novels[activeNovelIdx]) novels[activeNovelIdx].activeChapterIdx = i;
 
   if (continuousMode) {
     const target = document.getElementById(`ch-title-${i}`);
@@ -157,6 +226,7 @@ function updateActiveUI() {
 function deleteChapter() {
   if (chapters.length === 1) { chapters[0].content = ''; chapters[0].title = 'فصل 1'; }
   else { chapters.splice(activeIdx, 1); if (activeIdx >= chapters.length) activeIdx = chapters.length - 1; }
+  if (novels[activeNovelIdx]) novels[activeNovelIdx].activeChapterIdx = activeIdx;
   renderTabs(); renderBody(); save();
 }
 
@@ -221,6 +291,7 @@ window.addEventListener('scroll', () => {
     }
     if (!isNaN(currentIdx) && activeIdx !== currentIdx) {
       activeIdx = currentIdx;
+      if (novels[activeNovelIdx]) novels[activeNovelIdx].activeChapterIdx = activeIdx;
       updateActiveUI();
       if (typeof stats === 'function') stats(chapters[activeIdx].content);
     }
@@ -239,12 +310,18 @@ window.addEventListener('keydown', e => {
 // Initialization
 window.onload = () => {
   if (typeof load === 'function') load();
-  if (chapters.length === 0) chapters = [{ title: 'فصل 1', content: '' }];
-  if (activeIdx >= chapters.length) activeIdx = 0;
+  
+  if (novels.length === 0) {
+    novels = [{ title: 'رواية جديدة', chapters: [{ title: 'فصل 1', content: '' }], activeChapterIdx: 0 }];
+  }
+  
+  syncStateFromActiveNovel();
   
   if (typeof buildSwatches === 'function') buildSwatches();
   if (typeof applyGlobalUI === 'function') applyGlobalUI();
   if (typeof applySidebarState === 'function') applySidebarState();
+  if (typeof renderLibrary === 'function') renderLibrary();
+  
   renderTabs();
   renderBody();
 };
