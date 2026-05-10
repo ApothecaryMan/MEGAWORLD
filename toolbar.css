@@ -32,7 +32,7 @@
 .stats-box{
   display: flex;
   align-items: center;
-  width: 320px;
+  width: 260px;
   padding: 0;
   height: var(--ui-btn-height);
   border: 1px solid var(--ui-border);
@@ -57,7 +57,8 @@
   flex-shrink: 0;
 }
 .stat{
-  flex: 1;
+  width: 64px;
+  flex-shrink: 0;
   min-width: 0;
   padding: 0 4px;
   display: flex;
@@ -66,7 +67,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-size: 11px;
+  font-size: 10px;
   opacity: 0.55;
 }
 

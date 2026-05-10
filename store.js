@@ -94,6 +94,7 @@ const Store = {
     if (this.activeNovel && this.activeNovel.chapters[idx]) {
       Object.assign(this.activeNovel.chapters[idx], data);
       this.save();
+      this.notify();
     }
   },
 
