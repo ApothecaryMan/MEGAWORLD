@@ -2,7 +2,7 @@
   width:240px;
   border-inline-end:1px solid var(--ui-border-light);
   padding:16px 12px;
-  background:inherit;
+  background: var(--color-background-primary);
   flex-shrink:0;
   overflow-y:auto;
   height:calc(100vh - 45px);
@@ -55,4 +55,6 @@
   .sidebar { display: none; }
 }
 
-/* .root.side-open .body-area { margin-inline-start: 240px; } */
+.root.side-open .body-area {
+  margin-inline-start: 240px;
+}
