@@ -10,7 +10,9 @@
   width:90%;
   max-width:850px;
   display:flex;flex-direction:column;gap:12px;
-  background:inherit;
+  /* الربط بالثيم المركزي */
+  background: var(--color-background-primary);
+  color: var(--color-text-primary);
 }
 .modal-hdr{
   display:flex;

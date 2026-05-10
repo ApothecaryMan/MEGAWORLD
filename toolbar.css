@@ -40,6 +40,16 @@
   overflow: hidden;
   white-space: nowrap;
 }
+.input-flat{
+  width: 140px;
+  padding: 0 10px;
+  height: var(--ui-btn-height);
+  background: var(--ui-input-bg);
+  border: 1px solid var(--ui-border);
+  font-size: 13px;
+  color: inherit;
+  outline: none;
+}
 .stats-divider{
   width: 1px;
   height: 100%;

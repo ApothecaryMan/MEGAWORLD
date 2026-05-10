@@ -4,7 +4,6 @@
   min-width:200px;
   background:inherit;
   border:1px solid var(--ui-border);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1); /* Subtle premium lift */
   padding:4px 0;
   user-select: none;
 }
@@ -16,7 +15,6 @@
   border-radius: 0;
   padding: 8px 16px;
   font-size: 13px;
-  transition: background 0.1s;
 }
 .context-item i{font-size:15px; opacity:0.5;}
 .context-item.danger{color: #ff4d4d;}

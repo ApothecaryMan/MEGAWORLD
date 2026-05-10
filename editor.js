@@ -1,76 +1,40 @@
-function syncModal() {
-  const m = document.getElementById('modal');
-  if (!m || !activePalette) return;
-  m.style.background = activePalette.bg;
-  m.style.color = activePalette.fg;
-  const els = m.querySelectorAll('.ta,.btn,.modal-title,.modal-title-input');
-  els.forEach(el => { el.style.color = activePalette.fg; });
-  const ta = document.getElementById('ta');
-  const ti = document.getElementById('titleInput');
-  if (ta) ta.style.background = 'rgba(128,128,128,0.08)';
-  if (ti) ti.style.borderBottomColor = 'rgba(128,128,128,.3)';
-}
+// محرك المحرر (Editor Engine)
 
 function openModal() {
-  const ch = chapters[activeIdx];
-  const ti = document.getElementById('titleInput');
+  const bg = document.getElementById('modalBg');
   const ta = document.getElementById('ta');
-  const mb = document.getElementById('modalBg');
+  const ti = document.getElementById('titleInput');
+  const activeChapter = Store.chapters[Store.activeChapterIdx];
+
+  if (!bg || !ta || !ti || !activeChapter) return;
+
+  ti.value = activeChapter.title || '';
+  ta.value = activeChapter.content || '';
   
-  if (ti) ti.value = ch ? ch.title : '';
-  if (ta) ta.value = ch ? ch.content : '';
-  if (mb) mb.classList.add('open');
-  
-  syncModal();
-  setTimeout(() => {
-    if (ta) ta.focus();
-  }, 80);
+  bg.classList.add('open');
+  ta.focus();
 }
 
 function closeModal() {
-  const mb = document.getElementById('modalBg');
-  if (mb) mb.classList.remove('open');
+  const bg = document.getElementById('modalBg');
+  if (bg) bg.classList.remove('open');
 }
 
 function applyText() {
-  try {
-    const ta = document.getElementById('ta');
-    const ti = document.getElementById('titleInput');
-    if (!ta || !ti) return;
-    const text = ta.value.trim();
-    const title = ti.value.trim();
-    if (!chapters[activeIdx]) return;
-    chapters[activeIdx].content = text;
-    if (title) chapters[activeIdx].title = title;
-    renderTabs();
-    renderBody();
-    save();
-  } catch (e) {
-    console.error('applyText error', e);
-  } finally {
+  const ta = document.getElementById('ta');
+  const ti = document.getElementById('titleInput');
+  const activeIdx = Store.activeChapterIdx;
+
+  if (ta && ti) {
+    Store.updateChapter(activeIdx, {
+      title: ti.value.trim() || ('فصل ' + (activeIdx + 1)),
+      content: ta.value
+    });
     closeModal();
   }
 }
 
-// Event Listeners for Editor
-window.addEventListener('DOMContentLoaded', () => {
-  const mb = document.getElementById('modalBg');
-  if (mb) mb.addEventListener('click', e => {
-    if (e.target === mb) closeModal();
-  });
-
-  const ta = document.getElementById('ta');
-  if (ta) ta.addEventListener('input', () => {
-    if (!chapters[activeIdx]) return;
-    chapters[activeIdx].content = ta.value;
-    save();
-  });
-
-  const ti = document.getElementById('titleInput');
-  if (ti) ti.addEventListener('input', () => {
-    if (!chapters[activeIdx]) return;
-    chapters[activeIdx].title = ti.value;
-    if (typeof renderTabs === 'function') renderTabs();
-    save();
-  });
+// إغلاق المودال عند الضغط على Esc
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeModal();
 });
