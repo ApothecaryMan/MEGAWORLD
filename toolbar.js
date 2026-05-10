@@ -2,19 +2,140 @@
  * محرك شريط الأدوات الموحد (Unified Toolbar Engine)
  */
 const Toolbar = {
-  init(containerId, schema) {
-    const container = document.getElementById(containerId);
+  containerId: null,
+  schema: [],
+  storageKey: null,
+  hiddenItems: [],
+
+  init(containerId, schema, storageKey = 'main_toolbar_layout') {
+    this.containerId = containerId;
+    this.schema = schema;
+    this.storageKey = storageKey;
+    
+    // تحميل العناصر المخفية وفلترتها (لضمان بقاء العناصر الموجودة في الـ Schema فقط)
+    const saved = localStorage.getItem(this.storageKey);
+    const rawHidden = saved ? JSON.parse(saved) : [];
+    const validIds = this.schema.map(i => i.id).filter(Boolean);
+    this.hiddenItems = rawHidden.filter(id => validIds.includes(id));
+
+    this.render();
+  },
+
+  render() {
+    const container = document.getElementById(this.containerId);
     if (!container) return;
     container.innerHTML = '';
-    schema.forEach(item => {
+    
+    // إنشاء الحاويات الثلاثة
+    const rightSide = this.makeElement('div', 'toolbar-side side-right');
+    const centerSide = this.makeElement('div', 'toolbar-side side-center');
+    const leftSide = this.makeElement('div', 'toolbar-side side-left');
+    
+    container.appendChild(rightSide);
+    container.appendChild(centerSide);
+    container.appendChild(leftSide);
+
+    this.schema.forEach(item => {
+      // تجاهل العناصر المخفية (إذا كان لها ID)
+      if (item.id && this.hiddenItems.includes(item.id)) return;
+      
       const el = this.createItem(item);
-      if (el) container.appendChild(el);
+      if (el) {
+        if (item.align === 'left') leftSide.appendChild(el);
+        else if (item.align === 'right') rightSide.appendChild(el);
+        else centerSide.appendChild(el);
+      }
     });
+
+    // إضافة مستمع القائمة المنبثقة للشريط نفسه
+    container.oncontextmenu = (e) => {
+      // منع ظهور القائمة الافتراضية إذا ضغطنا على الشريط نفسه أو الحاويات
+      if (e.target === container || e.target.classList.contains('toolbar-side') || e.target.classList.contains('spacer')) {
+        this.showConfigMenu(e);
+      }
+    };
+
     if (typeof buildSwatches === 'function') buildSwatches();
+  },
+
+  showConfigMenu(e) {
+    if (typeof ContextMenu === 'undefined') return;
+    
+    const menuItems = this.schema.map(item => {
+      // نتجاهل الفواصل والمسافات من قائمة التحكم لتجنب الزحام
+      if (!item.id || item.type === 'spacer' || item.type === 'sep') return null;
+      
+      const isHidden = this.hiddenItems.includes(item.id);
+      return {
+        label: item.label || item.id,
+        icon: isHidden ? 'ti-square' : 'ti-checkbox',
+        action: () => this.toggleItem(item.id),
+        onEnter: () => {
+          const el = document.getElementById(item.id);
+          if (el) el.classList.add('toolbar-highlight');
+        },
+        onLeave: () => {
+          const el = document.getElementById(item.id);
+          if (el) el.classList.remove('toolbar-highlight');
+        }
+      };
+    }).filter(Boolean);
+
+    menuItems.push({ sep: true });
+    menuItems.push({
+      label: 'إظهار الكل',
+      icon: 'ti-eye',
+      action: () => {
+        this.hiddenItems = [];
+        this.save();
+        this.render();
+        if (typeof applyGlobalUI === 'function') applyGlobalUI();
+      }
+    });
+    menuItems.push({
+      label: 'إخفاء الكل',
+      icon: 'ti-eye-off',
+      action: () => {
+        this.hiddenItems = this.schema.map(i => i.id).filter(Boolean);
+        this.save();
+        this.render();
+      }
+    });
+    menuItems.push({
+      label: 'إعادة الضبط الافتراضي',
+      icon: 'ti-refresh',
+      danger: true,
+      action: () => {
+        if (confirm('هل تريد إعادة ضبط شريط الأدوات للحالة الافتراضية؟')) {
+          this.hiddenItems = [];
+          this.save();
+          this.render();
+          if (typeof applyGlobalUI === 'function') applyGlobalUI();
+        }
+      }
+    });
+
+    ContextMenu.show(e, menuItems);
+  },
+
+  toggleItem(id) {
+    if (this.hiddenItems.includes(id)) {
+      this.hiddenItems = this.hiddenItems.filter(i => i !== id);
+    } else {
+      this.hiddenItems.push(id);
+    }
+    this.save();
+    this.render();
+    if (typeof applyGlobalUI === 'function') applyGlobalUI();
+  },
+
+  save() {
+    localStorage.setItem(this.storageKey, JSON.stringify(this.hiddenItems));
   },
 
   createItem(item) {
     switch (item.type) {
+      case 'group': return this.makeGroup(item);
       case 'button': return this.makeButton(item);
       case 'input': return this.makeInput(item);
       case 'sep': return this.makeElement('div', 'sep');
@@ -23,6 +144,17 @@ const Toolbar = {
       case 'custom': return this.makeCustom(item);
       default: return null;
     }
+  },
+
+  makeGroup(group) {
+    const wrapper = this.makeElement('div', 'toolbar-group', group.id);
+    if (group.items) {
+      group.items.forEach(item => {
+        const el = this.createItem(item);
+        if (el) wrapper.appendChild(el);
+      });
+    }
+    return wrapper;
   },
 
   makeElement(tag, className, id) {
@@ -176,35 +308,53 @@ function doSearch(val) {
 
 // --- تعريف البار الرئيسي ---
 const MainToolbarSchema = [
-  { type: 'button', label: 'الرئيسية', action: () => location.reload() },
-  { type: 'button', label: 'القائمة', id: 'sideToggleBtn', action: () => toggleSidebar() },
+  { type: 'button', label: 'الرئيسية', id: 'homeBtn', align: 'right', action: () => location.reload() },
+  { type: 'button', label: 'القائمة', id: 'sideToggleBtn', align: 'right', action: () => toggleSidebar() },
   { 
-    type: 'custom', id: 'statsBox', className: 'stats-box',
+    type: 'custom', id: 'statsBox', label: 'الإحصائيات', className: 'stats-box',
     html: `<div class="stat"><span id="wc">0</span>&nbsp;كلمة</div><div class="stats-divider"></div>
            <div class="stat"><span id="cc">0</span>&nbsp;حرف</div><div class="stats-divider"></div>
            <div class="stat"><span id="rt">0</span>&nbsp;<span id="rt-lbl">دقيقة</span></div><div class="stats-divider"></div>
            <div class="stat" id="navInfo">1 / 1</div>`
   },
-  { type: 'button', label: 'أميـري', id: 'fn', action: () => { Store.updateSettings('font', 'fn'); applyGlobalUI(); if (typeof renderBody === 'function') renderBody(); } },
-  { type: 'button', label: 'نـسخ', id: 'fn2', action: () => { Store.updateSettings('font', 'fn2'); applyGlobalUI(); if (typeof renderBody === 'function') renderBody(); } },
-  { type: 'button', label: 'نـظام', id: 'fn3', action: () => { Store.updateSettings('font', 'fn3'); applyGlobalUI(); if (typeof renderBody === 'function') renderBody(); } },
-  { type: 'button', label: '−', action: () => { Store.updateSettings('sz', Math.max(14, Store.state.settings.sz - 2)); applyGlobalUI(); if (typeof renderBody === 'function') renderBody(); } },
-  { type: 'custom', className: 'lbl', id: 'szlbl', html: '22' },
-  { type: 'button', label: '+', action: () => { Store.updateSettings('sz', Math.min(36, Store.state.settings.sz + 2)); applyGlobalUI(); if (typeof renderBody === 'function') renderBody(); } },
-  { type: 'button', label: 'يمين', id: 'ar', action: () => { Store.updateSettings('align', 'ar'); applyGlobalUI(); if (typeof renderBody === 'function') renderBody(); } },
-  { type: 'button', label: 'وسط', id: 'ac', action: () => { Store.updateSettings('align', 'ac'); applyGlobalUI(); if (typeof renderBody === 'function') renderBody(); } },
-  { type: 'button', label: 'ضبط', id: 'aj', action: () => { Store.updateSettings('align', 'aj'); applyGlobalUI(); if (typeof renderBody === 'function') renderBody(); } },
-  { type: 'button', label: 'السابق', id: 'prevBtn', action: () => Store.setChapter(Store.activeChapterIdx - 1) },
-  { type: 'button', label: 'التالي', id: 'nextBtn', action: () => Store.setChapter(Store.activeChapterIdx + 1) },
+  {
+    type: 'group', id: 'fontsGroup', label: 'الخطوط',
+    items: [
+      { type: 'button', label: 'أميـري', id: 'fn', action: () => { Store.updateSettings('font', 'fn'); applyGlobalUI(); if (typeof renderBody === 'function') renderBody(); } },
+      { type: 'button', label: 'نـسخ', id: 'fn2', action: () => { Store.updateSettings('font', 'fn2'); applyGlobalUI(); if (typeof renderBody === 'function') renderBody(); } },
+      { type: 'button', label: 'نـظام', id: 'fn3', action: () => { Store.updateSettings('font', 'fn3'); applyGlobalUI(); if (typeof renderBody === 'function') renderBody(); } }
+    ]
+  },
+  {
+    type: 'group', id: 'fontSizeGroup', label: 'حجم الخط',
+    items: [
+      { type: 'button', label: '−', id: 'decSizeBtn', action: () => { Store.updateSettings('sz', Math.max(14, Store.state.settings.sz - 2)); applyGlobalUI(); if (typeof renderBody === 'function') renderBody(); } },
+      { type: 'custom', className: 'btn-flat sz-display', id: 'szlbl', html: '22' },
+      { type: 'button', label: '+', id: 'incSizeBtn', action: () => { Store.updateSettings('sz', Math.min(36, Store.state.settings.sz + 2)); applyGlobalUI(); if (typeof renderBody === 'function') renderBody(); } }
+    ]
+  },
+  {
+    type: 'group', id: 'alignGroup', label: 'المحاذاة',
+    items: [
+      { type: 'button', label: 'يمين', id: 'ar', action: () => { Store.updateSettings('align', 'ar'); applyGlobalUI(); if (typeof renderBody === 'function') renderBody(); } },
+      { type: 'button', label: 'وسط', id: 'ac', action: () => { Store.updateSettings('align', 'ac'); applyGlobalUI(); if (typeof renderBody === 'function') renderBody(); } },
+      { type: 'button', label: 'ضبط', id: 'aj', action: () => { Store.updateSettings('align', 'aj'); applyGlobalUI(); if (typeof renderBody === 'function') renderBody(); } }
+    ]
+  },
+  {
+    type: 'group', id: 'navGroup', label: 'التنقل',
+    items: [
+      { type: 'button', label: 'السابق', id: 'prevBtn', action: () => Store.setChapter(Store.activeChapterIdx - 1) },
+      { type: 'button', label: 'التالي', id: 'nextBtn', action: () => Store.setChapter(Store.activeChapterIdx + 1) }
+    ]
+  },
   { type: 'button', label: 'متواصل', id: 'contBtn', action: () => { Store.updateSettings('continuousMode', !Store.state.settings.continuousMode); applyGlobalUI(); if (typeof renderBody === 'function') renderBody(); } },
-  { type: 'button', label: 'تركيز', action: () => document.body.classList.toggle('focus-mode') },
-  { type: 'button', label: 'تصدير', action: () => exportTxt() },
-  { type: 'custom', id: 'swatchWrap', className: 'swatch-wrap' },
-  { type: 'spacer' },
-  { type: 'input', placeholder: 'بحث...', id: 'sq', action: (val) => { if (typeof doSearch === 'function') doSearch(val); } },
-  { type: 'spacer' },
+  { type: 'button', label: 'تركيز', id: 'focusBtn', action: () => document.body.classList.toggle('focus-mode') },
+  { type: 'button', label: 'تصدير', id: 'exportBtn', action: () => exportTxt() },
+  { type: 'custom', id: 'swatchWrap', label: 'الألوان', className: 'swatch-wrap' },
+  { type: 'input', label: 'البحث', placeholder: 'بحث...', id: 'sq', align: 'left', action: (val) => { if (typeof doSearch === 'function') doSearch(val); } },
   { 
-    type: 'custom', 
+    type: 'custom', id: 'novelTitleWrap', label: 'اسم الرواية', align: 'left',
     className: 'site-name', html: `<input type="text" id="novelTitleInput" class="input-flat borderless" placeholder="اسم الرواية..." oninput="Store.updateNovelTitle(this.value)">` 
   }
 ];

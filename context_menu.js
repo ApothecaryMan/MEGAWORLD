@@ -53,6 +53,13 @@ const ContextMenu = {
       btn.onclick = () => {
         if (typeof item.action === 'function') item.action();
       };
+
+      if (typeof item.onEnter === 'function') {
+        btn.onmouseenter = item.onEnter;
+      }
+      if (typeof item.onLeave === 'function') {
+        btn.onmouseleave = item.onLeave;
+      }
       
       this.el.appendChild(btn);
     });

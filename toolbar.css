@@ -1,14 +1,54 @@
 /* Sticky Bar (Main Toolbar) Layout */
 .sticky-bar{
   position:sticky;top:0;z-index:20;
-  display:flex;flex-wrap:nowrap;align-items:center;gap:8px;
-  padding:8px 16px;
+  display:flex;flex-wrap:nowrap;align-items:center;
+  justify-content: space-between;
+  padding:8px 12px;
   border-bottom:1px solid var(--ui-border-light);
-  background:inherit;
+  background:var(--color-background-primary);
   overflow-x:auto;scrollbar-width:none;
   user-select:none;-webkit-user-select:none;
 }
+.toolbar-side {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.side-center {
+  flex: 1;
+  justify-content: center;
+}
+.side-right {
+  justify-content: flex-start;
+}
+.side-left {
+  justify-content: flex-end;
+}
 .sticky-bar::-webkit-scrollbar{display:none;}
+
+.toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+.toolbar-group .btn-flat:not(:last-child) {
+  border-inline-end: none;
+}
+.sz-display {
+  pointer-events: none;
+  min-width: 45px;
+  opacity: 1 !important;
+  font-weight: bold;
+}
+.toolbar-highlight {
+  outline: 2px solid var(--color-text-primary) !important;
+  outline-offset: -2px;
+  background: var(--color-text-primary) !important;
+  color: var(--color-background-primary) !important;
+  box-shadow: 0 0 12px var(--color-text-primary);
+  z-index: 100;
+  transition: none !important;
+}
 
 .sep{
   width: 1px;
