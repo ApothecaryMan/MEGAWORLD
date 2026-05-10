@@ -17,6 +17,18 @@ const Store = {
     }
   },
 
+  // --- البيانات الثابتة (Constants) ---
+  palettes: [
+    { id: 'bg-def', label: 'ورقي', bg: '#f5f3f0', text: '#2d2d2d' },
+    { id: 'bg-ivory', label: 'عاجي', bg: '#fdf6e3', text: '#3b3020' },
+    { id: 'bg-mint', label: 'نعناعي', bg: '#f0fdf5', text: '#1a3326' },
+    { id: 'bg-pink', label: 'زهري', bg: '#fdf0f0', text: '#3a1e1e' },
+    { id: 'bg-gray', label: 'رمادي', bg: '#f4f4f2', text: '#2a2a2a' },
+    { id: 'bg-sky', label: 'سماوي', bg: '#eff6ff', text: '#1e2f4a' },
+    { id: 'bg-night', label: 'ليلي', bg: '#1a1a2e', text: '#e0d8c8' },
+    { id: 'bg-dark', label: 'داكن', bg: '#212121', text: '#d4c9b0' }
+  ],
+
   // --- التهيئة (Initialization) ---
   init() {
     this.load();

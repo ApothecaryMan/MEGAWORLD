@@ -198,18 +198,8 @@ function buildSwatches() {
   const c = document.getElementById('swatchWrap');
   if (!c) return;
   c.innerHTML = '';
-  const palettes = [
-    { label: 'ورقي', cls: 'bg-def', s: '#f5f3f0' },
-    { label: 'عاجي', cls: 'bg-ivory', s: '#fdf6e3' },
-    { label: 'نعناعي', cls: 'bg-mint', s: '#f0fdf5' },
-    { label: 'زهري', cls: 'bg-pink', s: '#fdf0f0' },
-    { label: 'رمادي', cls: 'bg-gray', s: '#f4f4f2' },
-    { label: 'سماوي', cls: 'bg-sky', s: '#eff6ff' },
-    { label: 'ليلي', cls: 'bg-night', s: '#1a1a2e' },
-    { label: 'داكن', cls: 'bg-dark', s: '#212121' }
-  ];
-
-  const current = palettes.find(p => p.cls === Store.state.settings.theme) || palettes[0];
+  const palettes = Store.palettes;
+  const current = palettes.find(p => p.id === Store.state.settings.theme) || palettes[0];
   
   // زر الثيم الحالي (على شكل كبسولة)
   const btn = document.createElement('button');
@@ -217,19 +207,19 @@ function buildSwatches() {
   btn.title = 'تغيير الثيم';
   
   btn.innerHTML = `
-    <div class="swatch on" style="background:${current.s}; width:12px; height:12px; border-radius:50%; border:1px solid rgba(128,128,128,0.2);"></div>
+    <div class="swatch on" style="background:${current.bg}; width:12px; height:12px; border-radius:50%; border:1px solid rgba(128,128,128,0.2);"></div>
     <span style="font-size:12px; font-weight:500;">${current.label}</span>
   `;
   
   btn.onclick = (e) => {
     const menuItems = palettes.map(p => ({
       label: `<div style="display:flex;align-items:center;gap:12px;">
-                <div style="width:18px;height:18px;background:${p.s};border:1px solid rgba(128,128,128,0.3);border-radius:50%;"></div>
+                <div style="width:18px;height:18px;background:${p.bg};border:1px solid rgba(128,128,128,0.3);border-radius:50%;"></div>
                 ${p.label}
               </div>`,
-      icon: p.cls === Store.state.settings.theme ? 'ti-check' : '',
+      icon: p.id === Store.state.settings.theme ? 'ti-check' : '',
       action: () => {
-        Store.updateSettings('theme', p.cls);
+        Store.updateSettings('theme', p.id);
         applyGlobalUI();
       }
     }));
