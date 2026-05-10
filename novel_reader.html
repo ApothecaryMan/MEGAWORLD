@@ -12,7 +12,6 @@
 
   body{
     font-family:var(--font-sans);
-    transition:background .25s,color .25s;
     background: var(--color-background-primary);
     color: var(--color-text-primary);
     overflow-x: hidden;
@@ -43,7 +42,6 @@
     border-bottom:1px solid rgba(128,128,128,0.15);
     background:inherit;
     overflow-x:auto;scrollbar-width:none;
-    transition:background .25s;
     user-select:none;-webkit-user-select:none;
   }
   .sticky-bar::-webkit-scrollbar{display:none;}
@@ -65,7 +63,6 @@
     color:inherit;background:transparent;
     border:1px solid rgba(128,128,128,0.35);border-radius:0;
     cursor:pointer;white-space:nowrap;height:28px;line-height:1;flex-shrink:0;
-    transition:background .12s;
   }
   .btn:hover{background:rgba(128,128,128,0.12);}
   .btn.on{background:rgba(128,128,128,0.2);border-color:rgba(128,128,128,0.65);}
@@ -79,7 +76,7 @@
     width:16px;height:16px;
     border:1px solid rgba(128,128,128,0.35);border-radius:0;
     cursor:pointer;flex-shrink:0;
-    outline:2px solid transparent;outline-offset:1px;transition:outline .1s;
+    outline:2px solid transparent;outline-offset:1px;
   }
   .swatch.on{outline-color:rgba(128,128,128,.8);}
   .stat{display:inline-flex;align-items:center;gap:3px;font-size:11px;opacity:.55;white-space:nowrap;flex-shrink:0;}
@@ -90,7 +87,6 @@
     display:flex;flex-wrap:nowrap;align-items:stretch;
     border-bottom:1px solid rgba(128,128,128,0.2);
     overflow-x:auto;scrollbar-width:none;
-    transition: background .25s, margin-inline-start 0.2s ease;
     min-height:34px;
   }
   .root.side-open .tabs-bar {
@@ -113,7 +109,7 @@
     color:inherit;background:transparent;
     border:none;border-inline-end:1px solid rgba(128,128,128,0.15);
     cursor:pointer;white-space:nowrap;flex-shrink:0;
-    opacity:.55;transition:background .12s,opacity .12s;
+    opacity:.55;
     height:34px;
   }
   .tab:last-of-type{border-inline-end:none;}
@@ -137,7 +133,6 @@
     padding:0 12px;
     font-size:16px;color:inherit;background:transparent;border:none;
     cursor:pointer;opacity:.4;flex-shrink:0;height:34px;
-    transition:opacity .12s;
   }
   .tab-add:hover{opacity:.8;}
 
@@ -147,7 +142,7 @@
     display:flex;flex-direction:column;align-items:center;justify-content:center;
     gap:10px;min-height:300px;
     border:1px dashed rgba(128,128,128,0.3);
-    cursor:pointer;transition:background .15s,border-color .15s;
+    cursor:pointer;
     padding:32px;text-align:center;
   }
   .paste-zone:hover{background:rgba(128,128,128,0.05);border-color:rgba(128,128,128,.5);}
@@ -210,7 +205,7 @@
   .hidden{display:none!important;}
 
 .progress-wrap{position:fixed;bottom:0;right:0;width:100%;height:3px;background:rgba(128,128,128,.08);z-index:999;}
-.progress-bar{height:100%;width:0%;background:currentColor;opacity:.35;transition:width .1s;}
+.progress-bar{height:100%;width:0%;background:currentColor;opacity:.35;}
 mark{background:rgba(255,255,0,.25);color:inherit;padding:0 2px;}
 .focus-mode .sticky-bar,
 .focus-mode .tabs-bar,
@@ -219,7 +214,7 @@ opacity:0;
 transform:translateY(-10px);
 pointer-events:none;
 }
-.sticky-bar,.tabs-bar,.nav-bar{transition:.2s;}
+.sticky-bar,.tabs-bar,.nav-bar{}
 
 
 
@@ -227,7 +222,6 @@ pointer-events:none;
 
 
 .tabs-bar{
-transition:transform .22s ease, opacity .22s ease !important;
 }
 
 .tabs-bar.hide-tabs{
@@ -251,7 +245,6 @@ position:fixed;
 min-width:180px;
 background:rgba(20,20,20,.96);
 border:1px solid rgba(128,128,128,.22);
-backdrop-filter:blur(10px);
 display:none;
 flex-direction:column;
 padding:6px;
@@ -272,7 +265,7 @@ display:flex;
   color:inherit;
   background:transparent;
   border:none;
-  transition:.12s;
+  transition:none;
 }
 
 .context-item:hover{
@@ -375,7 +368,6 @@ background:rgba(0,0,0,.75);
 color:#fff;
 border:1px solid rgba(255,255,255,.15);
 cursor:pointer;
-backdrop-filter:blur(10px);
 font-size:12px;
 }
 
@@ -412,7 +404,6 @@ display:block;
   top:45px;
   inset-inline-start:0;
   z-index:15;
-  transition:background .25s;
   user-select:none;-webkit-user-select:none;
 }
 .sidebar-title{
@@ -425,7 +416,7 @@ display:block;
   display:block;width:100%;
   padding:8px 12px;font-size:13px;border:none;background:transparent;
   color:inherit;cursor:pointer;border-radius:0;
-  transition:background 0.1s, color 0.1s;
+  transition:none;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 .side-item:hover{background:rgba(128,128,128,0.08);}
