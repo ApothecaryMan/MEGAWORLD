@@ -225,11 +225,9 @@ Store.subscribe((event) => {
   if (event === 'chapter-added') openModal();
 });
 
-window.onload = () => {
+window.addEventListener('DOMContentLoaded', () => {
   renderTabs();
   renderBody();
-  if (typeof buildSwatches === 'function') buildSwatches();
-  if (typeof applyGlobalUI === 'function') applyGlobalUI();
   if (typeof applySidebarState === 'function') applySidebarState();
-};
+});
 

@@ -25,6 +25,10 @@ const NovelPage = {
     }
 
     this.render();
+
+    // Update Toolbar Title dynamically
+    const tbTitle = document.getElementById('toolbarNovelTitle');
+    if (tbTitle) tbTitle.innerText = this.novel.title;
   },
 
   render() {

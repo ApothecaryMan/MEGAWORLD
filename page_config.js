@@ -144,5 +144,26 @@ const MEGA_PAGES = {
       { type: 'grid', title: 'إدارة المكتبة الكاملة', items: [ /* Mock data */ ] },
       { type: 'footer', text: 'نظام إدارة MEGAWORLD - إصدار تجريبي' }
     ]
+  },
+
+  // --- تفاصيل الرواية (Novel Details) ---
+  'novel.html': {
+    id: 'novel',
+    title: 'تفاصيل العمل',
+    toolbar: [
+      { type: 'custom', id: 'logo', label: 'MEGAWORLD', className: 'site-name', align: 'right', html: 'MEGAWORLD' },
+      { type: 'button', label: 'الرئيسية', id: 'backHome', align: 'right', action: () => window.location.href = 'index.html' },
+      { type: 'spacer' },
+      { type: 'custom', id: 'toolbarNovelTitle', align: 'center', className: 'lbl', style: 'font-size: 14px; font-weight: bold; opacity: 1; color: var(--color-theme);', html: 'جاري التحميل...' },
+      { type: 'spacer' },
+      { type: 'button', label: 'ابدأ القراءة', id: 'quickRead', align: 'left', className: 'btn-flat active', style: 'height: 30px; font-size: 11px;', action: () => typeof NovelPage !== 'undefined' && NovelPage.startReading() },
+      { type: 'custom', id: 'swatchWrap', label: 'الألوان', className: 'swatch-wrap', align: 'left' },
+      { 
+        type: 'custom', id: 'profile', align: 'left', className: 'btn-flat borderless',
+        style: 'display:flex; align-items:center; gap:10px; padding-left:0;',
+        html: `<span style="font-size:11px; font-weight:600;">أحمد خالد</span>
+               <div style="width:24px; height:24px; background:#ddd; border-radius:50%; border:1px solid var(--ui-border);"></div>`
+      }
+    ]
   }
 };

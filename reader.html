@@ -13,69 +13,63 @@
 </head>
 <body>
 
-<div class="root bg-def" id="root">
-  <!-- زر إلغاء التركيز -->
-  <button class="focus-exit" onclick="document.body.classList.remove('focus-mode')">إلغاء وضع التركيز</button>
+<!-- زر إلغاء التركيز -->
+<button class="focus-exit" onclick="document.body.classList.remove('focus-mode')">إلغاء وضع التركيز</button>
 
-  <!-- القائمة العلوية المكوناتية -->
-  <div class="sticky-bar" id="mainToolbar">
-    <!-- يتم بناؤها ديناميكياً بواسطة Toolbar Engine -->
-  </div>
+<!-- القائمة العلوية المكوناتية -->
+<div class="sticky-bar" id="mainToolbar">
+  <!-- يتم بناؤها ديناميكياً بواسطة Toolbar Engine -->
+</div>
 
-  <div class="main-layout">
-    <!-- القائمة الجانبية -->
-    <div class="sidebar" id="sidebar">
-      <div class="sidebar-section">
-        <div class="sidebar-title">
-          <span>المكتبة</span>
-          <button class="btn-icon" onclick="addNovel()" title="رواية جديدة">+</button>
-        </div>
-        <div class="side-list" id="libraryList"></div>
+<div class="main-layout">
+  <!-- القائمة الجانبية -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">
+        <span>المكتبة</span>
+        <button class="btn-icon" onclick="addNovel()" title="رواية جديدة">+</button>
       </div>
-
-      <div class="sidebar-sep"></div>
-
-      <div class="sidebar-section">
-        <div class="sidebar-title">
-          <span>قائمة الفصول</span>
-          <button class="btn-icon" onclick="addChapter()" title="إضافة فصل">+</button>
-        </div>
-        <div class="side-list" id="sideList"></div>
-      </div>
+      <div class="side-list" id="libraryList"></div>
     </div>
 
-    <div class="body-area" style="flex:1; min-width:0;">
-      <!-- شريط التبويبات -->
-      <div class="tabs-bar" id="tabsBar"></div>
-      
-      <!-- منطقة المحتوى -->
-      <div class="body-wrap" id="bodyWrap"></div>
+    <div class="sidebar-sep"></div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-title">
+        <span>قائمة الفصول</span>
+        <button class="btn-icon" onclick="addChapter()" title="إضافة فصل">+</button>
+      </div>
+      <div class="side-list" id="sideList"></div>
     </div>
   </div>
 
-  <!-- Progress Bar -->
-  <div class="progress-wrap">
-    <div class="progress-bar" id="progressBar"></div>
+  <div class="body-area" style="flex:1; min-width:0;">
+    <!-- شريط التبويبات -->
+    <div class="tabs-bar" id="tabsBar"></div>
+    
+    <!-- منطقة المحتوى -->
+    <div class="body-wrap" id="bodyWrap"></div>
   </div>
+</div>
 
-  <!-- القائمة المنبثقة الذكية -->
-  <div class="context-menu" id="contextMenu"></div>
+<!-- Progress Bar -->
+<div class="progress-wrap">
+  <div class="progress-bar" id="progressBar"></div>
+</div>
 
-  <!-- النافذة المنبثقة للمحرر -->
-  <div class="modal-bg" id="modalBg">
-    <div class="modal" id="modal">
-      <div class="modal-hdr">
-        <div class="modal-title">اسم الفصل:</div>
-        <input class="input-flat" style="flex:1; border:none; border-bottom:1px solid var(--ui-border-light);" id="titleInput" placeholder="الفصل الأول...">
-      </div>
-      <textarea class="ta" id="ta" placeholder="الصق نص الفصل هنا..."></textarea>
-      <div class="modal-btns">
-        <button class="btn-flat" onclick="closeModal()">إلغاء</button>
-        <button class="btn-flat active" onclick="applyText()">حفظ</button>
-      </div>
+<!-- النافذة المنبثقة للمحرر -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal" id="modal">
+    <div class="modal-hdr">
+      <div class="modal-title">اسم الفصل:</div>
+      <input class="input-flat" style="flex:1; border:none; border-bottom:1px solid var(--ui-border-light);" id="titleInput" placeholder="الفصل الأول...">
+    </div>
+    <textarea class="ta" id="ta" placeholder="الصق نص الفصل هنا..."></textarea>
+    <div class="modal-btns">
+      <button class="btn-flat" onclick="closeModal()">إلغاء</button>
+      <button class="btn-flat active" onclick="applyText()">حفظ</button>
     </div>
   </div>
-
 </div>
 
 <!-- Scripts -->

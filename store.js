@@ -213,30 +213,3 @@ const Store = {
 
 // تهيئة العقل المركزي فور تحميل الملف
 Store.init();
-
-// ربط المتغيرات القديمة بالجديدة لضمان عدم تعطل الأكواد الحالية مؤقتاً
-let chapters = Store.chapters;
-let activeIdx = Store.activeChapterIdx;
-let novels = Store.state.novels;
-let activeNovelIdx = Store.state.activeNovelIdx;
-let font = Store.state.settings.font;
-let sz = Store.state.settings.sz;
-let align = Store.state.settings.align;
-let continuousMode = Store.state.settings.continuousMode;
-let activePalette = { cls: Store.state.settings.theme };
-let sidebarVisible = Store.state.settings.sidebarVisible;
-
-// وظيفة لمزامنة المتغيرات القديمة (سيتم حذفها لاحقاً بعد الريفراكتور الكامل)
-function syncLegacy() {
-  chapters = Store.chapters;
-  activeIdx = Store.activeChapterIdx;
-  novels = Store.state.novels;
-  activeNovelIdx = Store.state.activeNovelIdx;
-  font = Store.state.settings.font;
-  sz = Store.state.settings.sz;
-  align = Store.state.settings.align;
-  continuousMode = Store.state.settings.continuousMode;
-  sidebarVisible = Store.state.settings.sidebarVisible;
-}
-
-Store.subscribe(() => syncLegacy());

@@ -13,6 +13,9 @@ const AppLayout = {
         return;
       }
 
+      // 0. ضمان وجود المكونات العالمية (الحقن التلقائي)
+      this.ensureGlobalElements();
+
       // 1. تحديث عنوان الصفحة
       document.title = `MEGAWORLD | ${config.title}`;
 
@@ -39,6 +42,22 @@ const AppLayout = {
     const path = window.location.pathname;
     const page = path.split('/').pop() || 'index.html';
     return page;
+  },
+
+  ensureGlobalElements() {
+    // التأكد من وجود ID للجسم لتطبيق الثيمات
+    if (!document.body.id) document.body.id = 'root';
+    if (!document.body.classList.contains('root')) document.body.classList.add('root');
+
+    // حقن قائمة السياق تلقائياً إذا كانت مفقودة
+    if (!document.getElementById('contextMenu')) {
+      const cm = document.createElement('div');
+      cm.id = 'contextMenu';
+      cm.className = 'context-menu';
+      document.body.appendChild(cm);
+      // إعادة ربط المحرك بالقنصر الجديد
+      if (typeof ContextMenu !== 'undefined') ContextMenu.el = cm;
+    }
   }
 };
 
