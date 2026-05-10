@@ -20,7 +20,6 @@ const Store = {
   // --- البيانات الثابتة (Constants) ---
   palettes: [
     { id: 'bg-def', label: 'ورقي', bg: '#f5f3f0', text: '#2d2d2d' },
-    { id: 'bg-blue', label: 'أزرق سماوي', bg: '#0078d4', text: '#ffffff' },
     { id: 'bg-ivory', label: 'عاجي', bg: '#fdf6e3', text: '#3b3020' },
     { id: 'bg-mint', label: 'نعناعي', bg: '#f0fdf5', text: '#1a3326' },
     { id: 'bg-pink', label: 'زهري', bg: '#fdf0f0', text: '#3a1e1e' },
@@ -28,7 +27,7 @@ const Store = {
     { id: 'bg-sky', label: 'سماوي', bg: '#eff6ff', text: '#1e2f4a' },
     { id: 'bg-night', label: 'ليلي', bg: '#1a1a2e', text: '#e0d8c8' },
     { id: 'bg-dark', label: 'داكن', bg: '#212121', text: '#d4c9b0' },
-    { id: 'bg-oled', label: 'أسود مطلق (OLED)', bg: '#000000', text: '#ffffff' }
+    { id: 'bg-oled', label: '(OLED)', bg: '#000000', text: '#ffffff' }
   ],
 
   // --- التهيئة (Initialization) ---
@@ -122,6 +121,14 @@ const Store = {
     if (this.activeNovel && this.activeNovel.chapters[idx]) {
       const ch = this.activeNovel.chapters[idx];
       ch.views = (ch.views || 0) + 1;
+      
+      // تسجيل المشاهدة بالتاريخ المحلي للحسابات الزمنية بدقة
+      const now = new Date();
+      const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+      
+      if (!ch.viewLog) ch.viewLog = {};
+      ch.viewLog[today] = (ch.viewLog[today] || 0) + 1;
+      
       this.save();
     }
   },
@@ -209,6 +216,10 @@ const Store = {
       if (!n.status) n.status = 'مستمرة';
       if (!n.genres) n.genres = ['عام'];
       if (!n.cover) n.cover = 'public/ChatGPT Image May 7, 2026, 07_38_24 PM.png';
+      n.chapters.forEach(ch => {
+        if (!ch.views) ch.views = 0;
+        if (!ch.viewLog) ch.viewLog = {};
+      });
     });
     this.save();
   },

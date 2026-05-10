@@ -10,29 +10,36 @@ const HomeEngine = {
     const container = document.getElementById(containerId);
     if (!container) return;
     this.container = container;
+    this.schema = config;
     this.render(config);
   },
+
+  trendingDays: 7, // الافتراضي أسبوع
 
   render(config) {
     this.container.innerHTML = '';
     const allRealNovels = Store.state.novels || [];
     
-    // ترتيب الروايات حسب المشاهدات (ترتيب منفصل للرائج)
-    const sortedByViews = [...allRealNovels].sort((a, b) => this.getViews(b) - this.getViews(a));
+    // الترتيب حسب إجمالي المشاهدات (للتوب 3)
+    const sortedByTotal = StatsEngine.getSortedByTotal();
+    
+    // الترتيب حسب الفترة الزمنية (للرائج)
+    const sortedByTrending = StatsEngine.getSortedByPeriod(this.trendingDays);
 
     config.forEach(section => {
       let node;
       if (['top5', 'trending', 'grid'].includes(section.type)) {
         if (section.type === 'top5') {
-          const top3 = sortedByViews.slice(0, 3);
+          const top3 = sortedByTotal.slice(0, 3);
           if (top3.length > 0) {
             node = this.makeTop5({ title: section.title, items: top3 });
           }
         } else if (section.type === 'trending') {
-          // الروايات التي تلي المراكز الثلاثة الأولى في ترتيب المشاهدات
-          const trending = sortedByViews.slice(0, 10);
+          const trending = sortedByTrending.slice(0, 10);
           if (trending.length > 0) {
             node = this.makeTrending({ title: section.title, items: trending.map((n, i) => ({ ...n, rank: i + 1 })) });
+            node.id = 'trendingSection'; // معرف خاص للتحديث المستقل
+            this.trendingData = { title: section.title }; // حفظ العنوان للتحديث
           }
         } else if (section.type === 'grid') {
           if (allRealNovels.length > 0) {
@@ -101,7 +108,7 @@ const HomeEngine = {
             <div class="rank-stats-row">
               <div class="rank-stat">
                 <i class="ti ti-eye"></i>
-                <span>${this.formatNum(this.getViews(hero))} مشاهدة</span>
+                <span>${StatsEngine.formatNum(StatsEngine.getTotalViews(hero))} مشاهدة</span>
               </div>
               <div class="rank-stat">
                 <i class="ti ti-list"></i>
@@ -136,7 +143,7 @@ const HomeEngine = {
                 </div>
                 
                 <div class="rank-item-m-stats">
-                  <span><i class="ti ti-eye"></i> ${this.formatNum(this.getViews(item))}</span>
+                  <span><i class="ti ti-eye"></i> ${StatsEngine.formatNum(StatsEngine.getTotalViews(item))}</span>
                   <span><i class="ti ti-list"></i> ${item.chapters ? item.chapters.length : '---'} فصل</span>
                   <span><i class="ti ti-star"></i> ${item.rating || '---'}</span>
                 </div>
@@ -164,20 +171,25 @@ const HomeEngine = {
     section.innerHTML = `
       <div class="section-header">
         <div class="section-title-wrap">
-          <span class="section-subtitle">الأكثر قراءة الآن</span>
+          <span class="section-subtitle">${this.trendingDays === 1 ? 'الأكثر قراءة اليوم' : (this.trendingDays === 7 ? 'الأكثر قراءة هذا الأسبوع' : 'الأكثر قراءة هذا الشهر')}</span>
           <h2 class="section-title">${data.title}</h2>
+        </div>
+        <div class="filter-group" style="display: flex; gap: 8px;">
+          <button class="btn-flat mini ${this.trendingDays === 1 ? 'active' : ''}" onclick="HomeEngine.setTrendingPeriod(1)">اليوم</button>
+          <button class="btn-flat mini ${this.trendingDays === 7 ? 'active' : ''}" onclick="HomeEngine.setTrendingPeriod(7)">أسبوع</button>
+          <button class="btn-flat mini ${this.trendingDays === 30 ? 'active' : ''}" onclick="HomeEngine.setTrendingPeriod(30)">شهر</button>
         </div>
       </div>
       <div class="novel-grid">
         ${data.items.map(item => `
           <div class="novel-card" onclick="window.location.href='novel.html?id=${this.getNovelId(item.title)}'">
-            <div class="rank-badge" style="top: 8px; right: 8px; width: 30px; height: 30px; font-size: 14px;">${item.rank}</div>
+            <div class="rank-badge" style="top: 8px; right: 8px; width: 30px; height: 30px; font-size: 14px; border-radius: 0;">${item.rank}</div>
             <img src="${item.cover || 'public/ChatGPT Image May 7, 2026, 07_38_24 PM.png'}" class="novel-card-poster">
             <div class="novel-card-info">
               <div class="novel-card-title">${item.title || '---'}</div>
               <div class="novel-card-author">${item.author || '---'}</div>
               <div class="novel-card-stats">
-                <span>${this.formatNum(this.getViews(item))} <i class="ti ti-eye"></i></span>
+                <span>${StatsEngine.formatNum(StatsEngine.getViewsForPeriod(item, this.trendingDays))} <i class="ti ti-eye"></i></span>
                 <span>${item.chapters ? item.chapters.length : '---'} فصل <i class="ti ti-list"></i></span>
                 <span>${item.rating || '---'} <i class="ti ti-star"></i></span>
               </div>
@@ -207,7 +219,7 @@ const HomeEngine = {
               <div class="novel-card-title">${item.title || '---'}</div>
               <div class="novel-card-author">${item.author || '---'}</div>
               <div class="novel-card-stats">
-                <span>${this.formatNum(this.getViews(item))} <i class="ti ti-eye"></i></span>
+                <span>${StatsEngine.formatNum(StatsEngine.getTotalViews(item))} <i class="ti ti-eye"></i></span>
                 <span>${item.chapters ? item.chapters.length : '---'} فصل <i class="ti ti-list"></i></span>
                 <span>${item.rating || '---'} <i class="ti ti-star"></i></span>
               </div>
@@ -232,22 +244,24 @@ const HomeEngine = {
     return div;
   },
 
+  setTrendingPeriod(days) {
+    this.trendingDays = days;
+    const section = document.getElementById('trendingSection');
+    if (section && this.trendingData) {
+      // تحديث الروايات المرتبة حسب الفترة الجديدة
+      const sortedByTrending = StatsEngine.getSortedByPeriod(this.trendingDays);
+      const trendingItems = sortedByTrending.slice(0, 10).map((n, i) => ({ ...n, rank: i + 1 }));
+      
+      // إعادة بناء محتوى القسم فقط
+      const newData = { title: this.trendingData.title, items: trendingItems };
+      const tempDiv = this.makeTrending(newData);
+      section.innerHTML = tempDiv.innerHTML;
+    }
+  },
+
   getNovelId(title) {
     if (!Store || !Store.state || !Store.state.novels) return 0;
     const idx = Store.state.novels.findIndex(n => n.title === title);
     return idx !== -1 ? idx : 0;
-  },
-
-  getViews(item) {
-    if (!item.chapters || item.chapters.length === 0) return 0;
-    const views = item.chapters.map(ch => ch.views || 0);
-    return Math.max(...views);
-  },
-
-  formatNum(num) {
-    if (!num || isNaN(num)) return 0;
-    if (num >= 1000000) return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
-    if (num >= 1000) return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
-    return num.toLocaleString();
   }
 };
