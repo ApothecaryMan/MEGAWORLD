@@ -1,12 +1,13 @@
 /* Sticky Bar (Main Toolbar) Layout */
 .sticky-bar{
-  position:sticky;top:0;z-index:20;
+  position:sticky;top:0;z-index:100;
+  height: 48px;
   display:flex;flex-wrap:nowrap;align-items:center;
   justify-content: space-between;
-  padding:8px 12px;
+  padding:0 12px;
   border-bottom:1px solid var(--ui-border-light);
   background:var(--color-background-primary);
-  overflow-x:auto;scrollbar-width:none;
+  overflow: visible;
   user-select:none;-webkit-user-select:none;
 }
 .toolbar-side {
@@ -122,6 +123,12 @@
   border-bottom:1px solid var(--ui-border-light);
   overflow-x:auto;scrollbar-width:none;
   min-height:var(--ui-tab-height);
+  background: var(--color-background-primary);
+}
+.root:not(.side-open) .tabs-bar {
+  position: sticky;
+  top: 48px;
+  z-index: 90;
 }
 .tabs-bar::-webkit-scrollbar{display:none;}
 
@@ -190,4 +197,69 @@
 .quote-tools-area .btn-flat {
   font-size: 12px;
   padding: 6px 0;
+}
+
+/* --- Dropdown Components (Unified MDL) --- */
+.dropdown-wrap {
+  position: relative;
+  font-family: var(--ui-font-sans);
+}
+.dropdown-trigger {
+  height: var(--ui-btn-height);
+  padding: 0 12px;
+  background: transparent;
+  border: 1px solid currentColor;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  color: inherit;
+}
+.dropdown-trigger:hover {
+  background: var(--ui-hover-bg);
+  border-color: var(--ui-border);
+}
+.dropdown-wrap.open .dropdown-trigger {
+  border-color: var(--color-theme);
+  background: var(--ui-active-bg);
+}
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  min-width: 180px;
+  background: var(--color-background-primary);
+  border: 1px solid var(--ui-border);
+  display: none;
+  flex-direction: column;
+  z-index: 2000;
+  padding: 5px 0;
+  margin-top: 2px;
+}
+.dropdown-wrap.open .dropdown-menu {
+  display: flex;
+}
+.dropdown-item {
+  width: 100%;
+  padding: 8px 15px;
+  border: none;
+  background: transparent;
+  color: var(--color-text-primary);
+  font-size: 13px;
+  text-align: right;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+.dropdown-item:hover {
+  background: var(--ui-hover-bg);
+  color: var(--color-theme);
+}
+.dropdown-item i {
+  font-size: 16px;
+  opacity: 0.6;
 }

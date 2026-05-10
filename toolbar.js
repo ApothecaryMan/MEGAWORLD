@@ -19,6 +19,8 @@ const Toolbar = {
     this.hiddenItems = rawHidden.filter(id => validIds.includes(id));
 
     this.render();
+    // بناء لوحة الألوان فوراً بعد الرندر
+    if (typeof buildSwatches === 'function') buildSwatches();
   },
 
   render() {
@@ -142,6 +144,7 @@ const Toolbar = {
       case 'spacer': return this.makeElement('div', 'spacer');
       case 'label': return this.makeLabel(item);
       case 'custom': return this.makeCustom(item);
+      case 'dropdown': return this.makeDropdown(item);
       default: return null;
     }
   },
@@ -165,10 +168,16 @@ const Toolbar = {
   },
 
   makeButton(item) {
-    const btn = this.makeElement('button', item.className || 'btn-flat', item.id);
-    if (item.label) btn.textContent = item.label;
+    const btn = this.makeElement('button', 'btn-flat');
+    if (item.id) btn.id = item.id;
+    if (item.className) btn.classList.add(...item.className.split(' '));
+    
+    // دعم الأيقونات أو النصوص
+    if (item.html) btn.innerHTML = item.html;
+    else btn.textContent = item.label;
+
     if (item.title) btn.title = item.title;
-    if (item.action) btn.onclick = item.action;
+    btn.onclick = (e) => item.action && item.action(e);
     return btn;
   },
 
@@ -188,7 +197,43 @@ const Toolbar = {
   makeCustom(item) {
     const div = this.makeElement('div', item.className, item.id);
     if (item.html) div.innerHTML = item.html;
+    if (item.style) div.style.cssText = item.style;
     return div;
+  },
+
+  makeDropdown(item) {
+    const wrap = this.makeElement('div', 'dropdown-wrap');
+    if (item.id) wrap.id = item.id;
+    
+    wrap.innerHTML = `
+      <div class="dropdown-trigger">
+        ${item.icon ? `<i class="ti ti-${item.icon}"></i>` : ''}
+        <span>${item.label}</span>
+        <i class="ti ti-chevron-down"></i>
+      </div>
+      <div class="dropdown-menu"></div>
+    `;
+
+    const menu = wrap.querySelector('.dropdown-menu');
+    item.items.forEach(it => {
+      const btn = document.createElement('button');
+      btn.className = `dropdown-item ${it.className || ''}`;
+      btn.innerHTML = `<span>${it.label}</span> ${it.icon ? `<i class="ti ti-${it.icon}"></i>` : ''}`;
+      btn.onclick = (e) => { e.stopPropagation(); it.action(); wrap.classList.remove('open'); };
+      menu.appendChild(btn);
+    });
+
+    wrap.querySelector('.dropdown-trigger').onclick = (e) => {
+      e.stopPropagation();
+      const isOpen = wrap.classList.contains('open');
+      document.querySelectorAll('.dropdown-wrap').forEach(w => w.classList.remove('open'));
+      if (!isOpen) wrap.classList.add('open');
+    };
+    
+    // إغلاق عند الضغط خارجاً
+    document.addEventListener('click', () => wrap.classList.remove('open'));
+
+    return wrap;
   }
 };
 
@@ -314,7 +359,7 @@ function doSearch(val) {
 
 // --- تعريف البار الرئيسي ---
 const MainToolbarSchema = [
-  { type: 'button', label: 'الرئيسية', id: 'homeBtn', align: 'right', action: () => location.reload() },
+  { type: 'button', label: 'الرئيسية', id: 'homeBtn', align: 'right', action: () => window.location.href = 'index.html' },
   { type: 'button', label: 'القائمة', id: 'sideToggleBtn', align: 'right', action: () => toggleSidebar() },
   { 
     type: 'custom', id: 'statsBox', label: 'الإحصائيات', className: 'stats-box',
@@ -357,7 +402,7 @@ const MainToolbarSchema = [
   { type: 'button', label: 'متواصل', id: 'contBtn', action: () => { Store.updateSettings('continuousMode', !Store.state.settings.continuousMode); applyGlobalUI(); if (typeof renderBody === 'function') renderBody(); } },
   { type: 'button', label: 'تركيز', id: 'focusBtn', action: () => document.body.classList.toggle('focus-mode') },
   { type: 'button', label: 'تصدير', id: 'exportBtn', action: () => exportTxt() },
-  { type: 'button', label: 'تجربة', id: 'testBtn', align: 'left', action: () => window.location.href = 'test.html' },
+  { type: 'button', label: 'الإدارة', id: 'adminBtn', align: 'left', action: () => window.location.href = 'admin.html' },
   { type: 'custom', id: 'swatchWrap', label: 'الألوان', className: 'swatch-wrap' },
   { type: 'input', label: 'البحث', placeholder: 'بحث...', id: 'sq', align: 'left', action: (val) => { if (typeof doSearch === 'function') doSearch(val); } },
   { 
@@ -366,7 +411,5 @@ const MainToolbarSchema = [
   }
 ];
 
-window.addEventListener('DOMContentLoaded', () => {
-  Toolbar.init('mainToolbar', MainToolbarSchema);
-  applyGlobalUI();
-});
+
+// Auto-init removed. Managed by AppLayout.

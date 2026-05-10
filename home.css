@@ -1,0 +1,285 @@
+/* 
+  MEGAWORLD Home & Admin Styles
+  Pure Flat (No shadows), Instant (No transitions)
+*/
+
+.home-container {
+  padding: 40px;
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--ui-border-light);
+  padding-bottom: 10px;
+}
+
+.section-title {
+  font-size: 14px;
+  opacity: 0.5;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: bold;
+}
+
+/* --- Top 5 Hierarchy (التصنيف الهرمي الفخم) --- */
+.top5-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Rank 1: The Hero */
+.rank-tier-1 {
+  display: flex;
+  gap: 30px;
+  padding: 40px;
+  background: var(--ui-input-bg);
+  border: 1px solid var(--color-theme);
+  position: relative;
+}
+.rank-tier-1 .rank-badge-huge {
+  position: absolute;
+  top: 15px;
+  left: 20px;
+  font-size: 100px;
+  font-weight: 900;
+  opacity: 0.1;
+  line-height: 1;
+}
+.rank-tier-1 img.novel-cover {
+  width: 200px;
+  height: 300px;
+  object-fit: cover;
+  border: 1px solid var(--ui-border);
+}
+
+/* Rank 2 & 3: Featured */
+.rank-tier-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.rank-item-m {
+  display: flex;
+  gap: 15px;
+  padding: 20px;
+  border: 1px solid var(--ui-border);
+  background: var(--ui-input-bg);
+}
+
+/* Rank 4 & 5: List */
+.rank-tier-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 15px;
+}
+.rank-item-s {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--ui-border-light);
+  background: var(--color-background-primary);
+}
+
+/* --- Trending List (القائمة الرائجة) --- */
+.trending-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+.trending-card {
+  display: flex;
+  gap: 15px;
+  padding: 15px;
+  background: var(--ui-input-bg);
+  border: 1px solid var(--ui-border-light);
+  position: relative;
+  cursor: pointer;
+}
+.trending-card:hover {
+  border-color: var(--color-theme);
+  background: var(--ui-hover-bg);
+}
+.rank-badge {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 32px;
+  height: 32px;
+  background: var(--color-theme);
+  color: var(--color-on-theme);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+  border: 1px solid var(--color-theme);
+  z-index: 5;
+}
+.trending-cover {
+  width: 75px;
+  height: 110px;
+  background: #333;
+  flex-shrink: 0;
+  border: 1px solid var(--ui-border);
+  object-fit: cover;
+}
+.trending-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+}
+.trending-title {
+  font-size: 15px;
+  font-weight: bold;
+  color: var(--color-text-primary);
+}
+.trending-meta {
+  font-size: 11px;
+  opacity: 0.6;
+}
+.trending-desc {
+  font-size: 12px;
+  opacity: 0.8;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.4;
+}
+
+/* --- Novel Grid Card (Poster + Overlay Info) --- */
+.novel-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 25px;
+}
+.novel-card {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.novel-card-poster {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  background: var(--ui-input-bg);
+  border: 1px solid var(--ui-border-light);
+  object-fit: cover;
+}
+.novel-card-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 30px 12px 12px;
+  background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.novel-card-title {
+  font-size: 14px;
+  font-weight: bold;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.novel-card-author {
+  font-size: 11px;
+  opacity: 0.7;
+}
+.novel-card:hover .novel-card-poster {
+  border-color: var(--color-theme);
+}
+
+/* --- Admin Specific Overlays --- */
+.card-edit-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  opacity: 0;
+}
+.trending-card:hover .card-edit-overlay,
+.novel-card:hover .card-edit-overlay {
+  opacity: 1;
+}
+
+.grid-actions {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  left: 8px;
+  display: flex;
+  justify-content: space-between;
+  z-index: 10;
+  opacity: 0;
+}
+.novel-card:hover .grid-actions {
+  opacity: 1;
+}
+
+.grid-action-btn {
+  width: 28px;
+  height: 28px;
+  background: rgba(0,0,0,0.8);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.grid-action-btn:hover {
+  background: var(--color-theme);
+}
+.grid-action-btn.danger:hover {
+  background: #ff4444;
+}
+
+/* --- Input UI for Admin --- */
+.input-hero {
+  background: transparent;
+  border: none;
+  border-bottom: 2px dashed var(--ui-border);
+  font-size: 32px;
+  font-weight: bold;
+  color: var(--color-text-primary);
+  width: 100%;
+  padding: 5px 0;
+  outline: none;
+}
+.input-hero:focus {
+  border-bottom-color: var(--color-theme);
+  border-bottom-style: solid;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+  .home-container { padding: 15px; gap: 30px; }
+  .rank-tier-1 { flex-direction: column; padding: 25px; align-items: center; text-align: center; }
+  .rank-tier-2, .rank-tier-3 { grid-template-columns: 1fr; }
+  .novel-grid { grid-template-columns: 1fr 1fr; gap: 15px; }
+  .rank-badge-huge { left: 50%; transform: translateX(-50%); top: 0; }
+}

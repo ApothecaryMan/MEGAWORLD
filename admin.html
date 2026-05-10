@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MEGAWORLD | لوحة الإدارة</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="toolbar.css">
+  <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="context_menu.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+</head>
+<body class="root bg-def" id="root">
+
+  <div id="mainToolbar" class="sticky-bar"></div>
+
+  <main class="home-container">
+    
+    <!-- Admin Hero Editor -->
+    <section>
+      <div class="section-header">
+        <h2 class="section-title">إدارة الرواية المميزة (Rank 1)</h2>
+        <button class="btn-flat active">حفظ التغييرات</button>
+      </div>
+      <div class="rank-tier-1">
+        <div style="position: relative;">
+          <img src="public/ChatGPT Image May 7, 2026, 07_38_24 PM.png" class="novel-cover" style="width: 180px; height: 260px;">
+          <div class="card-edit-overlay" style="opacity: 1; background: rgba(0,0,0,0.2);">
+             <button class="btn-icon on" title="تغيير الصورة"><i class="ti ti-photo"></i></button>
+          </div>
+        </div>
+        <div class="rank-tier-1-info" style="flex: 1;">
+          <input type="text" class="input-hero" value="سيد الأسرار: العودة" placeholder="عنوان الرواية...">
+          <textarea style="width: 100%; height: 100px; background: transparent; border: 1px dashed var(--ui-border); color: var(--color-text-primary); margin-top: 15px; padding: 10px; font-family: inherit; resize: none; outline: none;" placeholder="وصف الرواية...">رحلة ملحمية في عالم السحر والغموض. استكشف العوالم الخفية وواجه الأسرار القديمة في أكثر روايات السنة إثارة وتشويقاً.</textarea>
+          <div class="flex-row" style="margin-top: 20px;">
+            <button class="btn-flat">تغيير روابط الأزرار</button>
+            <button class="btn-flat danger" style="color: #ff5f5f; border-color: #ff5f5f;">حذف من الصدارة</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Admin Trending Editor -->
+    <section>
+      <div class="section-header">
+        <h2 class="section-title">إدارة القائمة الرائجة</h2>
+        <button class="btn-flat">+ إضافة عمل</button>
+      </div>
+      <div class="trending-grid">
+        <div class="trending-card">
+          <div class="rank-badge">4</div>
+          <img src="public/ChatGPT Image May 7, 2026, 08_05_10 PM.png" class="trending-cover">
+          <div class="trending-info">
+            <div class="trending-title">الهروب من المستقبل</div>
+            <div class="trending-meta">ID: 102938 | خيال علمي</div>
+          </div>
+          <div class="card-edit-overlay">
+            <button class="grid-action-btn"><i class="ti ti-pencil"></i></button>
+            <button class="grid-action-btn danger"><i class="ti ti-trash"></i></button>
+          </div>
+        </div>
+        <div class="trending-card">
+          <div class="rank-badge">5</div>
+          <img src="public/ChatGPT Image May 7, 2026, 07_38_24 PM.png" class="trending-cover">
+          <div class="trending-info">
+            <div class="trending-title">مملكة الأسرار</div>
+            <div class="trending-meta">ID: 445566 | خيال</div>
+          </div>
+          <div class="card-edit-overlay">
+            <button class="grid-action-btn"><i class="ti ti-pencil"></i></button>
+            <button class="grid-action-btn danger"><i class="ti ti-trash"></i></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Admin Library Management -->
+    <section>
+      <div class="section-header">
+        <h2 class="section-title">إدارة جميع الروايات</h2>
+        <input type="text" class="input-flat" placeholder="بحث عن رواية..." style="width: 250px;">
+      </div>
+      <div class="novel-grid">
+        <div class="novel-card editing">
+          <img src="public/ChatGPT Image May 7, 2026, 07_38_24 PM.png" class="novel-card-poster">
+          <div class="novel-card-info">
+            <div class="novel-card-title">مملكة الأسرار</div>
+            <div class="novel-card-author">أحمد خالد</div>
+          </div>
+          <div class="grid-actions">
+            <div class="grid-action-btn danger" title="حذف"><i class="ti ti-trash"></i></div>
+            <div class="grid-action-btn" title="تعديل"><i class="ti ti-pencil"></i></div>
+          </div>
+        </div>
+        <div class="novel-card editing">
+          <img src="public/ChatGPT Image May 7, 2026, 07_42_42 PM.png" class="novel-card-poster">
+          <div class="novel-card-info">
+            <div class="novel-card-title">ظل الإمبراطور</div>
+            <div class="novel-card-author">سارة سليم</div>
+          </div>
+          <div class="grid-actions">
+            <div class="grid-action-btn danger" title="حذف"><i class="ti ti-trash"></i></div>
+            <div class="grid-action-btn" title="تعديل"><i class="ti ti-pencil"></i></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer style="margin-top: 60px; padding: 20px; border-top: 1px solid var(--ui-border); text-align: center; opacity: 0.5; font-size: 11px;">
+    نظام إدارة MEGAWORLD - الإصدار التجريبي 1.0
+  </footer>
+
+  <div class="context-menu" id="contextMenu"></div>
+
+  <!-- Scripts -->
+  <script src="store.js"></script>
+  <script src="context_menu.js"></script>
+  <script src="toolbar.js"></script>
+  <script src="page_config.js"></script>
+  <script src="app_layout.js"></script>
+
+</body>
+</html>

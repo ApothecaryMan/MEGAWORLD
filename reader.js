@@ -148,8 +148,8 @@ function renderBody() {
     const target = document.getElementById(`ch-title-${Store.activeChapterIdx}`);
     if (target) {
       setTimeout(() => {
-        const y = target.getBoundingClientRect().top + window.scrollY - 60;
-        window.scrollTo({ top: y, behavior: 'smooth' });
+        const y = target.getBoundingClientRect().top + window.scrollY - 82;
+        window.scrollTo({ top: y });
       }, 30);
     }
   }
