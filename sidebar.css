@@ -55,6 +55,4 @@
   .sidebar { display: none; }
 }
 
-.root.side-open .body-area {
-  margin-inline-start: 240px;
-}
+/* .root.side-open .body-area { margin-inline-start: 240px; } */

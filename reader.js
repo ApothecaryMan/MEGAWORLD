@@ -173,13 +173,7 @@ window.addEventListener('scroll', () => {
   const bar = document.getElementById('progressBar');
   if (bar) bar.style.width = (isFinite(p) ? p : 0) + '%';
 
-  const tabs = document.getElementById('tabsBar');
-  const current = window.scrollY;
-  if (tabs) {
-    if (current > lastScrollY && current > 80) tabs.classList.add('hide-tabs');
-    else tabs.classList.remove('hide-tabs');
-  }
-  lastScrollY = current;
+  lastScrollY = window.scrollY;
 
   if (Store.state.settings.continuousMode) {
     const markers = document.querySelectorAll('.ch-marker');
