@@ -795,7 +795,7 @@ chapters.forEach((c,i)=>{
 if(!c.content)return;
 
         full+=`
-        <h2 class="chapter-text ${font} ${align}" style="font-size:${sz}px; font-weight:bold; margin-top:2rem; margin-bottom:16px;">${escHtml(c.title)}</h2>
+        <h2 id="ch-title-${i}" class="chapter-text ch-marker ${font} ${align}" data-index="${i}" style="font-size:${sz}px; font-weight:bold; margin-top:2rem; margin-bottom:16px;">${escHtml(c.title)}</h2>
         <div class="chapter-text ${font} ${align}" style="font-size:${sz}px;">
         ${escHtml(c.content)}
         </div>
@@ -807,7 +807,7 @@ if(!c.content)return;
     } else {
       wrap.innerHTML=`
       ${activeIdx!==0?'<div class="orn"><div class="orn-line"></div><div class="orn-dot"></div><div class="orn-line"></div></div>':''}
-      <h2 class="chapter-text ${font} ${align}" style="font-size:${sz}px; font-weight:bold; margin-bottom:16px;">${escHtml(ch.title)}</h2>
+      <h2 id="ch-title-${activeIdx}" class="chapter-text ch-marker ${font} ${align}" data-index="${activeIdx}" style="font-size:${sz}px; font-weight:bold; margin-bottom:16px;">${escHtml(ch.title)}</h2>
       <div class="chapter-text ${font} ${align}" id="chapterText" style="font-size:${sz}px;">${escHtml(ch.content)}</div>
       <div class="orn" style="margin-top:2rem;"><div class="orn-line"></div><div class="orn-dot"></div><div class="orn-line"></div></div>`;
       stats(ch.content);
@@ -834,8 +834,35 @@ if(!c.content)return;
 
   function goTo(i){
     if(i<0||i>=chapters.length)return;
+    const oldIdx = activeIdx;
     activeIdx=i;
-    renderTabs();renderBody();save();
+    
+    if(continuousMode){
+      const target = document.getElementById(`ch-title-${i}`);
+      if(target){
+        target.scrollIntoView({behavior:'smooth', block:'start'});
+        updateActiveUI();
+      } else {
+        renderTabs();renderBody();
+      }
+    } else {
+      renderTabs();renderBody();
+    }
+    save();
+  }
+
+  function updateActiveUI(){
+    // Update tabs
+    document.querySelectorAll('.tab').forEach((t, idx) => {
+      t.classList.toggle('active', idx === activeIdx);
+    });
+    // Update sidebar
+    document.querySelectorAll('.side-item').forEach((s, idx) => {
+      s.classList.toggle('active', idx === activeIdx);
+    });
+    // Update nav info if exists
+    const info=document.getElementById('navInfo');
+    if(info) info.textContent=(activeIdx+1)+' / '+chapters.length;
   }
 
   function deleteChapter(){
@@ -979,20 +1006,37 @@ document.body.classList.toggle('focus-mode');
 }
 
 
+let lastScrollY=window.scrollY;
 window.addEventListener('scroll',()=>{
+  const h=document.documentElement.scrollHeight-window.innerHeight;
+  const p=(window.scrollY/h)*100;
+  const bar=document.getElementById('progressBar');
+  if(bar) bar.style.width=(isFinite(p)?p:0)+'%';
 
-const h=
-document.documentElement.scrollHeight-
-window.innerHeight;
+  // Hide tabs on scroll
+  const tabs=document.getElementById('tabsBar');
+  const current=window.scrollY;
+  if(tabs){
+    if(current>lastScrollY && current>80) tabs.classList.add('hide-tabs');
+    else tabs.classList.remove('hide-tabs');
+  }
+  lastScrollY=current;
 
-const p=(window.scrollY/h)*100;
-
-const bar=document.getElementById('progressBar');
-
-if(bar){
-bar.style.width=(isFinite(p)?p:0)+'%';
-}
-
+  // Chapter Sync
+  if(continuousMode){
+    const markers = document.querySelectorAll('.ch-marker');
+    for(let m of markers){
+      const rect = m.getBoundingClientRect();
+      if(rect.top > -20 && rect.top < 120){
+        const idx = parseInt(m.getAttribute('data-index'));
+        if(!isNaN(idx) && activeIdx !== idx){
+          activeIdx = idx;
+          updateActiveUI();
+        }
+        break;
+      }
+    }
+  }
 });
 
 window.addEventListener('keydown',e=>{
@@ -1009,31 +1053,6 @@ if(e.ctrlKey && e.key==='f'){
 e.preventDefault();
 searchInChapter();
 }
-
-});
-
-
-let lastScrollY=window.scrollY;
-
-window.addEventListener('scroll',()=>{
-
-const tabs=document.getElementById('tabsBar');
-
-if(!tabs)return;
-
-const current=window.scrollY;
-
-if(current>lastScrollY && current>80){
-
-tabs.classList.add('hide-tabs');
-
-}else{
-
-tabs.classList.remove('hide-tabs');
-
-}
-
-lastScrollY=current;
 
 });
 
@@ -1102,14 +1121,9 @@ save();
 
 
 window.addEventListener('keydown',e=>{
-
-if(e.key==='Escape' &&
-document.body.classList.contains('focus-mode')){
-
-document.body.classList.remove('focus-mode');
-
-}
-
+  if(e.key==='Escape' && document.body.classList.contains('focus-mode')){
+    document.body.classList.remove('focus-mode');
+  }
 });
 
 </script>
