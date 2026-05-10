@@ -232,3 +232,4 @@ window.onload = () => {
   if (typeof applyGlobalUI === 'function') applyGlobalUI();
   if (typeof applySidebarState === 'function') applySidebarState();
 };
+

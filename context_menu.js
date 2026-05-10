@@ -97,6 +97,7 @@ document.addEventListener('contextmenu', (e) => {
       const wordCount = sel.split(/\s+/).filter(w => w.length > 0).length;
       ContextMenu.show(e, [
         { label: 'نسخ النص', icon: 'ti-copy', action: () => navigator.clipboard.writeText(sel) },
+        { label: 'حفظ كاقتباس (صورة)', icon: 'ti-photo', action: () => { if (typeof exportQuote === 'function') exportQuote(sel); } },
         { label: 'البحث عن النص', icon: 'ti-search', action: () => { if (typeof doSearch === 'function') doSearch(sel); } },
         { sep: true },
         { label: `الكلمات المحددة: ${wordCount}`, icon: 'ti-text-size' },
