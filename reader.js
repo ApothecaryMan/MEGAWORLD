@@ -143,6 +143,16 @@ function renderBody() {
   }
 
   updateNavUI();
+  
+  if (settings.continuousMode) {
+    const target = document.getElementById(`ch-title-${Store.activeChapterIdx}`);
+    if (target) {
+      setTimeout(() => {
+        const y = target.getBoundingClientRect().top + window.scrollY - 60;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }, 30);
+    }
+  }
 }
 
 function updateNavUI() {
