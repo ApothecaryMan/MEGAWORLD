@@ -37,6 +37,6 @@
   .sidebar { display: none; }
 }
 
-.root.side-open .tabs-bar {
+.root.side-open .body-area {
   margin-inline-start: 240px;
 }

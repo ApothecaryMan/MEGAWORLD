@@ -32,20 +32,47 @@ body{
 .root.bg-night ::selection { background: rgba(255,255,255,0.15); color: #fff; }
 .root.bg-dark  ::selection { background: rgba(212,201,176,0.2); color: #fff; }
 
-.body-wrap{padding:24px 20px;min-height:calc(100vh - 80px);flex:1;}
+.body-wrap{
+  padding:24px 20px;
+  flex:1;
+  display:flex;
+  flex-direction:column;
+}
 
 .paste-zone{
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:10px;min-height:300px;
-  border:1px dashed rgba(128,128,128,0.3);
+  gap:16px;
+  flex:1;
+  width:100%;
+  border:1px solid rgba(128,128,128,0.15);
   cursor:pointer;
-  padding:32px;text-align:center;
+  padding:40px;text-align:center;
+  background:rgba(128,128,128,0.02);
 }
-.paste-zone:hover{background:rgba(128,128,128,0.05);border-color:rgba(128,128,128,.5);}
-.paste-zone.drag{background:rgba(128,128,128,.08);border-color:rgba(128,128,128,.7);}
-.paste-zone i{font-size:34px;opacity:.25;}
-.paste-title{font-size:15px;opacity:.5;}
-.paste-sub{font-size:11px;opacity:.3;}
+.paste-zone:hover{
+  background:rgba(128,128,128,0.06);
+  border-color:rgba(128,128,128,0.3);
+}
+.paste-zone.drag{
+  background:rgba(128,128,128,0.1);
+  border-color:currentColor;
+}
+.paste-zone i{
+  font-size:48px;
+  opacity:0.2;
+  margin-bottom:8px;
+}
+.paste-title{
+  font-family:'Amiri', serif;
+  font-size:24px;
+  opacity:0.6;
+  font-weight:bold;
+}
+.paste-sub{
+  font-size:13px;
+  opacity:0.4;
+  letter-spacing:0.5px;
+}
 
 .chapter-text{
   font-family:'Amiri',serif;font-size:22px;line-height:2.2;
@@ -94,7 +121,17 @@ font-size:12px;
   opacity:0; transform:translateY(-10px); pointer-events:none;
 }
 
-.main-layout{display:flex;}
+.main-layout{
+  display:flex;
+  min-height:calc(100vh - 45px); /* 45px is approx height of sticky-bar */
+}
+.body-area{
+  flex:1;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+}
+
 
 .site-name{
   font-family: 'Cinzel Decorative', serif;
