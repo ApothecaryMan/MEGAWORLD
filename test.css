@@ -527,6 +527,17 @@
   background: #ff5f5f;
   color: white;
 }
+.grid-action-btn.edit {
+  color: var(--color-theme);
+}
+.tag-remove {
+  margin-right: 5px;
+  opacity: 0.5;
+  font-size: 10px;
+}
+.tag-remove:hover {
+  opacity: 1;
+}
 
 /* --- Top 5 Hierarchy (التصنيف الهرمي) --- */
 .top5-container {
@@ -641,4 +652,231 @@
   .dropdown-wrap {
     width: 100%; /* Full width dropdowns on mobile */
   }
+}
+
+/* --- Full Novel Detail Components --- */
+.novel-detail-header {
+  display: flex;
+  gap: 40px;
+  padding: 40px;
+  background: var(--ui-input-bg);
+  border: 1px solid var(--ui-border);
+  position: relative;
+  align-items: flex-start;
+}
+
+.novel-detail-cover {
+  width: 240px;
+  height: 340px;
+  object-fit: cover;
+  border: 1px solid var(--color-theme);
+  flex-shrink: 0;
+  background: #333;
+}
+
+.novel-detail-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.novel-detail-title {
+  font-size: 38px;
+  font-weight: 900;
+  margin: 0;
+  line-height: 1.1;
+  color: var(--color-text-primary);
+}
+
+.novel-detail-author {
+  font-size: 16px;
+  opacity: 0.6;
+  font-weight: 500;
+}
+
+.novel-rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #ffb800; /* Gold Stars */
+  font-size: 20px;
+  margin: 5px 0;
+}
+.novel-rating span {
+  color: var(--color-text-primary);
+  font-size: 14px;
+  opacity: 0.5;
+  margin-right: 10px;
+}
+
+.novel-summary {
+  font-size: 16px;
+  line-height: 1.8;
+  opacity: 0.8;
+  margin: 15px 0;
+  max-width: 800px;
+}
+
+.novel-detail-stats {
+  display: flex;
+  gap: 40px;
+  padding: 20px 0;
+  border-top: 1px solid var(--ui-border-light);
+  border-bottom: 1px solid var(--ui-border-light);
+  margin: 10px 0;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-value {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.stat-label {
+  font-size: 10px;
+  opacity: 0.5;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+@media (max-width: 800px) {
+  .novel-detail-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+  }
+  .novel-detail-cover {
+    width: 180px;
+    height: 260px;
+  }
+  .novel-detail-title {
+    font-size: 28px;
+  }
+  .novel-detail-stats {
+    justify-content: center;
+    gap: 20px;
+  }
+}
+
+/* --- Chapter List Components --- */
+.chapter-list-container {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--ui-border);
+  background: var(--ui-input-bg);
+  margin-top: 10px;
+}
+
+.chapter-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 25px;
+  border-bottom: 1px solid var(--ui-border-light);
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+
+.chapter-item:hover {
+  background: var(--ui-hover-bg);
+}
+
+.chapter-item:last-child {
+  border-bottom: none;
+}
+
+.chapter-main-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex: 1;
+}
+
+.chapter-index {
+  font-weight: bold;
+  opacity: 0.3;
+  width: 40px;
+  font-size: 18px;
+}
+
+.chapter-item-title {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.chapter-item-meta {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  font-size: 12px;
+  opacity: 0.5;
+}
+
+.chapter-lock {
+  color: var(--color-theme);
+  font-size: 16px;
+}
+
+.chapter-date {
+  min-width: 100px;
+  text-align: left;
+}
+
+/* --- Reviews Components --- */
+.review-item {
+  padding: 20px;
+  border: 1px solid var(--ui-border-light);
+  background: var(--ui-input-bg);
+  margin-bottom: 15px;
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  align-items: center;
+}
+
+.review-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.review-avatar {
+  width: 38px;
+  height: 38px;
+  background: var(--ui-active-bg);
+  border: 1px solid var(--ui-border);
+}
+
+.review-username {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.review-content {
+  font-size: 14px;
+  line-height: 1.6;
+  opacity: 0.8;
+}
+
+.review-date {
+  font-size: 11px;
+  opacity: 0.4;
+}
+
+/* --- Related Grid --- */
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 20px;
 }

@@ -3,399 +3,91 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MEGAWORLD Component Testing</title>
+  <title>MEGAWORLD | Design Playground</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="toolbar.css">
-  <link rel="stylesheet" href="sidebar.css">
-  <link rel="stylesheet" href="context_menu.css">
   <link rel="stylesheet" href="test.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 </head>
-<body>
+<body class="root bg-def" id="root">
 
-<div class="root bg-def" id="root">
-  
-  <div class="theme-switcher">
-    <button class="btn-flat" onclick="setTheme('bg-def')">Default</button>
-    <button class="btn-flat" onclick="setTheme('bg-blue')">Sky Blue</button>
-    <button class="btn-flat" onclick="setTheme('bg-ivory')">Ivory</button>
-    <button class="btn-flat" onclick="setTheme('bg-night')">Night</button>
-    <button class="btn-flat" onclick="setTheme('bg-dark')">Dark</button>
-    <button class="btn-flat" onclick="setTheme('bg-oled')">OLED</button>
-    <button class="btn-flat" style="margin-right: 15px; background: var(--color-theme); color: white; border: none;" onclick="window.location.href='reader.html'">العودة للقارئ</button>
-  </div>
+<div class="theme-switcher">
+  <button class="btn-flat" onclick="setTheme('bg-def')">Default</button>
+  <button class="btn-flat" onclick="setTheme('bg-blue')">Blue</button>
+  <button class="btn-flat" onclick="setTheme('bg-ivory')">Ivory</button>
+  <button class="btn-flat" onclick="setTheme('bg-oled')">OLED</button>
+  <button class="btn-flat" onclick="setTheme('bg-night')">Night</button>
+</div>
 
+<div class="main-layout">
   <div class="test-container">
-    <h1 class="site-name">MEGAWORLD Playground</h1>
-    
-    <div class="test-section">
-      <h2>Buttons (Pure Flat)</h2>
-      <div class="flex-row">
-        <button class="btn-flat">زر افتراضي</button>
-        <button class="btn-flat active">زر نشط</button>
-        <button class="btn-icon"><i class="ti ti-plus"></i></button>
-        <button class="btn-icon"><i class="ti ti-settings"></i></button>
-        <button class="btn-icon on"><i class="ti ti-bell"></i></button>
-      </div>
-    </div>
-
-    <div class="test-section">
-      <h2>Sliders Playground</h2>
-      <div style="max-width: 400px; display: flex; flex-direction: column; gap: 25px;">
-        <div>
-          <label style="font-size: 11px; font-weight: bold;">Slider Flat (Classic MDL)</label>
-          <div style="font-size: 10px; opacity: 0.5; margin-bottom: 5px;">الاستخدام: للإعدادات الرقمية الأساسية (مثل حجم الخط).</div>
-          <input type="range" class="slider-flat">
-        </div>
-        <div>
-          <label style="font-size: 11px; font-weight: bold;">Slider Fill (Dynamic Progress)</label>
-          <div style="font-size: 10px; opacity: 0.5; margin-bottom: 5px;">الاستخدام: للتقدم (Progress) أو القيم التي تتطلب تغذية بصرية للامتلاء.</div>
-          <input type="range" class="slider-fill" value="30" style="--fill: 30%;" oninput="this.style.setProperty('--fill', this.value + '%')">
-        </div>
-        <div>
-          <label style="font-size: 11px; font-weight: bold;">Slider Thin (Minimalist)</label>
-          <div style="font-size: 10px; opacity: 0.5; margin-bottom: 5px;">الاستخدام: للتعديلات الجانبية البسيطة أو في الواجهات المزدحمة.</div>
-          <input type="range" class="slider-thin">
-        </div>
-      </div>
-    </div>
-
-    <div class="test-section">
-      <h2>Inputs & Forms</h2>
-      <div class="flex-row">
-        <input type="text" class="input-flat" placeholder="أدخل نصاً...">
-        <input type="text" class="input-flat borderless" value="بدون حدود">
-        <textarea class="input-flat" style="height: 100px; width: 300px; padding-top: 10px;" placeholder="نص طويل..."></textarea>
-      </div>
-    </div>
-
-    <div class="test-section">
-      <h2>List Items (Sidebar Style)</h2>
-      <div style="width: 250px; border: 1px solid var(--ui-border-light);">
-        <button class="list-item-flat">عنصر قائمة عادي</button>
-        <button class="list-item-flat active">عنصر قائمة نشط</button>
-        <button class="list-item-flat">عنصر آخر</button>
-      </div>
-    </div>
 
     <div class="test-section">
       <h2>Novel Home Page Components</h2>
       
-      <!-- 1. Hero Card -->
+      <!-- 1. Novel Hero (Top Ranked) -->
       <div class="novel-hero">
-        <div class="novel-cover">غلاف الرواية</div>
+        <div class="novel-cover">RANK #1</div>
         <div class="novel-info-main">
-          <h1 class="novel-title-big">سيد الخواتم: رفقة الخاتم</h1>
+          <h1 class="novel-title-big">سيد الأسرار: العودة من الهاوية</h1>
           <div class="novel-meta">
-            <span>بواسطة: ج. ر. ر. تولكين</span>
-            <span>|</span>
-            <span>الحالة: مكتملة</span>
-            <span>|</span>
-            <span>الفصول: 120</span>
+            <span><i class="ti ti-user"></i> أحمد خالد</span>
+            <span><i class="ti ti-eye"></i> 1.2M مشاهدة</span>
+            <span><i class="ti ti-list"></i> 450 فصل</span>
           </div>
-          <div class="flex-row" style="margin-top: 10px;">
-            <button class="genre-tag">خيال</button>
-            <button class="genre-tag">مغامرة</button>
-            <button class="genre-tag">ملحمي</button>
-          </div>
-          <div class="flex-row" style="margin-top: 15px;">
-            <button class="btn-flat active" style="background: var(--color-theme); color: var(--color-on-theme); border: none; padding: 0 25px;">ابدأ القراءة</button>
-            <button class="btn-flat">أضف للمكتبة</button>
+          <div class="flex-row">
+            <span class="genre-tag">خيال علمي</span>
+            <span class="genre-tag">رعب</span>
+            <span class="genre-tag">غموض</span>
           </div>
         </div>
       </div>
 
-      <!-- 2. Chapter List -->
-      <div style="margin-top: 25px;">
-        <h3 style="font-size: 14px; margin-bottom: 15px; opacity: 0.7;">قائمة الفصول</h3>
-        <div style="display: flex; flex-direction: column;">
-          <div class="chapter-row">
-            <span class="chapter-num">1</span>
-            <span class="chapter-name">رحلة غير متوقعة</span>
-            <span class="chapter-date">منذ يومين</span>
-          </div>
-          <div class="chapter-row">
-            <span class="chapter-num">2</span>
-            <span class="chapter-name">ظل الماضي</span>
-            <span class="chapter-date">منذ 5 أيام</span>
-          </div>
-          <div class="chapter-row">
-            <span class="chapter-num">3</span>
-            <span class="chapter-name">ثلاثة هم الصحبة</span>
-            <span class="chapter-date">الأسبوع الماضي</span>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="test-section">
-      <h2>Novel Home Page (Edit Mode)</h2>
-      
-      <!-- 1. Hero Card Edit -->
-      <div class="novel-hero">
-        <div class="novel-cover" style="position: relative;">
-          غلاف الرواية
-          <button class="cover-edit-btn">تغيير الغلاف</button>
-        </div>
-        <div class="novel-info-main" style="flex: 1;">
-          <input type="text" class="input-hero" value="سيد الخواتم: رفقة الخاتم">
-          <div class="novel-meta">
-            <span>المؤلف: <input type="text" class="input-flat borderless" style="font-size:12px; width:120px; padding:0;" value="ج. ر. ر. تولكين"></span>
-            <span>|</span>
-            <span>الحالة: <select class="input-flat borderless" style="font-size:12px; padding:0;"><option>مكتملة</option><option>مستمرة</option></select></span>
-          </div>
-          <div class="flex-row" style="margin-top: 10px;">
-            <button class="genre-tag">خيال <span class="tag-remove">×</span></button>
-            <button class="genre-tag">مغامرة <span class="tag-remove">×</span></button>
-            <button class="btn-flat" style="padding: 2px 8px; font-size: 10px;">+ إضافة وسم</button>
-          </div>
-          <div class="flex-row" style="margin-top: 15px;">
-            <button class="btn-flat active" style="background: #059669; color: white; border: none; padding: 0 25px;">حفظ التغييرات</button>
-            <button class="btn-flat">إلغاء</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- 2. Chapter List Edit -->
-      <div style="margin-top: 25px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-          <h3 style="font-size: 14px; opacity: 0.7;">تعديل قائمة الفصول</h3>
-          <button class="btn-flat" style="font-size: 11px;">+ إضافة فصل</button>
-        </div>
-        <div style="display: flex; flex-direction: column;">
-          <div class="chapter-row">
-            <div style="display: flex; align-items: center; gap: 10px;">
-              <i class="ti ti-menu-order" style="opacity: 0.3; cursor: grab;"></i>
-              <span class="chapter-num">1</span>
-              <span class="chapter-name">رحلة غير متوقعة</span>
-            </div>
-            <div style="display: flex; gap: 5px;">
-              <button class="action-icon-btn edit"><i class="ti ti-edit"></i></button>
-              <button class="action-icon-btn danger"><i class="ti ti-trash"></i></button>
-            </div>
-          </div>
-          <div class="chapter-row">
-            <div style="display: flex; align-items: center; gap: 10px;">
-              <i class="ti ti-menu-order" style="opacity: 0.3; cursor: grab;"></i>
-              <span class="chapter-num">2</span>
-              <span class="chapter-name">ظل الماضي</span>
-            </div>
-            <div style="display: flex; gap: 5px;">
-              <button class="action-icon-btn edit"><i class="ti ti-edit"></i></button>
-              <button class="action-icon-btn danger"><i class="ti ti-trash"></i></button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="test-section">
-      <h2>Trending List (View Mode)</h2>
+      <!-- 2. Trending Grid Card -->
       <div class="trending-grid">
-        <!-- Card 1 -->
         <div class="trending-card">
           <div class="rank-badge">1</div>
-          <img src="public/ChatGPT Image May 7, 2026, 07_38_24 PM.png" class="trending-cover">
+          <img src="public/ChatGPT Image May 7, 2026, 07_38_24 PM.png" class="trending-cover" alt="Cover">
           <div class="trending-info">
-            <div class="trending-title">مملكة الأسرار</div>
-            <div class="trending-meta">بواسطة: أحمد خالد | 2.5M مشاهدة</div>
-            <div class="trending-desc">رحلة في عالم مليء بالسحر والغموض حيث لا أحد ينجو بصدق.</div>
+            <div class="trending-title">سيد الأسرار</div>
+            <div class="trending-meta">دراما • سحر</div>
+            <div class="trending-desc">رحلة في أعماق العوالم الخفية حيث لا يوجد أمان...</div>
           </div>
         </div>
-        <!-- Card 2 -->
         <div class="trending-card">
           <div class="rank-badge">2</div>
-          <img src="public/ChatGPT Image May 7, 2026, 07_42_42 PM.png" class="trending-cover">
+          <img src="public/ChatGPT Image May 7, 2026, 07_42_42 PM.png" class="trending-cover" alt="Cover">
           <div class="trending-info">
             <div class="trending-title">ظل الإمبراطور</div>
-            <div class="trending-meta">بواسطة: سارة سليم | 1.8M مشاهدة</div>
-            <div class="trending-desc">مؤامرات سياسية وصراعات على السلطة في قلب الإمبراطورية القديمة.</div>
-          </div>
-        </div>
-        <!-- Card 3 -->
-        <div class="trending-card">
-          <div class="rank-badge">3</div>
-          <img src="public/ChatGPT Image May 7, 2026, 08_01_54 PM.png" class="trending-cover">
-          <div class="trending-info">
-            <div class="trending-title">نجم الشمال</div>
-            <div class="trending-meta">بواسطة: محمد علي | 1.2M مشاهدة</div>
-            <div class="trending-desc">حكاية ملحمية عن الحب والحرب في أقاصي القطب المتجمد.</div>
-          </div>
-        </div>
-        <!-- Card 4 -->
-        <div class="trending-card">
-          <div class="rank-badge" style="background: var(--ui-border); color: var(--color-text-primary);">4</div>
-          <img src="public/ChatGPT Image May 7, 2026, 08_05_10 PM.png" class="trending-cover">
-          <div class="trending-info">
-            <div class="trending-title">الهروب من المستقبل</div>
-            <div class="trending-meta">بواسطة: ليلى حسن | 900K مشاهدة</div>
-            <div class="trending-desc">خيال علمي يستعرض صراع البشرية مع الذكاء الاصطناعي المتطور.</div>
+            <div class="trending-meta">اكشن • غموض</div>
+            <div class="trending-desc">بين الحرب والسلام، يولد قائد جديد من تحت الرماد...</div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="test-section">
-      <h2>Trending List (Edit Mode)</h2>
-      <div style="margin-bottom: 15px;">
-        <button class="btn-flat">+ إضافة عمل للقائمة</button>
-      </div>
-      <div class="trending-grid">
-        <!-- Edit Card 1 -->
-        <div class="trending-card">
-          <div class="rank-badge">1</div>
-          <img src="public/ChatGPT Image May 7, 2026, 07_38_24 PM.png" class="trending-cover">
-          <div class="trending-info">
-            <div class="trending-title">مملكة الأسرار</div>
-            <div class="trending-meta">رابط العمل: novel_123</div>
-          </div>
-          <div class="card-edit-overlay">
-            <button class="btn-flat active" style="background: var(--color-theme); color: var(--color-on-theme); border: none;">تعديل</button>
-            <button class="btn-flat active" style="background: #b91c1c; color: white; border: none;">حذف</button>
-          </div>
-        </div>
-        <!-- Edit Card 2 -->
-        <div class="trending-card">
-          <div class="rank-badge">2</div>
-          <img src="public/ChatGPT Image May 7, 2026, 07_42_42 PM.png" class="trending-cover">
-          <div class="trending-info">
-            <div class="trending-title">ظل الإمبراطور</div>
-            <div class="trending-meta">رابط العمل: novel_456</div>
-          </div>
-          <div class="card-edit-overlay">
-            <button class="btn-flat active" style="background: var(--color-theme); color: var(--color-on-theme); border: none;">تعديل</button>
-            <button class="btn-flat active" style="background: #b91c1c; color: white; border: none;">حذف</button>
-          </div>
-        </div>
-      </div>
-    <div class="test-section">
-      <h2>Top 5 Famous Novels (Hierarchy Design)</h2>
-      <div class="top5-container">
-        
-        <!-- Rank 1: Full Luxury -->
-        <div class="rank-tier-1">
-          <div class="rank-badge-huge">1</div>
-          <img src="public/ChatGPT Image May 7, 2026, 07_38_24 PM.png" style="width: 180px; height: 260px; object-fit: cover; border: 1px solid var(--color-theme);">
-          <div class="rank-tier-1-info" style="flex: 1;">
-            <div style="font-size: 12px; opacity: 0.6; text-transform: uppercase; letter-spacing: 2px;">رواية الشهر الأولى</div>
-            <h3>سيد الأسرار: العودة</h3>
-            <p style="font-size: 14px; opacity: 0.8; line-height: 1.6; max-width: 500px;">
-              الرواية الأكثر مبيعاً لهذا العام، تأخذك في رحلة ملحمية لا تُنسى عبر عوالم لم تطأها قدم بشر من قبل. تصميم فخم يليق بالمركز الأول.
-            </p>
-            <div class="flex-row" style="margin-top: 20px;">
-              <button class="btn-flat active">ابدأ القراءة الآن</button>
-              <button class="btn-flat">تفاصيل العمل</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Rank 2: Medium Luxury -->
-        <div class="rank-tier-2">
-          <div class="rank-item-m">
-            <img src="public/ChatGPT Image May 7, 2026, 07_42_42 PM.png" style="width: 80px; height: 120px; object-fit: cover; border: 1px solid var(--ui-border);">
-            <div class="trending-info">
-              <div style="color: var(--color-theme); font-weight: bold; font-size: 20px;">2</div>
-              <div class="trending-title">ظل الإمبراطور</div>
-              <div class="trending-meta">سارة سليم | 1.8M</div>
-            </div>
-          </div>
-          <div class="rank-item-m">
-            <img src="public/ChatGPT Image May 7, 2026, 08_01_54 PM.png" style="width: 80px; height: 120px; object-fit: cover; border: 1px solid var(--ui-border);">
-            <div class="trending-info">
-              <div style="color: var(--color-theme); font-weight: bold; font-size: 20px;">3</div>
-              <div class="trending-title">نجم الشمال</div>
-              <div class="trending-meta">محمد علي | 1.2M</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Rank 4 & 5: Simple List -->
-        <div class="rank-tier-3">
-          <div class="rank-item-s">
-            <div class="rank-num-s">4</div>
-            <img src="public/ChatGPT Image May 7, 2026, 08_05_10 PM.png" style="width: 40px; height: 60px; object-fit: cover;">
-            <div class="trending-title">الهروب من المستقبل</div>
-          </div>
-          <div class="rank-item-s">
-            <div class="rank-num-s">5</div>
-            <img src="public/ChatGPT Image May 7, 2026, 07_38_24 PM.png" style="width: 40px; height: 60px; object-fit: cover;">
-            <div class="trending-title">صراع العروش</div>
-          </div>
-          <div style="opacity: 0.5; font-size: 11px; display: flex; align-items: center;">شاهد القائمة الكاملة...</div>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="test-section">
-      <h2>Library Grid (View Mode)</h2>
+      <!-- 3. Novel Grid (Library Style) -->
       <div class="novel-grid">
         <div class="novel-card">
-          <img src="public/ChatGPT Image May 7, 2026, 07_38_24 PM.png" class="novel-card-poster">
+          <img src="public/ChatGPT Image May 7, 2026, 08_01_54 PM.png" class="novel-card-poster" alt="Cover">
           <div class="novel-card-info">
-            <div class="novel-card-title">مملكة الأسرار</div>
-            <div class="novel-card-author">أحمد خالد</div>
-          </div>
-        </div>
-        <div class="novel-card">
-          <img src="public/ChatGPT Image May 7, 2026, 07_42_42 PM.png" class="novel-card-poster">
-          <div class="novel-card-info">
-            <div class="novel-card-title">ظل الإمبراطور</div>
+            <div class="novel-card-title">نجم الشمال</div>
             <div class="novel-card-author">سارة سليم</div>
           </div>
         </div>
         <div class="novel-card">
-          <img src="public/ChatGPT Image May 7, 2026, 08_01_54 PM.png" class="novel-card-poster">
+          <img src="public/ChatGPT Image May 7, 2026, 08_05_10 PM.png" class="novel-card-poster" alt="Cover">
           <div class="novel-card-info">
-            <div class="novel-card-title">نجم الشمال</div>
+            <div class="novel-card-title">الهروب من المستقبل</div>
             <div class="novel-card-author">محمد علي</div>
           </div>
         </div>
-        <div class="novel-card">
-          <img src="public/ChatGPT Image May 7, 2026, 08_05_10 PM.png" class="novel-card-poster">
-          <div class="novel-card-info">
-            <div class="novel-card-title">الهروب من المستقبل</div>
-            <div class="novel-card-author">ليلى حسن</div>
-          </div>
-        </div>
       </div>
+
     </div>
 
+    <!-- Dropdown / Filter Testing -->
     <div class="test-section">
-      <h2>Library Grid (Edit Mode)</h2>
-      <div class="novel-grid">
-        <!-- Card Edit 1 -->
-        <div class="novel-card editing">
-          <img src="public/ChatGPT Image May 7, 2026, 07_38_24 PM.png" class="novel-card-poster">
-          <div class="novel-card-info">
-            <div class="novel-card-title">مملكة الأسرار</div>
-            <div class="novel-card-author">أحمد خالد</div>
-          </div>
-          <div class="grid-actions">
-            <div class="grid-action-btn danger" title="حذف"><i class="ti ti-trash"></i></div>
-            <div class="grid-action-btn" title="إخفاء"><i class="ti ti-eye-off"></i></div>
-          </div>
-        </div>
-        <!-- Card Edit 2 -->
-        <div class="novel-card editing">
-          <img src="public/ChatGPT Image May 7, 2026, 07_42_42 PM.png" class="novel-card-poster">
-          <div class="novel-card-info">
-            <div class="novel-card-title">ظل الإمبراطور</div>
-            <div class="novel-card-author">سارة سليم</div>
-          </div>
-          <div class="grid-actions">
-            <div class="grid-action-btn danger" title="حذف"><i class="ti ti-trash"></i></div>
-            <div class="grid-action-btn" title="إخفاء"><i class="ti ti-eye-off"></i></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="test-section">
-      <h2>Dropdowns & Filters</h2>
-      <div class="flex-row" style="gap: 50px; align-items: flex-start;">
+      <h2>Dropdown / Filter Interaction</h2>
+      <div class="flex-row" style="gap: 30px;">
         
         <!-- 1. Closed Dropdown -->
         <div>
@@ -439,6 +131,186 @@
         هذا نص تجريبي بخط أميري، مصمم لتوفير أفضل تجربة قراءة ممكنة. 
         نحن نلتزم بقواعد التصميم المسطح (Pure Flat) لضمان السرعة والوضوح.
       </div>
+    </div>
+
+    <!-- --- FULL NOVEL PAGE PROTOTYPE --- -->
+
+    <!-- Phase 1: Novel Header (The Hero) -->
+    <section class="test-section">
+      <h2>1. واجهة الرواية الرئيسية (Novel Hero Alpha)</h2>
+      <div class="novel-detail-header">
+        <img src="public/ChatGPT Image May 7, 2026, 07_38_24 PM.png" class="novel-detail-cover" alt="Cover">
+        
+        <div class="novel-detail-info">
+          <h1 class="novel-detail-title">سيد الأسرار: العودة من الهاوية</h1>
+          <div class="novel-detail-author">بواسطة: أحمد خالد</div>
+          
+          <div class="novel-rating">
+            <i class="ti ti-star-filled"></i>
+            <i class="ti ti-star-filled"></i>
+            <i class="ti ti-star-filled"></i>
+            <i class="ti ti-star-filled"></i>
+            <i class="ti ti-star-half-filled"></i>
+            <span>(4.8/5) • 1.2K تقييم</span>
+          </div>
+
+          <div class="novel-summary">
+            في عالم حيث السحر هو العملة الوحيدة، يستيقظ شاب بلا ذكريات في أعماق الهاوية المحرمة. 
+            بينما تلاحقه قوى الظلام، يكتشف أن لديه القدرة على التلاعب بالزمن نفسه. 
+            هل سينجح في كشف أسرار ماضيه أم سيغرق في ظلال المستقبل؟
+          </div>
+
+          <div class="flex-row" style="margin-bottom: 10px;">
+            <span class="genre-tag">خيال علمي</span>
+            <span class="genre-tag">رعب</span>
+            <span class="genre-tag">غموض</span>
+            <span class="genre-tag">سحر</span>
+          </div>
+
+          <div class="novel-detail-stats">
+            <div class="stat-item">
+              <span class="stat-value">1.2M</span>
+              <span class="stat-label">مشاهدة</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value">85K</span>
+              <span class="stat-label">إعجاب</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value">450</span>
+              <span class="stat-label">فصل</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value">مكتملة</span>
+              <span class="stat-label">الحالة</span>
+            </div>
+          </div>
+
+          <div class="flex-row" style="margin-top: 15px; gap: 15px;">
+            <button class="btn-flat active" style="padding: 0 30px; height: 45px; font-size: 16px;">ابدأ القراءة الآن</button>
+            <button class="btn-flat" style="padding: 0 25px; height: 45px; font-size: 16px;">
+              <i class="ti ti-bookmark"></i> أضف للمكتبة
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Phase 2: Chapter List -->
+    <section class="test-section">
+      <div class="section-header">
+        <h2 class="section-title">فصول الرواية (450 فصل)</h2>
+        <button class="btn-flat" style="font-size: 11px;">ترتيب: الأحدث <i class="ti ti-arrows-sort"></i></button>
+      </div>
+      <div class="chapter-list-container">
+        <a href="#" class="chapter-item">
+          <div class="chapter-main-info">
+            <span class="chapter-index">450</span>
+            <span class="chapter-item-title">نهاية العالم كما نعرفه (الجزء الثاني)</span>
+          </div>
+          <div class="chapter-item-meta">
+            <span class="chapter-date">منذ ساعة واحدة</span>
+            <span class="chapter-lock"><i class="ti ti-lock"></i></span>
+          </div>
+        </a>
+        <a href="#" class="chapter-item">
+          <div class="chapter-main-info">
+            <span class="chapter-index">449</span>
+            <span class="chapter-item-title">العودة إلى نقطة البداية</span>
+          </div>
+          <div class="chapter-item-meta">
+            <span class="chapter-date">منذ 5 ساعات</span>
+            <span class="chapter-lock"><i class="ti ti-lock"></i></span>
+          </div>
+        </a>
+        <a href="#" class="chapter-item">
+          <div class="chapter-main-info">
+            <span class="chapter-index">448</span>
+            <span class="chapter-item-title">أسرار الهاوية المفقودة</span>
+          </div>
+          <div class="chapter-item-meta">
+            <span class="chapter-date">منذ يوم واحد</span>
+            <span class="chapter-lock"><i class="ti ti-lock-open"></i></span>
+          </div>
+        </a>
+        <a href="#" class="chapter-item">
+          <div class="chapter-main-info">
+            <span class="chapter-index">447</span>
+            <span class="chapter-item-title">الظلال تلاحقنا جميعاً</span>
+          </div>
+          <div class="chapter-item-meta">
+            <span class="chapter-date">منذ يومين</span>
+            <span class="chapter-lock"><i class="ti ti-lock-open"></i></span>
+          </div>
+        </a>
+      </div>
+      <button class="btn-flat" style="width: 100%; height: 50px; margin-top: 10px; border-style: dashed; opacity: 0.6;">مشاهدة المزيد من الفصول (446+)</button>
+    </section>
+
+    <!-- Phase 3: Reviews & Related -->
+    <div class="flex-row" style="align-items: flex-start; gap: 30px;">
+      
+      <!-- Reviews Section (70% width) -->
+      <section class="test-section" style="flex: 2;">
+        <div class="section-header">
+          <h2 class="section-title">تقييمات القراء (1.2K)</h2>
+          <button class="btn-flat" style="color: var(--color-theme);">أضف تقييمك</button>
+        </div>
+        
+        <div class="review-item">
+          <div class="review-header">
+            <div class="review-user">
+              <div class="review-avatar"></div>
+              <div class="review-username">محمد علي</div>
+            </div>
+            <div class="novel-rating" style="font-size: 12px;">
+              <i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i>
+            </div>
+          </div>
+          <div class="review-content">
+            رواية مذهلة! الأسلوب الأدبي راقٍ جداً والحبكة غير متوقعة. أنتظر الفصول القادمة بفارغ الصبر.
+          </div>
+          <div class="review-date">منذ يومين</div>
+        </div>
+
+        <div class="review-item">
+          <div class="review-header">
+            <div class="review-user">
+              <div class="review-avatar"></div>
+              <div class="review-username">سارة سليم</div>
+            </div>
+            <div class="novel-rating" style="font-size: 12px;">
+              <i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star-filled"></i><i class="ti ti-star"></i>
+            </div>
+          </div>
+          <div class="review-content">
+            البداية كانت بطيئة بعض الشيء ولكن الأحداث بدأت تتسارع الآن. الكاتب مبدع في وصف الشخصيات.
+          </div>
+          <div class="review-date">منذ 4 أيام</div>
+        </div>
+      </section>
+
+      <!-- Related Novels (30% width) -->
+      <section class="test-section" style="flex: 1;">
+        <h2 class="section-title">روايات قد تعجبك</h2>
+        <div class="novel-grid" style="grid-template-columns: 1fr; gap: 15px;">
+          <div class="trending-card">
+            <img src="public/ChatGPT Image May 7, 2026, 07_42_42 PM.png" class="trending-cover" alt="Cover">
+            <div class="trending-info">
+              <div class="trending-title">ظل الإمبراطور</div>
+              <div class="trending-meta">سحر • اكشن</div>
+            </div>
+          </div>
+          <div class="trending-card">
+            <img src="public/ChatGPT Image May 7, 2026, 08_01_54 PM.png" class="trending-cover" alt="Cover">
+            <div class="trending-info">
+              <div class="trending-title">نجم الشمال</div>
+              <div class="trending-meta">دراما • خيال</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
     </div>
 
   </div>
