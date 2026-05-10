@@ -357,6 +357,7 @@ const MainToolbarSchema = [
   { type: 'button', label: 'متواصل', id: 'contBtn', action: () => { Store.updateSettings('continuousMode', !Store.state.settings.continuousMode); applyGlobalUI(); if (typeof renderBody === 'function') renderBody(); } },
   { type: 'button', label: 'تركيز', id: 'focusBtn', action: () => document.body.classList.toggle('focus-mode') },
   { type: 'button', label: 'تصدير', id: 'exportBtn', action: () => exportTxt() },
+  { type: 'button', label: 'تجربة', id: 'testBtn', align: 'left', action: () => window.location.href = 'test.html' },
   { type: 'custom', id: 'swatchWrap', label: 'الألوان', className: 'swatch-wrap' },
   { type: 'input', label: 'البحث', placeholder: 'بحث...', id: 'sq', align: 'left', action: (val) => { if (typeof doSearch === 'function') doSearch(val); } },
   { 

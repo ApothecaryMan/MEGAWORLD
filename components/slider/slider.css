@@ -1,0 +1,109 @@
+/* 
+  MEGAWORLD Component: Slider
+  Designs: Flat, Fill, Thin
+*/
+
+/* 
+  1. Slider Flat (.slider-flat)
+  - الاستخدام: للإعدادات الرقمية الأساسية (مثل حجم الخط).
+  - الخصائص: شريط صلب، مقبض مربع كبير للتحكم الدقيق.
+*/
+.slider-flat {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 4px;
+  background: var(--ui-border-light);
+  outline: none;
+  margin: 10px 0;
+  border-radius: 0;
+}
+.slider-flat::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  background: var(--color-text-primary);
+  cursor: pointer;
+  border: 1px solid var(--color-background-primary);
+  border-radius: 0;
+}
+.slider-flat::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  background: var(--color-text-primary);
+  cursor: pointer;
+  border: 1px solid var(--color-background-primary);
+  border-radius: 0;
+}
+
+/* 
+  2. Slider Fill (.slider-fill)
+  - الاستخدام: للتقدم (Progress) أو التحكم في القيم التي تتطلب تغذية بصرية للامتلاء (مثل درجة التظليل).
+  - الخصائص: شريط يمتلئ من اليمين (RTL) مع حركة المقبض.
+*/
+.slider-fill {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 4px;
+  background-color: var(--ui-border-light);
+  background-image: linear-gradient(var(--color-text-primary), var(--color-text-primary));
+  background-repeat: no-repeat;
+  background-size: var(--fill, 0%) 100%;
+  background-position: right;
+  outline: none;
+  margin: 10px 0;
+  border-radius: 0;
+  cursor: pointer;
+}
+.slider-fill::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  background: var(--color-text-primary);
+  cursor: pointer;
+  border: 1px solid var(--color-background-primary);
+  border-radius: 0;
+}
+.slider-fill::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  background: var(--color-text-primary);
+  cursor: pointer;
+  border: 1px solid var(--color-background-primary);
+  border-radius: 0;
+}
+
+/* 
+  3. Slider Thin (.slider-thin)
+  - الاستخدام: للتعديلات الجانبية البسيطة أو في الواجهات المزدحمة (مثل المسافات بين الأسطر في القائمة الجانبية).
+  - الخصائص: خفيف جداً (1 بكسل)، لا يظهر بوضوح إلا عند التفاعل.
+*/
+.slider-thin {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 1px;
+  background: var(--color-text-primary);
+  opacity: 0.3;
+  outline: none;
+  margin: 15px 0;
+}
+.slider-thin::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 8px;
+  height: 20px;
+  background: var(--color-text-primary);
+  cursor: pointer;
+  border: none;
+  border-radius: 0;
+}
+.slider-thin::-moz-range-thumb {
+  width: 8px;
+  height: 20px;
+  background: var(--color-text-primary);
+  cursor: pointer;
+  border: none;
+  border-radius: 0;
+}
+.slider-thin:hover { opacity: 1; }
