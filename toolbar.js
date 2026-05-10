@@ -145,6 +145,7 @@ const Toolbar = {
       case 'label': return this.makeLabel(item);
       case 'custom': return this.makeCustom(item);
       case 'dropdown': return this.makeDropdown(item);
+      case 'user': return this.makeUser(item);
       default: return null;
     }
   },
@@ -233,6 +234,84 @@ const Toolbar = {
     // إغلاق عند الضغط خارجاً
     document.addEventListener('click', () => wrap.classList.remove('open'));
 
+    return wrap;
+  },
+
+  makeUser(item) {
+    const wrap = this.makeElement('div', 'toolbar-user', item.id);
+    if (item.className) wrap.classList.add(...item.className.split(' '));
+    
+    wrap.innerHTML = `
+      <div class="user-avatar">
+        ${item.avatar ? `<img src="${item.avatar}" alt="User">` : '<i class="ti ti-user" style="opacity: 0.5;"></i>'}
+      </div>
+      <span class="user-name">${item.label || 'مستخدم'}</span>
+      <i class="ti ti-chevron-down user-chevron"></i>
+      
+      <div class="profile-menu">
+        <div class="profile-header">
+          <div class="profile-avatar-big">
+            ${item.avatar ? `<img src="${item.avatar}" alt="User">` : '<i class="ti ti-user" style="opacity: 0.3; font-size: 32px;"></i>'}
+          </div>
+          <div class="profile-info-main">
+            <div class="profile-display-name">${item.label || 'مستخدم'}</div>
+            <div class="profile-status">
+              <span>${item.status || 'عضو ذهبي'}</span>
+              <span class="profile-level">${item.level || 'ليفل 45'}</span>
+            </div>
+          </div>
+        </div>
+        <div class="profile-menu-body"></div>
+        <div class="profile-footer">
+          <button class="btn-flat logout-btn">تسجيل الخروج</button>
+          <button class="btn-flat switch-btn">تبديل الحساب</button>
+        </div>
+      </div>
+    `;
+
+    const menuBody = wrap.querySelector('.profile-menu-body');
+    const menuItems = item.menuItems || [
+      { label: 'ملفي الشخصي', icon: 'ti-user-circle' },
+      { label: 'المكتبة الخاصة', icon: 'ti-bookmarks', badge: '12' },
+      { label: 'سجل القراءة', icon: 'ti-history' },
+      { sep: true },
+      { label: 'إعدادات الحساب', icon: 'ti-settings' },
+      { sep: true },
+      { label: 'مركز المساعدة', icon: 'ti-help-circle' }
+    ];
+
+    menuItems.forEach(it => {
+      if (it.sep) {
+        const sep = document.createElement('div');
+        sep.className = 'profile-menu-sep';
+        menuBody.appendChild(sep);
+        return;
+      }
+
+      const btn = document.createElement('button');
+      btn.className = 'profile-menu-item';
+      btn.innerHTML = `
+        <i class="ti ${it.icon}"></i>
+        <span class="item-label">${it.label}</span>
+        ${it.badge ? `<span class="item-badge">${it.badge}</span>` : ''}
+      `;
+      btn.onclick = (e) => { 
+        e.stopPropagation(); 
+        if (it.action) it.action(); 
+        wrap.classList.remove('open'); 
+      };
+      menuBody.appendChild(btn);
+    });
+
+    wrap.onclick = (e) => {
+      e.stopPropagation();
+      const isOpen = wrap.classList.contains('open');
+      document.querySelectorAll('.toolbar-user, .dropdown-wrap').forEach(w => w.classList.remove('open'));
+      if (!isOpen) wrap.classList.add('open');
+    };
+
+    document.addEventListener('click', () => wrap.classList.remove('open'));
+    
     return wrap;
   }
 };

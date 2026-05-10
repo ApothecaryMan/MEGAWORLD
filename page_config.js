@@ -23,12 +23,7 @@ const MEGA_PAGES = {
       { type: 'spacer' },
       { type: 'button', title: 'التنبيهات', id: 'notifBtn', align: 'left', className: 'btn-icon', html: '<i class="ti ti-bell"></i>' },
       { type: 'custom', id: 'swatchWrap', label: 'الألوان', className: 'swatch-wrap', align: 'left' },
-      { 
-        type: 'custom', id: 'profile', align: 'left', className: 'btn-flat borderless',
-        style: 'display:flex; align-items:center; gap:10px; padding-left:0;',
-        html: `<span style="font-size:12px; font-weight:600;">أحمد خالد</span>
-               <div style="width:28px; height:28px; background:#ddd; border-radius:50%; border:1px solid var(--ui-border);"></div>`
-      }
+      { type: 'user', id: 'profile', align: 'left', label: 'أحمد محمد علي', avatar: 'public/ChatGPT Image May 7, 2026, 07_38_24 PM.png', status: 'عضو ذهبي', level: 'ليفل 45' }
     ],
     content: [
       {
@@ -158,12 +153,7 @@ const MEGA_PAGES = {
       { type: 'spacer' },
       { type: 'button', label: 'ابدأ القراءة', id: 'quickRead', align: 'left', className: 'btn-flat active', style: 'height: 30px; font-size: 11px;', action: () => typeof NovelPage !== 'undefined' && NovelPage.startReading() },
       { type: 'custom', id: 'swatchWrap', label: 'الألوان', className: 'swatch-wrap', align: 'left' },
-      { 
-        type: 'custom', id: 'profile', align: 'left', className: 'btn-flat borderless',
-        style: 'display:flex; align-items:center; gap:10px; padding-left:0;',
-        html: `<span style="font-size:11px; font-weight:600;">أحمد خالد</span>
-               <div style="width:24px; height:24px; background:#ddd; border-radius:50%; border:1px solid var(--ui-border);"></div>`
-      }
+      { type: 'user', id: 'profile', align: 'left', label: 'أحمد محمد علي', avatar: 'public/ChatGPT Image May 7, 2026, 07_38_24 PM.png', status: 'عضو ذهبي', level: 'ليفل 45' }
     ]
   }
 };
