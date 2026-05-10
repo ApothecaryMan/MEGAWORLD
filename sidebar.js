@@ -87,24 +87,25 @@ function renameNovel(i) {
 }
 
 // Initialize Library on Load
-window.addEventListener('DOMContentLoaded', () => {
+function initSidebar() {
   renderLibrary();
   applySidebarState();
   
+  // الوصول للعنصر الذي تم بناؤه ديناميكياً في التولبار
   const titleField = document.getElementById('novelTitleInput');
   if (titleField) {
-    titleField.readOnly = true;
-    titleField.ondblclick = () => {
-      titleField.readOnly = false;
-      titleField.focus();
-      titleField.select();
-    };
+    // إزالة التقييد الافتراضي للسماح بالتعديل اللحظي من التولبار
+    titleField.readOnly = false; 
     titleField.onblur = () => {
-      titleField.readOnly = true;
       Store.save();
     };
     titleField.onkeydown = (e) => { if (e.key === 'Enter') titleField.blur(); };
   }
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  // استخدام setTimeout بسيط لضمان انتهاء Toolbar.init أولاً
+  setTimeout(initSidebar, 50);
 });
 
 // الاشتراك في تحديثات الـ Store لإعادة الرسم تلقائياً
