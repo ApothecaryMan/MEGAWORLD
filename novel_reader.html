@@ -5,11 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MEGAWORLD Novel Reader</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="toolbar.css">
+  <link rel="stylesheet" href="sidebar.css">
+  <link rel="stylesheet" href="context_menu.css">
+  <link rel="stylesheet" href="editor.css">
 </head>
 <body>
 
 <div class="root bg-def" id="root">
 
+  <!-- القائمة العلوية -->
   <div class="sticky-bar">
     <button class="btn" title="الرئيسية">الرئيسية</button>
     <button class="btn" onclick="toggleSidebar()" id="sideToggleBtn">القائمة</button>
@@ -22,7 +27,7 @@
       <div class="stat"><b id="rt">0</b>&nbsp;<span id="rt-lbl">دقيقة</span></div>
     </div>
     <span class="lbl">خط</span>
-    <button class="btn on" id="f1" onclick="setFont('fn','f1')">أميـري</button>
+    <button class="btn" id="f1" onclick="setFont('fn','f1')">أميـري</button>
     <button class="btn" id="f2" onclick="setFont('fn2','f2')">نـسخ</button>
     <button class="btn" id="f3" onclick="setFont('fn3','f3')">نـظام</button>
     <div class="sep"></div>
@@ -32,7 +37,7 @@
     <button class="btn" onclick="chSz(2)">+</button>
     <div class="sep"></div>
     <span class="lbl">محاذاة</span>
-    <button class="btn on" id="ar" onclick="setAl('ar','ar')" aria-label="يمين">يمين</button>
+    <button class="btn" id="ar" onclick="setAl('ar','ar')" aria-label="يمين">يمين</button>
     <button class="btn" id="ac" onclick="setAl('ac','ac')" aria-label="وسط">وسط</button>
     <button class="btn" id="aj" onclick="setAl('aj','aj')" aria-label="ضبط">ضبط</button>
     <div class="sep"></div>
@@ -53,6 +58,7 @@
   </div>
 
   <div class="main-layout">
+    <!-- القائمة الجانبية -->
     <div class="sidebar" id="sidebar">
       <div class="sidebar-title">
         <span>قائمة الفصول</span>
@@ -62,6 +68,7 @@
     </div>
 
     <div class="body-area" style="flex:1; min-width:0;">
+      <!-- شريط التبويبات -->
       <div class="tabs-bar" id="tabsBar">
         <button class="tab-add" onclick="addChapter()" title="فصل جديد">+</button>
       </div>
@@ -71,20 +78,7 @@
 
 </div>
 
-<div class="modal-bg" id="modalBg">
-  <div class="modal" id="modal">
-    <div class="modal-hdr">
-      <span class="modal-title">اسم الفصل:</span>
-      <input class="modal-title-input" id="titleInput" placeholder="الفصل الأول...">
-    </div>
-    <textarea class="ta" id="ta" placeholder="الصق نص الفصل هنا..."></textarea>
-    <div class="modal-btns">
-      <button class="btn" onclick="applyText()">حفظ</button>
-      <button class="btn" onclick="closeModal()">إلغاء</button>
-    </div>
-  </div>
-</div>
-
+<!-- القائمة المنيو (المنبثقة) -->
 <div class="context-menu" id="contextMenu">
   <div class="context-title">القائمة السريعة</div>
   <button class="context-item" onclick="openModal()">
@@ -116,12 +110,32 @@
   <button class="context-item" onclick="toggleFocus()"><span>وضع التركيز</span></button>
 </div>
 
-<button class="focus-exit" onclick="toggleFocus()">إغلاق وضع التركيز</button>
+<!-- المحرر (Modal) -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal" id="modal">
+    <div class="modal-hdr">
+      <span class="modal-title">اسم الفصل:</span>
+      <input class="modal-title-input" id="titleInput" placeholder="الفصل الأول...">
+    </div>
+    <textarea class="ta" id="ta" placeholder="الصق نص الفصل هنا..."></textarea>
+    <div class="modal-btns">
+      <button class="btn" onclick="applyText()">حفظ</button>
+      <button class="btn" onclick="closeModal()">إلغاء</button>
+    </div>
+  </div>
+</div>
 
+<button class="focus-exit" onclick="toggleFocus()">إغلاق وضع التركيز</button>
 <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
 
+<!-- استيراد الموديولات بالترتيب الصحيح -->
+<script src="config.js"></script>
 <script src="storage.js"></script>
 <script src="reader.js"></script>
+<script src="toolbar.js"></script>
+<script src="sidebar.js"></script>
+<script src="context_menu.js"></script>
+<script src="editor.js"></script>
 
 </body>
 </html>

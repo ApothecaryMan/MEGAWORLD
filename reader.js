@@ -1,134 +1,6 @@
-let continuousMode = false;
-
-function toggleContinuousMode() {
-  continuousMode = !continuousMode;
-  const btn = document.getElementById('contBtn');
-  if (btn) btn.classList.toggle('on', continuousMode);
-  renderBody();
-}
-
-let font = 'fn', sz = 22, align = 'ar', activeIdx = 0;
-let chapters = [];
-let dragSrcIdx = null;
-let sidebarVisible = true;
-
-const palettes = [
-  { cls: 'bg-def', s: '#e8e6e0', bg: 'var(--color-background-primary)', fg: 'var(--color-text-primary)' },
-  { cls: 'bg-ivory', s: '#fdf6e3', bg: '#fdf6e3', fg: '#3b3020' },
-  { cls: 'bg-pink', s: '#fde8e8', bg: '#fdf0f0', fg: '#3a1e1e' },
-  { cls: 'bg-mint', s: '#d1fae5', bg: '#f0fdf5', fg: '#1a3326' },
-  { cls: 'bg-sky', s: '#dbeafe', bg: '#eff6ff', fg: '#1e2f4a' },
-  { cls: 'bg-gray', s: '#f4f4f2', bg: '#f4f4f2', fg: '#2a2a2a' },
-  { cls: 'bg-night', s: '#1a1a2e', bg: '#1a1a2e', fg: '#e0d8c8' },
-  { cls: 'bg-dark', s: '#212121', bg: '#212121', fg: '#d4c9b0' },
-];
-let activePalette = palettes[0];
-
-function toggleSidebar() {
-  sidebarVisible = !sidebarVisible;
-  applySidebarState();
-  save();
-}
-
-function applySidebarState() {
-  const sb = document.getElementById('sidebar');
-  const btn = document.getElementById('sideToggleBtn');
-  const root = document.getElementById('root');
-  if (sb) {
-    sb.classList.toggle('hidden', !sidebarVisible);
-  }
-  if (root) {
-    root.classList.toggle('side-open', sidebarVisible);
-  }
-  if (btn) {
-    btn.classList.toggle('on', sidebarVisible);
-  }
-}
+// Main Logic & Core Functionality
 
 setInterval(save, 2000);
-
-function buildSwatches() {
-  const c = document.getElementById('swatches');
-  if (!c) return;
-  c.innerHTML = '';
-  palettes.forEach((p, i) => {
-    const b = document.createElement('button');
-    b.className = 'swatch' + (p.cls === activePalette.cls ? ' on' : '');
-    b.title = p.cls;
-    b.style.background = p.s;
-    b.onclick = () => setBg(p, b);
-    c.appendChild(b);
-  });
-}
-
-function setBg(p, btn) {
-  activePalette = p;
-  const r = document.getElementById('root');
-  palettes.forEach(q => r.classList.remove(q.cls));
-  r.classList.add(p.cls);
-  document.querySelectorAll('.swatch').forEach(s => s.classList.remove('on'));
-  btn.classList.add('on');
-  save();
-}
-
-function applyGlobalUI() {
-  const r = document.getElementById('root');
-  if (!r) return;
-  palettes.forEach(q => r.classList.remove(q.cls));
-  r.classList.add(activePalette.cls);
-  document.getElementById('szlbl').textContent = sz;
-  ['f1', 'f2', 'f3'].forEach(x => {
-    const el = document.getElementById(x);
-    if (el) el.classList.remove('on');
-  });
-  const fi = { fn: 'f1', fn2: 'f2', fn3: 'f3' }[font];
-  if (fi) {
-    const el = document.getElementById(fi);
-    if (el) el.classList.add('on');
-  }
-  ['ar', 'ac', 'aj'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.classList.toggle('on', align === id);
-  });
-
-  const contBtn = document.getElementById('contBtn');
-  if (contBtn) contBtn.classList.toggle('on', continuousMode);
-  document.querySelectorAll('.swatch').forEach(s => {
-    s.classList.toggle('on', s.title === activePalette.cls);
-  });
-}
-
-function setFont(f, id) { font = f; applyGlobalUI(); renderBody(); save(); }
-function chSz(d) { sz = Math.min(36, Math.max(14, sz + d)); document.getElementById('szlbl').textContent = sz; renderBody(); save(); }
-function setAl(a, id) { align = a; applyGlobalUI(); renderBody(); save(); }
-
-function stats(text) {
-  const w = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
-  const ch = text.replace(/\s/g, '').length;
-  const m = Math.max(1, Math.round(w / 200));
-
-  const shortNum = (n) => {
-    if (n >= 1000) return (n / 1000).toLocaleString('ar-EG', { maximumFractionDigits: 1 }) + ' <small style="font-size:0.8em; opacity:0.8;">ألف</small>';
-    return n.toLocaleString('ar-EG');
-  };
-
-  document.getElementById('wc').innerHTML = shortNum(w);
-  document.getElementById('cc').innerHTML = shortNum(ch);
-
-  const rtEl = document.getElementById('rt');
-  const rtLbl = document.getElementById('rt-lbl');
-
-  if (m === 1) {
-    rtEl.textContent = '';
-    rtLbl.textContent = 'دقيقة واحدة';
-  } else if (m === 2) {
-    rtEl.textContent = '';
-    rtLbl.textContent = 'دقيقتان';
-  } else {
-    rtEl.textContent = m.toLocaleString('ar-EG');
-    rtLbl.textContent = (m >= 3 && m <= 10) ? 'دقائق' : 'دقيقة';
-  }
-}
 
 function renderTabs() {
   const bar = document.getElementById('tabsBar');
@@ -184,22 +56,29 @@ function renderBody() {
   if (!wrap) return;
   const ch = chapters[activeIdx];
   if (!ch) { wrap.innerHTML = ''; return; }
+  
   if (!ch.content) {
     wrap.innerHTML = `<div class="paste-zone" id="pasteZone" role="button">
         <i class="ti ti-clipboard-text" aria-hidden="true"></i>
         <div class="paste-title">انقر للصق نص الفصل</div>
         <div class="paste-sub">أو اسحب النص وأفلته هنا</div>
       </div>`;
-    document.getElementById('pasteZone').onclick = openModal;
     const z = document.getElementById('pasteZone');
-    z.addEventListener('dragover', e => { e.preventDefault(); z.classList.add('drag'); });
-    z.addEventListener('dragleave', () => z.classList.remove('drag'));
-    z.addEventListener('drop', e => {
-      e.preventDefault(); z.classList.remove('drag');
-      const text = e.dataTransfer.getData('text');
-      if (text) { document.getElementById('ta').value = text; applyText(); }
-    });
-    stats('');
+    if (z) {
+      z.onclick = () => { if (typeof openModal === 'function') openModal(); };
+      z.addEventListener('dragover', e => { e.preventDefault(); z.classList.add('drag'); });
+      z.addEventListener('dragleave', () => z.classList.remove('drag'));
+      z.addEventListener('drop', e => {
+        e.preventDefault(); z.classList.remove('drag');
+        const text = e.dataTransfer.getData('text');
+        if (text) {
+          const ta = document.getElementById('ta');
+          if (ta) ta.value = text;
+          if (typeof applyText === 'function') applyText();
+        }
+      });
+    }
+    if (typeof stats === 'function') stats('');
   } else {
     if (continuousMode) {
       let full = '';
@@ -214,14 +93,14 @@ function renderBody() {
         `;
       });
       wrap.innerHTML = full;
-      stats(chapters[activeIdx].content);
+      if (typeof stats === 'function') stats(chapters[activeIdx].content);
     } else {
       wrap.innerHTML = `
       ${activeIdx !== 0 ? '<div class="orn"><div class="orn-line"></div><div class="orn-dot"></div><div class="orn-line"></div></div>' : ''}
       <h2 id="ch-title-${activeIdx}" class="chapter-text ch-marker ${font} ${align}" data-index="${activeIdx}" style="font-size:${sz}px; font-weight:bold; margin-bottom:16px;">${escHtml(ch.title)}</h2>
       <div class="chapter-text ${font} ${align}" id="chapterText" style="font-size:${sz}px;">${escHtml(ch.content)}</div>
       <div class="orn" style="margin-top:2rem;"><div class="orn-line"></div><div class="orn-dot"></div><div class="orn-line"></div></div>`;
-      stats(ch.content);
+      if (typeof stats === 'function') stats(ch.content);
     }
   }
 
@@ -242,7 +121,7 @@ function addChapter() {
   activeIdx = chapters.length - 1;
   renderTabs(); renderBody();
   window.scrollTo({ top: 0 });
-  openModal();
+  if (typeof openModal === 'function') openModal();
   save();
 }
 
@@ -280,64 +159,6 @@ function deleteChapter() {
   else { chapters.splice(activeIdx, 1); if (activeIdx >= chapters.length) activeIdx = chapters.length - 1; }
   renderTabs(); renderBody(); save();
 }
-
-function syncModal() {
-  const m = document.getElementById('modal');
-  if (!m) return;
-  m.style.background = activePalette.bg;
-  m.style.color = activePalette.fg;
-  const els = m.querySelectorAll('.ta,.btn,.modal-title,.modal-title-input');
-  els.forEach(el => { el.style.color = activePalette.fg; });
-  document.getElementById('ta').style.background = 'rgba(128,128,128,0.08)';
-  document.getElementById('titleInput').style.borderBottomColor = 'rgba(128,128,128,.3)';
-}
-
-function openModal() {
-  const ch = chapters[activeIdx];
-  document.getElementById('titleInput').value = ch ? ch.title : '';
-  document.getElementById('ta').value = ch ? ch.content : '';
-  document.getElementById('modalBg').classList.add('open');
-  syncModal();
-  setTimeout(() => document.getElementById('ta').focus(), 80);
-}
-
-function closeModal() {
-  document.getElementById('modalBg').classList.remove('open');
-}
-
-function applyText() {
-  try {
-    const text = document.getElementById('ta').value.trim();
-    const title = document.getElementById('titleInput').value.trim();
-    if (!chapters[activeIdx]) return;
-    chapters[activeIdx].content = text;
-    if (title) chapters[activeIdx].title = title;
-    renderTabs();
-    renderBody();
-    save();
-  } catch (e) {
-    console.error('applyText error', e);
-  } finally {
-    closeModal();
-  }
-}
-
-document.getElementById('modalBg').addEventListener('click', e => {
-  if (e.target === document.getElementById('modalBg')) closeModal();
-});
-
-document.getElementById('ta').addEventListener('input', () => {
-  if (!chapters[activeIdx]) return;
-  chapters[activeIdx].content = document.getElementById('ta').value;
-  save();
-});
-
-document.getElementById('titleInput').addEventListener('input', () => {
-  if (!chapters[activeIdx]) return;
-  chapters[activeIdx].title = document.getElementById('titleInput').value;
-  renderTabs();
-  save();
-});
 
 function doSearch(q) {
   const el = document.getElementById('chapterText');
@@ -401,7 +222,7 @@ window.addEventListener('scroll', () => {
     if (!isNaN(currentIdx) && activeIdx !== currentIdx) {
       activeIdx = currentIdx;
       updateActiveUI();
-      stats(chapters[activeIdx].content);
+      if (typeof stats === 'function') stats(chapters[activeIdx].content);
     }
   }
 });
@@ -415,50 +236,15 @@ window.addEventListener('keydown', e => {
   }
 });
 
-const contextMenu = document.getElementById('contextMenu');
-
-function showContextMenu(e) {
-  e.preventDefault();
-  const menu = document.getElementById('contextMenu');
-  menu.classList.add('show');
-  let x = e.clientX;
-  let y = e.clientY;
-  const menuWidth = menu.offsetWidth;
-  if (x - menuWidth < 0) menu.style.left = x + 'px';
-  else menu.style.left = (x - menuWidth) + 'px';
-  menu.style.top = y + 'px';
-  syncContextTheme();
-}
-
-document.addEventListener('contextmenu', showContextMenu);
-document.addEventListener('click', () => contextMenu.classList.remove('show'));
-
-function syncContextTheme() {
-  const root = document.getElementById('root');
-  if (!root) return;
-  const bg = getComputedStyle(root).backgroundColor;
-  const fg = getComputedStyle(root).color;
-  contextMenu.style.background = bg;
-  contextMenu.style.color = fg;
-}
-
-function setThemeQuick(cls) {
-  const palette = palettes.find(p => p.cls === cls);
-  if (!palette) return;
-  activePalette = palette;
-  const r = document.getElementById('root');
-  palettes.forEach(q => r.classList.remove(q.cls));
-  r.classList.add(palette.cls);
-  document.querySelectorAll('.swatch').forEach(s => s.classList.toggle('on', s.title === palette.cls));
-  save();
-}
-
 // Initialization
-load();
-if (chapters.length === 0) chapters = [{ title: 'فصل 1', content: '' }];
-if (activeIdx >= chapters.length) activeIdx = 0;
-buildSwatches();
-applyGlobalUI();
-applySidebarState();
-renderTabs();
-renderBody();
+window.onload = () => {
+  if (typeof load === 'function') load();
+  if (chapters.length === 0) chapters = [{ title: 'فصل 1', content: '' }];
+  if (activeIdx >= chapters.length) activeIdx = 0;
+  
+  if (typeof buildSwatches === 'function') buildSwatches();
+  if (typeof applyGlobalUI === 'function') applyGlobalUI();
+  if (typeof applySidebarState === 'function') applySidebarState();
+  renderTabs();
+  renderBody();
+};

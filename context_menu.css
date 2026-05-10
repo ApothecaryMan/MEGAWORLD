@@ -1,0 +1,53 @@
+.context-menu{
+  position:fixed;
+  min-width:180px;
+  background:rgba(20,20,20,.96);
+  border:1px solid rgba(128,128,128,.3);
+  display:none;
+  flex-direction:column;
+  padding:6px;
+  z-index:9999;
+  overflow:hidden;
+  direction:rtl;
+  user-select:none;-webkit-user-select:none;
+}
+
+.context-menu.show{
+  display:flex;
+}
+
+.context-title{
+  padding:10px 12px;
+  font-size:11px;
+  opacity:.45;
+  border-bottom:1px solid rgba(128,128,128,.12);
+}
+
+.context-item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  padding:8px 10px;
+  font-size:12px;
+  cursor:pointer;
+  color:inherit;
+  background:transparent;
+  border:none;
+  transition:none;
+}
+
+.context-item:hover{
+  background:rgba(128,128,128,.12);
+}
+
+.context-item small{
+  opacity:.35;
+  font-size:10px;
+}
+
+.context-sep{
+  height:1px;
+  background:rgba(128,128,128,.12);
+  margin:4px 0;
+}

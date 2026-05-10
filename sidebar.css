@@ -1,0 +1,42 @@
+.sidebar{
+  width:240px;
+  border-inline-end:1px solid rgba(128,128,128,0.15);
+  padding:16px 12px;
+  background:inherit;
+  flex-shrink:0;
+  overflow-y:auto;
+  height:calc(100vh - 45px);
+  position:fixed;
+  top:45px;
+  inset-inline-start:0;
+  z-index:15;
+  user-select:none;-webkit-user-select:none;
+}
+.sidebar-title{
+  font-size:13px;font-weight:bold;margin-bottom:12px;opacity:0.5;
+  border-bottom:1px solid rgba(128,128,128,0.1);padding-bottom:8px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.side-list{display:flex;flex-direction:column;gap:2px;}
+.side-item{
+  display:block;width:100%;
+  padding:8px 12px;font-size:13px;border:none;background:transparent;
+  color:inherit;cursor:pointer;border-radius:0;
+  transition:none;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  text-align: right;
+}
+.side-item:hover{background:rgba(128,128,128,0.08);}
+.side-item.active{
+  background:rgba(128,128,128,0.12);
+  font-weight:bold;
+  border-inline-start:3px solid currentColor;
+}
+
+@media (max-width: 800px) {
+  .sidebar { display: none; }
+}
+
+.root.side-open .tabs-bar {
+  margin-inline-start: 240px;
+}
