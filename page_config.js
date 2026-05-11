@@ -22,6 +22,7 @@ const MEGA_PAGES = {
       { type: 'input', label: 'البحث', placeholder: 'ابحث عن رواية...', id: 'sq', align: 'center', icon: 'search', style: 'width: 500px; border-radius: 20px;', action: (val) => { if (typeof HomeEngine !== 'undefined') HomeEngine.showSearchResults(val); } },
       { type: 'spacer' },
       { type: 'button', label: 'التنبيهات', title: 'التنبيهات', id: 'notifBtn', align: 'left', className: 'btn-icon', html: '<i class="ti ti-bell"></i>' },
+      { type: 'button', label: 'تجربة', id: 'testBtn', align: 'left', action: () => window.location.href = 'test.html' },
       { type: 'custom', id: 'swatchWrap', label: 'الألوان', className: 'swatch-wrap', align: 'left' },
       { type: 'user', id: 'profile', align: 'left', label: 'أحمد محمد علي', avatar: 'public/ChatGPT Image May 7, 2026, 07_38_24 PM.png', status: 'عضو ذهبي', level: 'ليفل 45' }
     ],
