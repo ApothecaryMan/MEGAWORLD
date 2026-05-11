@@ -134,18 +134,6 @@
 }
 
 /* Tabs Bar */
-.tabs-bar{
-  display:flex;flex-wrap:nowrap;align-items:stretch;
-  border-bottom:1px solid var(--ui-border-light);
-  overflow-x:auto;scrollbar-width:none;
-  min-height:var(--ui-tab-height);
-  background: var(--color-background-primary);
-}
-.root:not(.side-open) .tabs-bar {
-  position: sticky;
-  top: 48px;
-  z-index: 90;
-}
 .tabs-bar::-webkit-scrollbar{display:none;}
 
 .tab{
@@ -176,14 +164,6 @@
   transform:translateY(-100%);
   opacity:0;
   pointer-events:none;
-}
-
-/* Novel Title Container */
-.site-name{
-  margin-inline-end: 15px;
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
 }
 
 /* Quote Editor Specific */

@@ -43,7 +43,6 @@ textarea.ta{
 }
 textarea.ta:focus{
   border-color: var(--ui-border);
-  background:rgba(128,128,128,0.05);
 }
 .modal-btns{
   display:flex;

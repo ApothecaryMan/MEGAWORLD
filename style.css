@@ -8,6 +8,8 @@
   font-style: normal;
 }
 
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
 :root {
   /* المتغيرات الأساسية للثيمات */
   --color-background-primary: #f5f3f0;
@@ -55,8 +57,6 @@
 .root.bg-ember  ::selection { background: rgba(232, 200, 154, 0.2); color: #fff; }
 
 .root {
-  background: var(--color-background-primary);
-  color: var(--color-text-primary);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -141,7 +141,7 @@ body {
 .list-item-flat.active { background: var(--ui-active-bg); opacity: 1; font-weight: bold; color: var(--color-theme); border-right: 3px solid var(--color-theme); }
 
 
-*{box-sizing:border-box;margin:0;padding:0;}
+
 
 /* --- Layout Sections --- */
 
@@ -185,7 +185,7 @@ body {
   font-family: var(--ui-font-serif); font-size: 22px; line-height: 2.2;
   max-width: 850px; margin: 0 auto; white-space: pre-wrap; word-break: break-word; color: inherit;
 }
-.chapter-text.fn {font-family: var(--ui-font-serif);}
+
 .chapter-text.fn2{font-family:'Noto Naskh Arabic',serif;}
 .chapter-text.fn3{font-family:var(--ui-font-sans),serif;}
 .chapter-text.ar{text-align:right;}
@@ -208,9 +208,11 @@ body {
   border-bottom: 1px solid var(--ui-border-light);
 }
 .tabs-bar {
-  display: flex; align-items: flex-end; padding: 0;
+  display: flex; align-items: stretch; padding: 0;
   height: var(--ui-tab-height); gap: 0;
   overflow-x: auto; scrollbar-width: none;
+  border-bottom: 1px solid var(--ui-border-light);
+  background: var(--color-background-primary);
 }
 .tabs-bar::-webkit-scrollbar { display: none; }
 
