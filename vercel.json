@@ -1,4 +1,10 @@
 {
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/profile", "destination": "/profile.html" },
+    { "source": "/editor", "destination": "/editor.html" },
+    { "source": "/library", "destination": "/library.html" },
+    { "source": "/novel", "destination": "/novel.html" }
+  ]
 }
