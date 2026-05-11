@@ -111,6 +111,30 @@ function renderBody() {
   const ch = Store.chapters[Store.activeChapterIdx];
   if (!ch) { wrap.innerHTML = ''; return; }
   
+  // القائمة المنبثقة لمنطقة المحتوى
+  wrap.oncontextmenu = (e) => {
+    if (window.getSelection().toString().trim()) return;
+    
+    ContextMenu.show(e, [
+      { label: 'تعديل الفصل الحالي', icon: 'ti-edit', action: () => openModal() },
+      { label: 'إضافة فصل جديد', icon: 'ti-plus', action: () => Store.addChapter() },
+      { sep: true },
+      { label: 'تبديل وضع التركيز', icon: 'ti-maximize', action: () => document.body.classList.toggle('focus-mode') },
+      { label: 'تغيير الثيم', icon: 'ti-palette', action: () => {
+          const btn = document.querySelector('.theme-picker-btn');
+          if (btn) btn.click();
+        }
+      },
+      { sep: true },
+      { label: 'وضع التمرير المتواصل', icon: 'ti-infinity', action: () => {
+          Store.updateSettings('continuousMode', !Store.state.settings.continuousMode);
+          if (typeof applyGlobalUI === 'function') applyGlobalUI();
+          renderBody();
+        }
+      }
+    ]);
+  };
+  
   const settings = Store.state.settings;
 
   if (!ch.content) {

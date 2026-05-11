@@ -11,6 +11,14 @@
   flex-direction: column;
   gap: 40px;
   font-family: 'Thmanyah Sans', sans-serif;
+  user-select: none;
+}
+
+/* تمكين التحديد لأسماء الروايات فقط */
+.novel-card-title, 
+.rank-item-m-title, 
+.rank-tier-1 h3 {
+  user-select: text;
 }
 
 .section-header {

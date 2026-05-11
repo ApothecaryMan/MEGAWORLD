@@ -111,7 +111,7 @@ const HomeEngine = {
       </div>
       <div class="top5-container">
         <!-- Rank 1: Full Luxury (Hero) -->
-        <div class="rank-tier-1">
+        <div class="rank-tier-1" oncontextmenu="HomeEngine.showNovelMenu(event, ${this.getNovelId(hero.title)})">
           <div class="rank-badge">1</div>
           ${this.renderPoster(hero.cover, 'novel-cover')}
           <div class="rank-tier-1-info" style="flex: 1;">
@@ -158,7 +158,7 @@ const HomeEngine = {
         <!-- Rank 2 & 3: Medium Luxury -->
         <div class="rank-tier-2">
           ${featured.map((item, i) => `
-            <div class="rank-item-m" style="position: relative; cursor: pointer;" onclick="window.location.href='novel.html?id=${this.getNovelId(item.title)}'">
+            <div class="rank-item-m" style="position: relative; cursor: pointer;" onclick="window.location.href='novel.html?id=${this.getNovelId(item.title)}'" oncontextmenu="HomeEngine.showNovelMenu(event, ${this.getNovelId(item.title)})">
               <div class="rank-badge">${i + 2}</div>
               ${this.renderPoster(item.cover, 'rank-item-m-cover')}
               <div class="rank-item-m-info">
@@ -207,7 +207,7 @@ const HomeEngine = {
       </div>
       <div class="novel-grid">
         ${data.items.map(item => `
-          <div class="novel-card" onclick="window.location.href='novel.html?id=${this.getNovelId(item.title)}'">
+          <div class="novel-card" onclick="window.location.href='novel.html?id=${this.getNovelId(item.title)}'" oncontextmenu="HomeEngine.showNovelMenu(event, ${this.getNovelId(item.title)})">
             <div class="rank-badge" style="top: 8px; right: 8px; width: 30px; height: 30px; font-size: 14px; border-radius: 0;">${item.rank}</div>
             ${this.renderPoster(item.cover, 'novel-card-poster')}
             <div class="novel-card-info">
@@ -238,7 +238,7 @@ const HomeEngine = {
       </div>
       <div class="novel-grid">
         ${data.items.map(item => `
-          <div class="novel-card" onclick="window.location.href='novel.html?id=${this.getNovelId(item.title)}'">
+          <div class="novel-card" onclick="window.location.href='novel.html?id=${this.getNovelId(item.title)}'" oncontextmenu="HomeEngine.showNovelMenu(event, ${this.getNovelId(item.title)})">
             ${this.renderPoster(item.cover, 'novel-card-poster')}
             <div class="novel-card-info">
               <div class="novel-card-title">${item.title || '---'}</div>
@@ -315,6 +315,23 @@ const HomeEngine = {
     if (typeof ContextMenu !== 'undefined') {
       ContextMenu.showAt(rect.left, rect.bottom + 10, menuItems, rect.width);
     }
+  },
+
+  showNovelMenu(e, id) {
+    e.preventDefault();
+    e.stopPropagation();
+    const n = Store.state.novels[id];
+    if (!n) return;
+    
+    ContextMenu.show(e, [
+      { label: 'ابدأ القراءة', icon: 'ti-book', action: () => { Store.switchNovel(id); window.location.href = 'editor.html'; } },
+      { label: 'عرض صفحة الرواية', icon: 'ti-external-link', action: () => window.location.href = `novel.html?id=${id}` },
+      { sep: true },
+      { label: 'نسخ اسم الرواية', icon: 'ti-copy', action: () => navigator.clipboard.writeText(n.title) },
+      { label: 'نسخ اسم المؤلف', icon: 'ti-user', action: () => navigator.clipboard.writeText(n.author) },
+      { sep: true },
+      { label: 'تعديل في لوحة الإدارة', icon: 'ti-settings', action: () => window.location.href = 'admin.html' }
+    ]);
   },
 
   setTrendingPeriod(days) {

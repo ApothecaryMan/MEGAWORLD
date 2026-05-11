@@ -111,37 +111,4 @@ const ContextMenu = {
 };
 
 // الاستماع الافتراضي للقائمة العامة
-document.addEventListener('contextmenu', (e) => {
-  const isSpecial = e.target.closest('.list-item-flat') || e.target.closest('.tab') || e.target.closest('.sticky-bar');
-  if (!isSpecial) {
-    const sel = window.getSelection().toString().trim();
-    if (sel.length > 0) {
-      // قائمة تحديد النص (Selection Menu)
-      const wordCount = sel.split(/\s+/).filter(w => w.length > 0).length;
-      ContextMenu.show(e, [
-        { label: 'نسخ النص', icon: 'ti-copy', action: () => navigator.clipboard.writeText(sel) },
-        { label: 'حفظ كاقتباس', icon: 'ti-photo', action: () => { if (typeof exportQuoteQuick === 'function') exportQuoteQuick(sel); } },
-        { label: 'البحث عن النص', icon: 'ti-search', action: () => { if (typeof doSearch === 'function') doSearch(sel); } },
-        { sep: true },
-        { label: `الكلمات المحددة: ${wordCount}`, icon: 'ti-text-size' },
-        { label: `الحروف المحددة: ${sel.length}`, icon: 'ti-sort-a-z' }
-      ]);
-    } else {
-      // قائمة الفصل العامة (General Menu)
-      ContextMenu.show(e, [
-        { label: 'تعديل الفصل الحالي', icon: 'ti-edit', action: () => { if (typeof openModal === 'function') openModal(); } },
-        { label: 'إضافة فصل جديد', icon: 'ti-plus', action: () => { if (typeof addChapter === 'function') addChapter(); } },
-        { sep: true },
-        { label: 'تبديل وضع التركيز', icon: 'ti-maximize', action: () => document.body.classList.toggle('focus-mode') },
-        { label: 'وضع التمرير المتواصل', icon: 'ti-infinity', action: () => { 
-            if (Store && typeof applyGlobalUI === 'function') {
-              Store.updateSettings('continuousMode', !Store.state.settings.continuousMode);
-              applyGlobalUI();
-              if (typeof renderBody === 'function') renderBody();
-            }
-          } 
-        }
-      ]);
-    }
-  }
-});
+// تم إلغاء القائمة العامة بناءً على طلب المستخدم لإبقاء النظام بسيطاً ومركزاً على العناصر التفاعلية فقط.
