@@ -866,6 +866,149 @@
 </div>
 
 
+    <!-- ========================================== -->
+    <!-- 14. Private Library (المكتبة الخاصة) -->
+    <!-- ========================================== -->
+    <div class="test-section">
+      <div class="test-header">
+        <div class="test-title">المكتبة الشخصية (Private Library)</div>
+        <div class="test-desc">نظام متكامل لإدارة الروايات، التقدم في القراءة، والتبويبات المختلفة.</div>
+      </div>
+
+      <div class="library-full-container">
+        <!-- 1. Tabs Bar -->
+        <div class="library-tabs-row">
+          <button class="lib-tab active">قيد القراءة <span class="tab-count">12</span></button>
+          <button class="lib-tab">مكتملة <span class="tab-count">45</span></button>
+          <button class="lib-tab">مفضلة <span class="tab-count">8</span></button>
+          <button class="lib-tab">متابعة <span class="tab-count">3</span></button>
+          <button class="lib-tab">متوقفة <span class="tab-count">2</span></button>
+        </div>
+
+        <!-- 2. Library Toolbar -->
+        <div class="library-controls">
+          <div class="lib-search-wrap">
+            <i class="ti ti-search"></i>
+            <input type="text" class="input-flat lib-search-input" placeholder="بحث في مكتبتك...">
+          </div>
+          
+          <!-- Genre Filter -->
+          <div class="filter-group">
+            <span class="filter-label">التصنيف:</span>
+            <div class="dropdown-wrap mini" onclick="this.classList.toggle('open')">
+              <div class="dropdown-trigger">
+                <span>الكل</span>
+                <i class="ti ti-chevron-down"></i>
+              </div>
+              <div class="dropdown-menu">
+                <button class="dropdown-item active">الكل</button>
+                <button class="dropdown-item">فانتازيا</button>
+                <button class="dropdown-item">رومانسي</button>
+                <button class="dropdown-item">إثارة</button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Sort Filter -->
+          <div class="filter-group">
+            <span class="filter-label">ترتيب:</span>
+            <div class="dropdown-wrap mini" onclick="this.classList.toggle('open')">
+              <div class="dropdown-trigger">
+                <span>آخر قراءة</span>
+                <i class="ti ti-chevron-down"></i>
+              </div>
+              <div class="dropdown-menu">
+                <button class="dropdown-item active">آخر قراءة</button>
+                <button class="dropdown-item">الأحدث إضافة</button>
+                <button class="dropdown-item">أبجدياً (أ-ي)</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="view-toggle">
+            <button class="btn-flat mini active" title="عرض شبكي"><i class="ti ti-layout-grid"></i></button>
+            <button class="btn-flat mini" title="عرض قائمة"><i class="ti ti-list"></i></button>
+          </div>
+        </div>
+
+        <!-- 3. Library Grid Content -->
+        <div class="library-grid">
+          
+          <!-- Novel Card 1: In Progress -->
+          <div class="lib-novel-card">
+            <div class="lib-card-cover-wrap">
+              <img src="https://m.media-amazon.com/images/I/81S774oG+VL._AC_UF1000,1000_QL80_.jpg" class="lib-card-cover">
+              <div class="lib-card-badge">فصل جديد!</div>
+            </div>
+            
+            <div class="lib-card-info">
+              <h3 class="lib-card-title">بداية النهاية: العالم الجديد</h3>
+              <p class="lib-card-author">بواسطة: محمد أحمد</p>
+              
+              <div class="lib-progress-section">
+                <div class="lib-progress-text">
+                  <span>الفصل 23 من 80</span>
+                  <span>28%</span>
+                </div>
+                <div class="progress-flat-container">
+                  <div class="progress-flat-fill" style="width: 28.75%;"></div>
+                </div>
+              </div>
+
+              <div class="lib-card-footer">
+                <div class="lib-last-read">آخر قراءة: أمس</div>
+                <div class="lib-actions">
+                  <button class="btn-flat active mini"><i class="ti ti-player-play"></i> أكمل</button>
+                  <button class="btn-flat mini" title="خيارات إضافية"><i class="ti ti-dots-vertical"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Novel Card 2: Another Style -->
+          <div class="lib-novel-card">
+            <div class="lib-card-cover-wrap">
+              <img src="https://m.media-amazon.com/images/I/71X8X8zYwFL._AC_UF1000,1000_QL80_.jpg" class="lib-card-cover">
+            </div>
+            
+            <div class="lib-card-info">
+              <h3 class="lib-card-title">سجلات المحارب القديم</h3>
+              <p class="lib-card-author">بواسطة: كاتب مجهول</p>
+              
+              <div class="lib-progress-section">
+                <div class="lib-progress-text">
+                  <span>الفصل 150 من 150</span>
+                  <span style="color:var(--color-theme);">مكتملة</span>
+                </div>
+                <div class="progress-flat-container">
+                  <div class="progress-flat-fill" style="width: 100%;"></div>
+                </div>
+              </div>
+
+              <div class="lib-card-footer">
+                <div class="lib-last-read">قرأت في: 12 مايو</div>
+                <div class="lib-actions">
+                  <button class="btn-flat mini"><i class="ti ti-refresh"></i> أعد القراءة</button>
+                  <button class="btn-flat mini"><i class="ti ti-dots-vertical"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 4. Empty State (Hidden by default for demo) -->
+        <div class="lib-empty-state" style="display:none;">
+          <i class="ti ti-books"></i>
+          <h3>مكتبتك فارغة في هذا القسم</h3>
+          <p>لا يوجد روايات قيد القراءة حالياً. ابدأ باستكشاف عوالم جديدة الآن!</p>
+          <button class="btn-flat active"><i class="ti ti-compass"></i> استكشف الروايات</button>
+        </div>
+
+      </div>
+    </div>
+
+
 <script>
   function setTheme(theme) {
     const root = document.getElementById('root');
@@ -873,6 +1016,72 @@
     allThemes.forEach(cls => root.classList.remove(cls));
     root.classList.add(theme);
   }
+  // --- Library Logic ---
+  function switchLibTab(btn) {
+    document.querySelectorAll('.lib-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    
+    // محاكاة إظهار الحالة الفارغة عند اختيار "متوقفة" كمثال
+    const grid = document.querySelector('.library-grid');
+    const empty = document.querySelector('.lib-empty-state');
+    
+    if (btn.textContent.includes('متوقفة')) {
+      grid.style.display = 'none';
+      empty.style.display = 'flex';
+    } else {
+      grid.style.display = 'grid';
+      empty.style.display = 'none';
+    }
+  }
+
+  function setLibView(mode) {
+    const grid = document.querySelector('.library-grid');
+    const btns = document.querySelectorAll('.view-toggle .btn-flat');
+    
+    btns.forEach(b => b.classList.remove('active'));
+    
+    if (mode === 'list') {
+      grid.classList.add('list-view');
+      btns[1].classList.add('active');
+    } else {
+      grid.classList.remove('list-view');
+      btns[0].classList.add('active');
+    }
+  }
+
+  function libSearch(query) {
+    const cards = document.querySelectorAll('.lib-novel-card');
+    query = query.toLowerCase();
+    cards.forEach(card => {
+      const title = card.querySelector('.lib-card-title').textContent.toLowerCase();
+      card.style.display = title.includes(query) ? 'flex' : 'none';
+    });
+  }
+
+  function showLibOptions(e) {
+    if (typeof ContextMenu !== 'undefined') {
+      ContextMenu.show(e, [
+        { label: 'نقل إلى "مكتملة"', icon: 'ti-check', action: () => alert('تم النقل') },
+        { label: 'نقل إلى "متوقفة"', icon: 'ti-player-pause', action: () => alert('تم النقل') },
+        { sep: true },
+        { label: 'حذف من المكتبة', icon: 'ti-trash', danger: true, action: () => alert('تم الحذف') }
+      ]);
+    }
+  }
+
+  // ربط الأزرار بالأحداث
+  document.querySelectorAll('.lib-tab').forEach(btn => {
+    btn.onclick = () => switchLibTab(btn);
+  });
+
+  document.querySelector('.view-toggle .btn-flat:nth-child(1)').onclick = () => setLibView('grid');
+  document.querySelector('.view-toggle .btn-flat:nth-child(2)').onclick = () => setLibView('list');
+  
+  document.querySelector('.lib-search-input').oninput = (e) => libSearch(e.target.value);
+  
+  document.querySelectorAll('.lib-actions .btn-flat:nth-child(2)').forEach(btn => {
+    btn.onclick = (e) => showLibOptions(e);
+  });
 </script>
 
 </body>
