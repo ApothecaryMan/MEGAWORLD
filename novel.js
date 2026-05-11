@@ -178,13 +178,13 @@ const NovelPage = {
 
   startReading() {
     Store.switchNovel(this.novelIdx);
-    window.location.href = 'reader.html';
+    window.location.href = 'editor.html';
   },
 
   readChapter(chIdx) {
     Store.switchNovel(this.novelIdx);
     Store.setChapter(chIdx);
-    window.location.href = 'reader.html';
+    window.location.href = 'editor.html';
   },
 
   addToLibrary() {

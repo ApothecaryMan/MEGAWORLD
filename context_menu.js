@@ -31,6 +31,29 @@ const ContextMenu = {
     setTimeout(() => document.addEventListener('click', close), 10);
   },
 
+  showAt(x, y, items, width = 200) {
+    if (!this.el) this.el = document.getElementById('contextMenu');
+    if (!this.el) return;
+
+    this.render(items);
+    this.el.style.width = width + 'px';
+    this.el.style.left = x + 'px';
+    this.el.style.top = y + 'px';
+    this.syncTheme();
+    
+    this.el.classList.add('show');
+    
+    const close = () => {
+      this.el.classList.remove('show');
+      document.removeEventListener('click', close);
+    };
+    setTimeout(() => document.addEventListener('click', close), 10);
+  },
+
+  hide() {
+    if (this.el) this.el.classList.remove('show');
+  },
+
   render(items) {
     this.el.innerHTML = '';
     items.forEach(item => {

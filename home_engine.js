@@ -15,6 +15,12 @@ const HomeEngine = {
   },
 
   trendingDays: 7, // الافتراضي أسبوع
+  currentFilter: null,
+
+  filterByGenre(genre) {
+    this.currentFilter = genre;
+    this.render(this.schema);
+  },
 
   renderPoster(cover, className = 'novel-card-poster') {
     if (cover) {
@@ -30,32 +36,39 @@ const HomeEngine = {
 
   render(config) {
     this.container.innerHTML = '';
-    const allRealNovels = Store.state.novels || [];
+    let allRealNovels = Store.state.novels || [];
     
+    // تطبيق الفلتر إذا وجد
+    if (this.currentFilter) {
+      allRealNovels = allRealNovels.filter(n => n.genres && n.genres.includes(this.currentFilter));
+    }
+
     // الترتيب حسب إجمالي المشاهدات (للتوب 3)
-    const sortedByTotal = StatsEngine.getSortedByTotal();
+    let sortedByTotal = StatsEngine.getSortedByTotal().filter(n => allRealNovels.includes(n));
     
     // الترتيب حسب الفترة الزمنية (للرائج)
-    const sortedByTrending = StatsEngine.getSortedByPeriod(this.trendingDays);
+    let sortedByTrending = StatsEngine.getSortedByPeriod(this.trendingDays).filter(n => allRealNovels.includes(n));
 
     config.forEach(section => {
       let node;
+      const sectionTitle = this.currentFilter ? `${section.title} - ${this.currentFilter}` : section.title;
+
       if (['top5', 'trending', 'grid'].includes(section.type)) {
         if (section.type === 'top5') {
           const top3 = sortedByTotal.slice(0, 3);
           if (top3.length > 0) {
-            node = this.makeTop5({ title: section.title, items: top3 });
+            node = this.makeTop5({ title: sectionTitle, items: top3 });
           }
         } else if (section.type === 'trending') {
           const trending = sortedByTrending.slice(0, 10);
           if (trending.length > 0) {
-            node = this.makeTrending({ title: section.title, items: trending.map((n, i) => ({ ...n, rank: i + 1 })) });
+            node = this.makeTrending({ title: sectionTitle, items: trending.map((n, i) => ({ ...n, rank: i + 1 })) });
             node.id = 'trendingSection'; // معرف خاص للتحديث المستقل
-            this.trendingData = { title: section.title }; // حفظ العنوان للتحديث
+            this.trendingData = { title: section.title }; // حفظ العنوان الأصلي للتحديث
           }
         } else if (section.type === 'grid') {
           if (allRealNovels.length > 0) {
-            node = this.makeGrid({ title: section.title, items: allRealNovels });
+            node = this.makeGrid({ title: sectionTitle, items: allRealNovels });
           }
         }
       } else {
@@ -133,7 +146,7 @@ const HomeEngine = {
             </div>
 
             <div class="flex-row" style="margin-top: 25px; gap: 12px;">
-              <a href="reader.html" class="btn-flat active" style="text-decoration: none; padding: 0 25px; height: 38px; display: flex; align-items: center;" onclick="Store.switchNovel(${this.getNovelId(hero.title)})">ابدأ القراءة الآن</a>
+              <a href="editor.html" class="btn-flat active" style="text-decoration: none; padding: 0 25px; height: 38px; display: flex; align-items: center;" onclick="Store.switchNovel(${this.getNovelId(hero.title)})">ابدأ القراءة الآن</a>
               <button class="btn-flat" style="height: 38px; padding: 0 20px;" onclick="window.location.href='novel.html?id=${this.getNovelId(hero.title)}'">تفاصيل العمل</button>
               <button class="btn-flat" style="height: 38px; width: 38px; padding: 0; justify-content: center;" title="حفظ في المكتبة">
                 <i class="ti ti-bookmark" style="font-size: 18px;"></i>
@@ -254,6 +267,54 @@ const HomeEngine = {
     const div = document.createElement('section');
     div.className = 'home-container';
     return div;
+  },
+
+  showSearchResults(query) {
+    if (!query.trim()) {
+      if (typeof ContextMenu !== 'undefined') ContextMenu.hide();
+      return;
+    }
+    
+    const allNovels = Store.state.novels || [];
+    const q = query.toLowerCase();
+    
+    const results = allNovels.filter(n => {
+      const titleWords = (n.title || '').toLowerCase().split(/\s+/);
+      const authorWords = (n.author || '').toLowerCase().split(/\s+/);
+      
+      const matchTitle = titleWords.some(w => w.startsWith(q));
+      const matchAuthor = authorWords.some(w => w.startsWith(q));
+      
+      return matchTitle || matchAuthor;
+    }).slice(0, 5);
+    
+    if (results.length === 0) {
+      if (typeof ContextMenu !== 'undefined') ContextMenu.hide();
+      return;
+    }
+    
+    const searchInput = document.getElementById('sq');
+    if (!searchInput) return;
+    
+    const rect = searchInput.getBoundingClientRect();
+    const menuItems = results.map(n => ({
+      label: `
+        <div style="display:flex; align-items:center; gap:12px; padding: 4px 0; text-align: right;">
+          <div style="width:32px; height:48px; flex-shrink:0; border:1px solid var(--ui-border-light); background:var(--ui-input-bg);">
+            ${n.cover ? `<img src="${n.cover}" style="width:100%; height:100%; object-fit:cover;">` : `<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; opacity:0.3;"><i class="ti ti-camera" style="font-size:12px;"></i></div>`}
+          </div>
+          <div style="overflow:hidden;">
+            <div style="font-weight:700; font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${n.title}</div>
+            <div style="font-size:11px; opacity:0.5; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${n.author}</div>
+          </div>
+        </div>
+      `,
+      action: () => window.location.href = `novel.html?id=${this.getNovelId(n.title)}`
+    }));
+    
+    if (typeof ContextMenu !== 'undefined') {
+      ContextMenu.showAt(rect.left, rect.bottom + 10, menuItems, rect.width);
+    }
   },
 
   setTrendingPeriod(days) {

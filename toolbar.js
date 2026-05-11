@@ -178,6 +178,7 @@ const Toolbar = {
     else btn.textContent = item.label;
 
     if (item.title) btn.title = item.title;
+    if (item.style) btn.style.cssText = item.style;
     btn.onclick = (e) => item.action && item.action(e);
     return btn;
   },
@@ -186,12 +187,26 @@ const Toolbar = {
     const input = this.makeElement('input', item.className || 'input-flat', item.id);
     if (item.placeholder) input.placeholder = item.placeholder;
     if (item.action) input.oninput = (e) => item.action(e.target.value);
+    
+    if (item.icon) {
+      const wrap = this.makeElement('div', 'input-wrap');
+      if (item.style) wrap.style.cssText = item.style;
+      const icon = this.makeElement('i', `ti ti-${item.icon} input-icon`);
+      wrap.appendChild(icon);
+      wrap.appendChild(input);
+      // تأكد أن الحقل نفسه يملأ المساحة
+      input.style.width = '100%'; 
+      return wrap;
+    }
+
+    if (item.style) input.style.cssText = item.style;
     return input;
   },
 
   makeLabel(item) {
     const span = this.makeElement('span', 'lbl', item.id);
     span.textContent = item.label;
+    if (item.style) span.style.cssText = item.style;
     return span;
   },
 

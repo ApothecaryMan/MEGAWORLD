@@ -115,6 +115,14 @@ const Store = {
     }
   },
 
+  getAllGenres() {
+    const genresSet = new Set();
+    this.state.novels.forEach(n => {
+      if (n.genres) n.genres.forEach(g => genresSet.add(g));
+    });
+    return Array.from(genresSet).sort();
+  },
+
   // --- إدارة الفصول (Chapter Management) ---
   addChapter() {
     if (this.activeNovel) {

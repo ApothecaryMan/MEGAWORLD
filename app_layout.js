@@ -21,6 +21,27 @@ const AppLayout = {
 
       // 2. تهيئة التولبار (إذا وجد له حاوية)
       if (document.getElementById('mainToolbar') && config.toolbar) {
+        // حقن التصنيفات الحقيقية بدلاً من الموكاب
+        const catDrop = config.toolbar.find(item => item.id === 'catDrop');
+        if (catDrop) {
+          const realGenres = Store.getAllGenres();
+          catDrop.items = realGenres.map(g => ({
+            label: g,
+            icon: 'hash',
+            action: () => {
+              if (typeof HomeEngine !== 'undefined' && typeof HomeEngine.filterByGenre === 'function') {
+                HomeEngine.filterByGenre(g);
+              } else {
+                console.log('Filtering by genre:', g);
+              }
+            }
+          }));
+          // إضافة خيار عرض الكل إذا كان هناك تصنيفات
+          if (realGenres.length > 0) {
+            catDrop.items.push({ sep: true });
+            catDrop.items.push({ label: 'عرض الكل', icon: 'list', action: () => HomeEngine.filterByGenre(null) });
+          }
+        }
         Toolbar.init('mainToolbar', config.toolbar);
       }
 

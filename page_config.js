@@ -17,11 +17,11 @@ const MEGA_PAGES = {
           { label: 'غموض', icon: 'spy', action: () => alert('غموض') }
         ]
       },
-      { type: 'button', label: 'المكتبة', id: 'libLink', align: 'right', action: () => window.location.href = 'reader.html' },
+      { type: 'button', label: 'المكتبة', id: 'libLink', align: 'right', action: () => window.location.href = 'editor.html' },
       { type: 'spacer' },
-      { type: 'input', label: 'البحث', placeholder: 'ابحث عن رواية...', id: 'sq', align: 'center', style: 'width: 350px; border-radius: 20px;' },
+      { type: 'input', label: 'البحث', placeholder: 'ابحث عن رواية...', id: 'sq', align: 'center', icon: 'search', style: 'width: 500px; border-radius: 20px;', action: (val) => { if (typeof HomeEngine !== 'undefined') HomeEngine.showSearchResults(val); } },
       { type: 'spacer' },
-      { type: 'button', title: 'التنبيهات', id: 'notifBtn', align: 'left', className: 'btn-icon', html: '<i class="ti ti-bell"></i>' },
+      { type: 'button', label: 'التنبيهات', title: 'التنبيهات', id: 'notifBtn', align: 'left', className: 'btn-icon', html: '<i class="ti ti-bell"></i>' },
       { type: 'custom', id: 'swatchWrap', label: 'الألوان', className: 'swatch-wrap', align: 'left' },
       { type: 'user', id: 'profile', align: 'left', label: 'أحمد محمد علي', avatar: 'public/ChatGPT Image May 7, 2026, 07_38_24 PM.png', status: 'عضو ذهبي', level: 'ليفل 45' }
     ],
@@ -46,9 +46,9 @@ const MEGA_PAGES = {
   },
 
   // --- القارئ (Reader Page) ---
-  'reader.html': {
+  'editor.html': {
     id: 'reader',
-    title: 'القارئ',
+    title: 'المحرر',
     toolbar: [
       { type: 'button', label: 'الرئيسية', id: 'homeBtn', align: 'right', action: () => window.location.href = 'index.html' },
       { type: 'button', label: 'القائمة', id: 'sideToggleBtn', align: 'right', action: () => typeof toggleSidebar === 'function' && toggleSidebar() },
@@ -116,7 +116,7 @@ const MEGA_PAGES = {
         html: `MEGAWORLD ADMIN <span style="font-size: 10px; background: var(--color-theme); color: var(--color-on-theme); padding: 2px 8px; margin-right: 10px; font-weight: bold; border-radius: 2px;">وضع التعديل</span>` 
       },
       { type: 'button', label: 'معاينة الموقع', id: 'viewSite', align: 'right', html: '<i class="ti ti-external-link"></i> معاينة الموقع', action: () => window.location.href = 'index.html' },
-      { type: 'button', label: 'الذهاب للقارئ', id: 'viewReader', align: 'right', action: () => window.location.href = 'reader.html' },
+      { type: 'button', label: 'الذهاب للقارئ', id: 'viewReader', align: 'right', action: () => window.location.href = 'editor.html' },
       
       { type: 'spacer' },
       
@@ -138,7 +138,7 @@ const MEGA_PAGES = {
       { type: 'custom', id: 'logo', label: 'MEGAWORLD', className: 'site-name', align: 'right', html: 'MEGAWORLD' },
       { type: 'button', label: 'الرئيسية', id: 'backHome', align: 'right', action: () => window.location.href = 'index.html' },
       { type: 'spacer' },
-      { type: 'custom', id: 'toolbarNovelTitle', align: 'center', className: 'lbl', style: 'font-size: 14px; font-weight: bold; opacity: 1; color: var(--color-theme);', html: 'جاري التحميل...' },
+      { type: 'custom', id: 'toolbarNovelTitle', label: 'اسم الرواية', align: 'center', className: 'lbl', style: 'font-size: 14px; font-weight: bold; opacity: 1; color: var(--color-theme);', html: 'جاري التحميل...' },
       { type: 'spacer' },
       { type: 'button', label: 'ابدأ القراءة', id: 'quickRead', align: 'left', className: 'btn-flat active', style: 'height: 30px; font-size: 11px;', action: () => typeof NovelPage !== 'undefined' && NovelPage.startReading() },
       { type: 'custom', id: 'swatchWrap', label: 'الألوان', className: 'swatch-wrap', align: 'left' },

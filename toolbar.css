@@ -90,11 +90,27 @@
   width: 140px;
   padding: 0 10px;
   height: var(--ui-btn-height);
-  background: var(--ui-input-bg);
+  background: transparent;
   border: 1px solid var(--ui-border);
   font-size: 13px;
   color: inherit;
   outline: none;
+}
+.input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.input-icon {
+  position: absolute;
+  right: 12px;
+  font-size: 16px;
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: 5;
+}
+.input-wrap .input-flat {
+  padding-right: 35px !important;
 }
 .stats-divider{
   width: 1px;
