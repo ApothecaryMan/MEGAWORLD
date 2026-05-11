@@ -64,8 +64,8 @@
 
 /* --- Global Scrollbar (Pure Flat) --- */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 4px;
+  height: 4px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
@@ -83,6 +83,7 @@ body {
   background: var(--color-background-primary);
   color: var(--color-text-primary);
   overflow-x: hidden;
+  overflow-y: overlay;
   margin: 0;
 }
 
