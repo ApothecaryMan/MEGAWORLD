@@ -62,6 +62,22 @@
   flex-direction: column;
 }
 
+/* --- Global Scrollbar (Pure Flat) --- */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--ui-border);
+  border-radius: 0;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-theme);
+}
+
 body {
   font-family: var(--ui-font-sans);
   background: var(--color-background-primary);
