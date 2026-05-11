@@ -249,3 +249,25 @@ body {
 }
 .hidden { display: none !important; }
 .flex-row { display: flex; align-items: center; gap: 10px; }
+.flex-center { display: flex; align-items: center; justify-content: center; }
+.flex-column { display: flex; flex-direction: column; }
+.novel-poster-placeholder {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  flex-shrink: 0;
+}
+
+/* Unified Placeholder */
+.placeholder-flat {
+  background: var(--ui-input-bg);
+  border: 1px solid var(--ui-border-light);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-primary);
+  opacity: 0.2;
+  gap: 10px;
+}
+.placeholder-flat i { font-size: 32px; }
+.placeholder-flat span { font-size: 11px; font-weight: bold; }

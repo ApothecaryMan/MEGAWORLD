@@ -131,19 +131,6 @@
 .side-cover-placeholder {
   width: 100%;
   height: 100%;
-  background: var(--ui-input-bg);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  color: var(--color-text-primary);
-  opacity: 0.3;
-  font-weight: bold;
-  font-size: 14px;
-}
-.side-cover-placeholder i {
-  font-size: 32px;
 }
 .side-cover-full {
   width: 100%;

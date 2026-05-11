@@ -384,8 +384,6 @@
   gap: 10px;
   flex-shrink: 0;
 }
-.novel-poster-placeholder i { font-size: 32px; }
-.novel-poster-placeholder span { font-size: 10px; font-weight: bold; }
 .novel-card-info {
   position: absolute;
   bottom: 0;

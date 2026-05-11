@@ -189,7 +189,7 @@ function renderNovelData() {
     <div class="side-cover-container">
       ${n.cover ? 
         `<img src="${n.cover}" class="side-cover-full" id="side-cover-preview">` :
-        `<div class="side-cover-placeholder">
+        `<div class="side-cover-placeholder placeholder-flat">
            <i class="ti ti-camera"></i>
            <span>غلاف الرواية</span>
          </div>`

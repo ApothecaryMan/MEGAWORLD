@@ -27,7 +27,7 @@ const HomeEngine = {
       return `<img src="${cover}" class="${className}">`;
     }
     return `
-      <div class="${className} novel-poster-placeholder">
+      <div class="${className} novel-poster-placeholder placeholder-flat">
         <i class="ti ti-camera"></i>
         <span>بدون غلاف</span>
       </div>
