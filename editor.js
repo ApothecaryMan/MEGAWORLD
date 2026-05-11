@@ -4,29 +4,39 @@ let currentModalMode = 'chapter'; // 'chapter' or 'novel-desc'
 function openModal(mode = 'chapter') {
   currentModalMode = mode;
   const bg = document.getElementById('modalBg');
-  const ta = document.getElementById('ta');
-  const ti = document.getElementById('titleInput');
-  const hdr = document.querySelector('.modal-title');
+  const body = document.getElementById('modalBody');
+  const hdr = document.getElementById('modalTitle');
+  const btns = document.getElementById('modalBtns');
   
-  if (!bg || !ta || !ti) return;
+  if (!bg || !body || !hdr || !btns) return;
 
+  // إعداد المحتوى بناءً على النوع
   if (mode === 'chapter') {
     const activeChapter = Store.chapters[Store.activeChapterIdx];
     if (!activeChapter) return;
-    hdr.textContent = 'اسم الفصل:';
-    ti.style.display = 'block';
-    ti.value = activeChapter.title || '';
-    ta.value = activeChapter.content || '';
+    hdr.textContent = 'تعديل الفصل';
+    body.innerHTML = `
+      <div class="flex-column" style="gap:12px;">
+        <input class="input-flat" style="width:100%; border:none; border-bottom:1px solid var(--ui-border-light);" id="titleInput" placeholder="عنوان الفصل..." value="${activeChapter.title || ''}">
+        <textarea class="ta" id="ta" placeholder="نص الفصل...">${activeChapter.content || ''}</textarea>
+      </div>
+    `;
   } else if (mode === 'novel-desc') {
     const novel = Store.activeNovel;
     if (!novel) return;
-    hdr.textContent = 'ملخص الرواية:';
-    ti.style.display = 'none';
-    ta.value = novel.description || '';
+    hdr.textContent = 'وصف الرواية';
+    body.innerHTML = `<textarea class="ta" id="ta" placeholder="اكتب ملخص الرواية هنا...">${novel.description || ''}</textarea>`;
   }
+
+  // إعداد الأزرار
+  btns.innerHTML = `
+    <button class="btn-flat" onclick="closeModal()">إلغاء</button>
+    <button class="btn-flat active" onclick="applyText()">حفظ التغييرات</button>
+  `;
   
   bg.classList.add('open');
-  ta.focus();
+  const ta = document.getElementById('ta');
+  if (ta) ta.focus();
 }
 
 function closeModal() {

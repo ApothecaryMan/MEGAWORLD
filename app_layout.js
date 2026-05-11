@@ -66,18 +66,44 @@ const AppLayout = {
   },
 
   ensureGlobalElements() {
-    // التأكد من وجود ID للجسم لتطبيق الثيمات
+    // 1. التأكد من وجود ID للجسم لتطبيق الثيمات
     if (!document.body.id) document.body.id = 'root';
     if (!document.body.classList.contains('root')) document.body.classList.add('root');
 
-    // حقن قائمة السياق تلقائياً إذا كانت مفقودة
+    // 2. حقن قائمة السياق تلقائياً
     if (!document.getElementById('contextMenu')) {
       const cm = document.createElement('div');
       cm.id = 'contextMenu';
       cm.className = 'context-menu';
       document.body.appendChild(cm);
-      // إعادة ربط المحرك بالقنصر الجديد
       if (typeof ContextMenu !== 'undefined') ContextMenu.el = cm;
+    }
+
+    // 3. حقن شريط التقدم (Progress Bar)
+    if (!document.getElementById('progressBar')) {
+      const pWrap = document.createElement('div');
+      pWrap.className = 'progress-wrap';
+      pWrap.innerHTML = '<div class="progress-bar" id="progressBar"></div>';
+      document.body.appendChild(pWrap);
+    }
+
+    // 4. حقن الهيكل الأساسي للمودال (Modal)
+    if (!document.getElementById('modalBg')) {
+      const modal = document.createElement('div');
+      modal.id = 'modalBg';
+      modal.className = 'modal-bg';
+      modal.innerHTML = `
+        <div class="modal" id="modal">
+          <div class="modal-hdr">
+            <div class="modal-title" id="modalTitle">تنبيه</div>
+          </div>
+          <div id="modalBody" style="padding: 10px 0;"></div>
+          <div class="modal-btns" id="modalBtns">
+            <button class="btn-flat" onclick="closeModal()">إغلاق</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
     }
   }
 };
