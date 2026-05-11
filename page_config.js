@@ -24,7 +24,17 @@ const MEGA_PAGES = {
       { type: 'button', label: 'التنبيهات', title: 'التنبيهات', id: 'notifBtn', align: 'left', className: 'btn-icon', html: '<i class="ti ti-bell"></i>' },
       { type: 'button', label: 'تجربة', id: 'testBtn', align: 'left', action: () => window.location.href = 'test.html' },
       { type: 'custom', id: 'swatchWrap', label: 'الألوان', className: 'swatch-wrap', align: 'left' },
-      { type: 'user', id: 'profile', align: 'left', label: 'أحمد محمد علي', avatar: 'public/ChatGPT Image May 7, 2026, 07_38_24 PM.png', status: 'عضو ذهبي', level: 'ليفل 45' }
+      { type: 'user', id: 'profile', align: 'left', label: 'أحمد محمد علي', avatar: 'public/ChatGPT Image May 7, 2026, 07_38_24 PM.png', status: 'عضو ذهبي', level: 'ليفل 45',
+        menuItems: [
+          { label: 'ملفي الشخصي', icon: 'ti-user-circle', action: () => window.location.href = 'profile.html' },
+          { label: 'المكتبة الخاصة', icon: 'ti-bookmarks', badge: '12', action: () => window.location.href = 'editor.html' },
+          { label: 'سجل القراءة', icon: 'ti-history' },
+          { sep: true },
+          { label: 'إعدادات الحساب', icon: 'ti-settings' },
+          { sep: true },
+          { label: 'مركز المساعدة', icon: 'ti-help-circle' }
+        ]
+      }
     ],
     content: [
       {
@@ -143,7 +153,47 @@ const MEGA_PAGES = {
       { type: 'spacer' },
       { type: 'button', label: 'ابدأ القراءة', id: 'quickRead', align: 'left', className: 'btn-flat active', style: 'height: 30px; font-size: 11px;', action: () => typeof NovelPage !== 'undefined' && NovelPage.startReading() },
       { type: 'custom', id: 'swatchWrap', label: 'الألوان', className: 'swatch-wrap', align: 'left' },
-      { type: 'user', id: 'profile', align: 'left', label: 'أحمد محمد علي', avatar: 'public/ChatGPT Image May 7, 2026, 07_38_24 PM.png', status: 'عضو ذهبي', level: 'ليفل 45' }
+      { 
+        type: 'user', id: 'profile', align: 'left', label: 'أحمد محمد علي', avatar: 'public/ChatGPT Image May 7, 2026, 07_38_24 PM.png', status: 'عضو ذهبي', level: 'ليفل 45',
+        menuItems: [
+          { label: 'ملفي الشخصي', icon: 'ti-user-circle', action: () => window.location.href = 'profile.html' },
+          { label: 'المكتبة الخاصة', icon: 'ti-bookmarks', badge: '12', action: () => window.location.href = 'editor.html' },
+          { label: 'سجل القراءة', icon: 'ti-history' },
+          { sep: true },
+          { label: 'إعدادات الحساب', icon: 'ti-settings' },
+          { sep: true },
+          { label: 'مركز المساعدة', icon: 'ti-help-circle' }
+        ]
+      }
+    ]
+  },
+
+  // --- الملف الشخصي (User Profile) ---
+  'profile.html': {
+    id: 'profilePage',
+    title: 'الملف الشخصي',
+    toolbar: [
+      { type: 'custom', id: 'logo', label: 'MEGAWORLD', className: 'site-name', align: 'right', html: 'MEGAWORLD' },
+      { type: 'button', label: 'الرئيسية', id: 'backHome', align: 'right', action: () => window.location.href = 'index.html' },
+      { type: 'spacer' },
+      { type: 'button', label: 'تجربة', id: 'testBtn', align: 'left', action: () => window.location.href = 'test.html' },
+      { type: 'custom', id: 'swatchWrap', label: 'الألوان', className: 'swatch-wrap', align: 'left' },
+      { 
+        type: 'user', id: 'profile', align: 'left', label: 'أحمد محمد علي', avatar: 'public/ChatGPT Image May 7, 2026, 07_38_24 PM.png', status: 'عضو ذهبي', level: 'ليفل 45',
+        menuItems: [
+          { label: 'ملفي الشخصي', icon: 'ti-user-circle', action: () => window.location.href = 'profile.html' },
+          { label: 'المكتبة الخاصة', icon: 'ti-bookmarks', badge: '12', action: () => window.location.href = 'editor.html' },
+          { label: 'سجل القراءة', icon: 'ti-history' },
+          { sep: true },
+          { label: 'إعدادات الحساب', icon: 'ti-settings' },
+          { sep: true },
+          { label: 'مركز المساعدة', icon: 'ti-help-circle' }
+        ]
+      }
+    ],
+    content: [
+      { type: 'profile-identity' },
+      { type: 'footer', text: '&copy; 2026 MEGAWORLD Design Language.' }
     ]
   }
 };

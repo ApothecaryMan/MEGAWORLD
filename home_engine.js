@@ -92,8 +92,282 @@ const HomeEngine = {
       case 'top5': return this.makeTop5(section);
       case 'trending': return this.makeTrending(section);
       case 'grid': return this.makeGrid(section);
+      case 'profile-identity': return this.makeProfileIdentity(section);
       case 'footer': return this.makeFooter(section);
       default: return null;
+    }
+  },
+
+  profileEditMode: false,
+  toggleProfileEdit() {
+    this.profileEditMode = !this.profileEditMode;
+    if (this.container && this.schema && this.schema.length > 0) {
+      this.render(this.schema);
+    } else {
+      const playground = document.getElementById('profile-identity-playground');
+      if (playground) {
+        const temp = this.makeProfileIdentity();
+        playground.innerHTML = temp.innerHTML;
+        playground.className = temp.className;
+      }
+    }
+  },
+  saveProfile() {
+    if (!Store.state.user) Store.state.user = {};
+    const u = Store.state.user;
+    
+    // الحصول على القيم الجديدة
+    const newName = document.getElementById('editDisplayName').value;
+    const newUser = document.getElementById('editUsername').value.replace('@', '');
+    const newBio = document.getElementById('editBio').value;
+
+    // حفظ في الـ Store
+    u.displayName = newName;
+    u.username = newUser;
+    u.bio = newBio;
+    Store.save();
+
+    this.profileEditMode = false;
+
+    // إذا كنا في صفحة مدارة بواسطة المحرك، نعيد الرندر
+    if (this.container && this.schema && this.schema.length > 0) {
+      this.render(this.schema);
+    } else {
+      // إذا كنا في صفحة التيست، نحدث النص فقط ونغلق وضع التعديل يدوياً أو نعيد الرندر للحاوية المحلية
+      const playground = document.getElementById('profile-identity-playground');
+      if (playground) {
+        // حيلة بسيطة: محاكاة رندر للحاوية فقط
+        const temp = this.makeProfileIdentity();
+        playground.innerHTML = temp.innerHTML;
+        playground.className = temp.className;
+      }
+    }
+    
+    // تحديث التولبار وكل المكونات العالمية
+    if (typeof applyGlobalUI === 'function') applyGlobalUI();
+  },
+
+  makeProfileIdentity(data) {
+    const user = Store.state.user || {};
+    const stats = user.stats || {};
+    const libraryCount = (Store.state.novels || []).length;
+    
+    const section = document.createElement('div');
+    section.className = 'profile-full-container';
+    section.innerHTML = `
+        <!-- 1. Header: Avatar & Basic Info -->
+        <div class="profile-identity-header">
+          <div class="profile-avatar-editable">
+            ${user.avatar ? `<img id="profileAvatarImg" src="${user.avatar}" style="width:100%; height:100%; object-fit:cover;">` : `<span class="avatar-fallback">${(user.displayName || 'م')[0]}</span>`}
+            ${this.profileEditMode ? `<button class="avatar-edit-hint" onclick="HomeEngine.triggerAvatarFile()"><i class="ti ti-camera"></i></button>` : ''}
+            <input type="file" id="avatarFileInput" style="display:none" accept="image/*" onchange="HomeEngine.handleAvatarFile(this)">
+          </div>
+          
+          <div class="profile-main-meta">
+            <div class="profile-name-group" style="display: flex; gap: 10px; align-items: center;">
+              ${this.profileEditMode ? `
+                <input type="text" id="editDisplayName" class="input-flat" style="font-size: 20px; font-weight: 800; width: 200px;" value="${user.displayName || ''}" placeholder="الاسم المعروض">
+                <input type="text" id="editUsername" class="input-flat" style="font-size: 14px; width: 150px; opacity: 0.8;" value="@${user.username || ''}" placeholder="اسم المستخدم">
+              ` : `
+                <h1 class="profile-display-name">${user.displayName || '---'}</h1>
+                <span class="profile-username">@${user.username || '---'}</span>
+              `}
+            </div>
+            
+            <div class="profile-badges-row">
+              <span class="badge-flat gold"><i class="ti ti-award"></i> ${user.membership || 'عضو عادي'}</span>
+              <span class="badge-flat silver">ليفل ${user.level || '0'}</span>
+              <span class="profile-join-date">انضم في: ${user.joinDate || '---'}</span>
+            </div>
+          </div>
+
+          <div class="profile-actions-top">
+            ${this.profileEditMode ? `
+              <button class="btn-flat active" onclick="HomeEngine.saveProfile()"><i class="ti ti-check"></i> حفظ التغييرات</button>
+              <button class="btn-flat" onclick="HomeEngine.toggleProfileEdit()"><i class="ti ti-x"></i> إلغاء</button>
+            ` : `
+              <button class="btn-flat active" onclick="HomeEngine.toggleProfileEdit()"><i class="ti ti-edit"></i> تعديل الملف الشخصي</button>
+              <a href="#" class="btn-flat" style="text-decoration: none;"><i class="ti ti-external-link"></i> عرض للعامة</a>
+            `}
+          </div>
+        </div>
+
+        <!-- 2. Bio Section -->
+        <div class="profile-section-block">
+          <div class="section-label">النبذة الشخصية (Bio)</div>
+          <div class="bio-textarea-wrap">
+            <textarea id="editBio" class="input-flat bio-textarea" ${this.profileEditMode ? '' : 'readonly'} placeholder="اكتب شيئاً عن نفسك...">${user.bio || ''}</textarea>
+            <div class="char-counter">${(user.bio || '').length} / 200</div>
+          </div>
+        </div>
+
+        <!-- 3. Personal Statistics Grid -->
+        <div class="profile-section-block">
+          <div class="section-label">الإحصائيات الشخصية</div>
+          <div class="profile-stats-grid">
+            <div class="stat-card">
+              <span class="stat-num">${stats.completedNovels || '0'}</span>
+              <span class="stat-desc">رواية مكتملة</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-num">${StatsEngine.formatNum(stats.totalChaptersRead || 0)}</span>
+              <span class="stat-desc">فصل مقروء</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-num">${stats.readingHours || '0'}</span>
+              <span class="stat-desc">ساعة قراءة</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-num">${stats.commentsCount || '0'}</span>
+              <span class="stat-desc">تعليق منشور</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-num">${libraryCount}</span>
+              <span class="stat-desc">رواية في المكتبة</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-num">${stats.followingCount || '0'}</span>
+              <span class="stat-desc">كتّاب متابَعون</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Favorite Genres -->
+        <div class="profile-section-block">
+          <div class="section-label">التصنيفات المفضلة</div>
+          <div class="genres-list">
+            ${(user.favoriteGenres || []).map((g, i) => `
+              <span class="genre-tag">
+                ${g} 
+                ${this.profileEditMode ? `<i class="ti ti-x" onclick="HomeEngine.removeGenre(${i})"></i>` : ''}
+              </span>
+            `).join('')}
+            ${this.profileEditMode ? `<button class="genre-tag add-btn" onclick="HomeEngine.addGenre(event)"><i class="ti ti-plus"></i> أضف</button>` : ''}
+          </div>
+        </div>
+
+        <!-- 5. Achievements -->
+        <div class="profile-section-block">
+          <div class="section-label">الإنجازات (Achievements)</div>
+          <div class="achievements-container">
+            <div class="achievements-list">
+              ${(user.achievements || []).map(a => `
+                <div class="achievement-icon ${a.unlocked ? '' : 'locked'}" title="${a.label} ${a.unlocked ? '' : '(مغلق)'}">
+                  <i class="ti ${a.icon}"></i>
+                </div>
+              `).join('')}
+            </div>
+            <div class="next-achievement-progress">
+              <div class="progress-info">
+                <span>التقدم نحو الإنجاز القادم</span>
+                <span>80%</span>
+              </div>
+              <div class="progress-flat-container">
+                <div class="progress-flat-fill" style="width: 80%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+    `;
+    return section;
+  },
+
+  addGenre(e) {
+    const allGenres = Store.getAllGenres();
+    const myGenres = Store.state.user.favoriteGenres || [];
+    const available = allGenres.filter(g => !myGenres.includes(g));
+
+    if (available.length === 0) return;
+
+    // تحويل التصنيفات إلى عناصر قائمة منسدلة
+    const menuItems = available.map(g => ({
+      label: g,
+      icon: 'ti-hash',
+      action: () => this.confirmAddGenre(g)
+    }));
+
+    // إظهار المنيو تحت الزر
+    if (typeof ContextMenu !== 'undefined') {
+      ContextMenu.show(e, menuItems);
+    }
+  },
+
+  confirmAddGenre(name) {
+    if (!Store.state.user.favoriteGenres) Store.state.user.favoriteGenres = [];
+    Store.state.user.favoriteGenres.push(name);
+    Store.save();
+    
+    if (typeof closeModal === 'function') closeModal();
+    
+    // إعادة الرندر حسب المكان
+    if (this.container && this.schema && this.schema.length > 0) {
+      this.render(this.schema);
+    } else {
+      const playground = document.getElementById('profile-identity-playground');
+      if (playground) {
+        playground.innerHTML = this.makeProfileIdentity().innerHTML;
+      }
+    }
+  },
+
+  removeGenre(idx) {
+    if (Store.state.user.favoriteGenres) {
+      Store.state.user.favoriteGenres.splice(idx, 1);
+      if (this.container && this.schema && this.schema.length > 0) {
+        this.render(this.schema);
+      } else {
+        const playground = document.getElementById('profile-identity-playground');
+        if (playground) {
+          const temp = this.makeProfileIdentity();
+          playground.innerHTML = temp.innerHTML;
+        }
+      }
+    }
+  },
+
+  triggerAvatarFile() {
+    document.getElementById('avatarFileInput').click();
+  },
+
+  handleAvatarFile(input) {
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          // تصغير الصورة لتقليل حجمها في الـ LocalStorage
+          const canvas = document.createElement('canvas');
+          const size = 200; // حجم مناسب جداً للبروفايل
+          canvas.width = size;
+          canvas.height = size;
+          const ctx = canvas.getContext('2d');
+          
+          // قص وتوسيط الصورة
+          const scale = Math.max(size / img.width, size / img.height);
+          const x = (size - img.width * scale) / 2;
+          const y = (size - img.height * scale) / 2;
+          ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+          
+          const compressedUrl = canvas.toDataURL('image/jpeg', 0.8);
+          
+          if (!Store.state.user) Store.state.user = {};
+          Store.state.user.avatar = compressedUrl;
+
+          // تحديث المعاينة فوراً
+          const previewImg = document.getElementById('profileAvatarImg');
+          if (previewImg) previewImg.src = compressedUrl;
+          else {
+             // لو كنا في وضع الفالباك (حرف) نحتاج رندر لإظهار الصورة
+             if (this.container && this.schema && this.schema.length > 0) this.render(this.schema);
+             else {
+               const playground = document.getElementById('profile-identity-playground');
+               if (playground) { playground.innerHTML = this.makeProfileIdentity().innerHTML; }
+             }
+          }
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(input.files[0]);
     }
   },
 

@@ -42,6 +42,16 @@ const AppLayout = {
             catDrop.items.push({ label: 'عرض الكل', icon: 'list', action: () => HomeEngine.filterByGenre(null) });
           }
         }
+        // حقن بيانات المستخدم الحقيقية في التولبار
+        const userItem = config.toolbar.find(item => item.type === 'user');
+        if (userItem) {
+          const u = Store.state.user || {};
+          userItem.label = u.displayName || 'مستخدم';
+          userItem.avatar = u.avatar || '';
+          userItem.status = u.membership || 'عضو عادي';
+          userItem.level = `ليفل ${u.level || 0}`;
+        }
+
         Toolbar.init('mainToolbar', config.toolbar);
       }
 
@@ -87,7 +97,7 @@ const AppLayout = {
       document.body.appendChild(pWrap);
     }
 
-    // 4. حقن الهيكل الأساسي للمودال (Modal)
+    // 4. حقن الهيكل الأساسي للمودال (Modal) - مطلوب لعمل المحرر والنظام
     if (!document.getElementById('modalBg')) {
       const modal = document.createElement('div');
       modal.id = 'modalBg';
@@ -98,9 +108,7 @@ const AppLayout = {
             <div class="modal-title" id="modalTitle">تنبيه</div>
           </div>
           <div id="modalBody" style="padding: 10px 0;"></div>
-          <div class="modal-btns" id="modalBtns">
-            <button class="btn-flat" onclick="closeModal()">إغلاق</button>
-          </div>
+          <div class="modal-btns" id="modalBtns"></div>
         </div>
       `;
       document.body.appendChild(modal);

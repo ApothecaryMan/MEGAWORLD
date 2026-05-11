@@ -15,6 +15,29 @@ const Store = {
       theme: 'bg-def',
       sidebarVisible: true,
       chapterSortOrder: 'asc'
+    },
+    user: {
+      displayName: 'أحمد محمد علي',
+      username: 'ahmed_dev',
+      avatar: 'public/ChatGPT Image May 7, 2026, 07_38_24 PM.png',
+      bio: 'محب للقراءة والكتابة، مهتم بروايات الخيال العلمي والفانتازيا. أسعى لإنهاء 100 رواية هذا العام!',
+      joinDate: 'مايو 2024',
+      membership: 'عضو ذهبي',
+      level: 45,
+      stats: {
+        completedNovels: 24,
+        totalChaptersRead: 1240,
+        readingHours: 320,
+        commentsCount: 15,
+        followingCount: 8
+      },
+      favoriteGenres: ['فانتازيا', 'رومانسي', 'إثارة', 'Isekai'],
+      achievements: [
+        { id: 'reader100', icon: 'ti-book', label: 'قرأ 100 فصل', unlocked: true },
+        { id: 'firstComment', icon: 'ti-message', label: 'أول تعليق', unlocked: true },
+        { id: 'activeMember', icon: 'ti-bolt', label: 'عضو نشط', unlocked: true },
+        { id: 'reader1000', icon: 'ti-lock', label: 'قرأ 1000 فصل', unlocked: false }
+      ]
     }
   },
 
@@ -196,7 +219,15 @@ const Store = {
 
   // --- الحفظ والتحميل (Persistence) ---
   save() {
-    localStorage.setItem('novel_reader_v9', JSON.stringify(this.state));
+    try {
+      localStorage.setItem('novel_reader_v9', JSON.stringify(this.state));
+    } catch (e) {
+      if (e.name === 'QuotaExceededError') {
+        console.warn('Storage quota exceeded. Some data may not be saved.');
+      } else {
+        console.error('Save failed', e);
+      }
+    }
   },
 
   load() {
