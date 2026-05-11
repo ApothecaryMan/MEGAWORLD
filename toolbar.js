@@ -60,6 +60,41 @@ const Toolbar = {
     if (typeof buildSwatches === 'function') buildSwatches();
   },
 
+  /**
+   * تحديث بيانات المستخدم في الشريط ديناميكياً
+   */
+  setUser(userData) {
+    const profileEl = document.getElementById('profile');
+    if (!profileEl) return;
+
+    if (!userData) {
+      // حالة عدم وجود مستخدم
+      profileEl.className = 'btn-flat active';
+      profileEl.style.height = '30px';
+      profileEl.innerHTML = `<span>دخول / تسجيل</span> <i class="ti ti-login"></i>`;
+      profileEl.onclick = () => window.AuthModule.renderLoginModal();
+    } else {
+      // حالة وجود مستخدم مسجل
+      profileEl.className = 'user-item-flat'; // الستايل اللي في CSS
+      profileEl.innerHTML = `
+        <div class="user-meta">
+          <span class="user-name">${userData.display_name || 'مستخدم'}</span>
+          <span class="user-status">${userData.role || 'عضو'}</span>
+        </div>
+        <img src="${userData.avatar_url || 'public/ChatGPT Image May 7, 2026, 07_38_24 PM.png'}" class="user-avatar">
+      `;
+      profileEl.onclick = (e) => {
+        const menuItems = [
+          { label: 'ملفي الشخصي', icon: 'ti-user-circle', action: () => window.location.href = 'profile.html' },
+          { label: 'المكتبة الخاصة', icon: 'ti-bookmarks', action: () => window.location.href = 'library.html' },
+          { sep: true },
+          { label: 'تسجيل الخروج', icon: 'ti-logout', danger: true, action: () => window.AuthModule.signOut() }
+        ];
+        if (typeof ContextMenu !== 'undefined') ContextMenu.show(e, menuItems);
+      };
+    }
+  },
+
   showConfigMenu(e) {
     if (typeof ContextMenu === 'undefined') return;
     
