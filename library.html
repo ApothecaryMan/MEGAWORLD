@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>المكتبة الشخصية | MEGAWORLD</title>
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="toolbar.css">
+  <link rel="stylesheet" href="sidebar.css">
+  <link rel="stylesheet" href="context_menu.css">
+  <link rel="stylesheet" href="library.css">
+  
+  <!-- Icons (Tabler Icons) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+</head>
+<body class="bg-def" id="root">
+
+  <div id="app-container">
+    <!-- Sidebar Injection point -->
+    <div id="sidebar"></div>
+
+    <main class="main-content">
+      <!-- Toolbar Injection point -->
+      <div id="mainToolbar" class="sticky-bar"></div>
+
+      <!-- Library Content -->
+      <div class="library-page-container">
+        
+        <div class="library-full-container">
+          <!-- Tabs Bar -->
+          <div class="library-tabs-row" id="lib-tabs">
+            <button class="lib-tab active" data-tab="reading">قيد القراءة <span class="tab-count" id="count-reading">0</span></button>
+            <button class="lib-tab" data-tab="completed">مكتملة <span class="tab-count" id="count-completed">0</span></button>
+            <button class="lib-tab" data-tab="wishlist">مفضلة <span class="tab-count" id="count-wishlist">0</span></button>
+            <button class="lib-tab" data-tab="following">متابعة <span class="tab-count" id="count-following">0</span></button>
+            <button class="lib-tab" data-tab="onhold">متوقفة <span class="tab-count" id="count-onhold">0</span></button>
+          </div>
+
+          <!-- Library Toolbar -->
+          <div class="library-controls">
+            <div class="lib-search-wrap">
+              <i class="ti ti-search"></i>
+              <input type="text" class="input-flat lib-search-input" id="lib-search" placeholder="بحث في مكتبتك...">
+            </div>
+            
+            <div class="filter-group">
+              <span class="filter-label">التصنيف:</span>
+              <div class="dropdown-wrap mini" id="filter-genre">
+                <div class="dropdown-trigger">
+                  <span id="current-genre">الكل</span>
+                  <i class="ti ti-chevron-down"></i>
+                </div>
+                <div class="dropdown-menu" id="genre-menu">
+                  <!-- Dynamic Genres -->
+                </div>
+              </div>
+            </div>
+            
+            <div class="filter-group">
+              <span class="filter-label">ترتيب:</span>
+              <div class="dropdown-wrap mini" id="filter-sort">
+                <div class="dropdown-trigger">
+                  <span id="current-sort">آخر قراءة</span>
+                  <i class="ti ti-chevron-down"></i>
+                </div>
+                <div class="dropdown-menu">
+                  <button class="dropdown-item active" data-sort="lastRead">آخر قراءة</button>
+                  <button class="dropdown-item" data-sort="newest">الأحدث إضافة</button>
+                  <button class="dropdown-item" data-sort="alpha">أبجدياً (أ-ي)</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="view-toggle">
+              <button class="btn-flat mini active" id="view-grid" title="عرض شبكي"><i class="ti ti-layout-grid"></i></button>
+              <button class="btn-flat mini" id="view-list" title="عرض قائمة"><i class="ti ti-list"></i></button>
+            </div>
+          </div>
+
+          <!-- Main Grid -->
+          <div class="library-grid" id="library-display">
+            <!-- Cards will be injected here by LibraryEngine -->
+          </div>
+
+          <!-- Empty State -->
+          <div class="lib-empty-state" id="lib-empty" style="display:none;">
+            <i class="ti ti-books"></i>
+            <h3>مكتبتك فارغة هنا</h3>
+            <p>لم تقم بإضافة أي روايات لهذا القسم بعد. ابدأ باستكشاف القصص الجديدة الآن!</p>
+            <a href="index.html" class="btn-flat active"><i class="ti ti-compass"></i> استكشف الروايات</a>
+          </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Core Scripts -->
+  <script src="store.js"></script>
+  <script src="page_config.js"></script>
+  <script src="sidebar.js"></script>
+  <script src="context_menu.js"></script>
+  <script src="toolbar.js"></script>
+  <script src="app_layout.js"></script>
+  <script src="library_engine.js"></script>
+  
+  <script>
+    // Initialize Page
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof LibraryEngine !== 'undefined') {
+        LibraryEngine.init();
+      }
+    });
+  </script>
+
+</body>
+</html>

@@ -50,6 +50,13 @@ const AppLayout = {
           userItem.avatar = u.avatar || '';
           userItem.status = u.membership || 'عضو عادي';
           userItem.level = `ليفل ${u.level || 0}`;
+
+          // تحديث عداد المكتبة (Badge) بإجمالي عدد الروايات
+          const libMenuItem = userItem.menuItems.find(m => m.label === 'المكتبة الخاصة');
+          if (libMenuItem) {
+            const totalNovels = Object.keys(Store.getNovels()).length;
+            libMenuItem.badge = totalNovels.toString();
+          }
         }
 
         Toolbar.init('mainToolbar', config.toolbar);
@@ -105,7 +112,6 @@ const AppLayout = {
       modal.innerHTML = `
         <div class="modal" id="modal">
           <div class="modal-hdr">
-            <div class="modal-title" id="modalTitle">تنبيه</div>
           </div>
           <div id="modalBody" style="padding: 10px 0;"></div>
           <div class="modal-btns" id="modalBtns"></div>

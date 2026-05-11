@@ -66,6 +66,14 @@ const Store = {
   },
 
   // --- إدارة الروايات (Novel Management) ---
+  getNovels() {
+    return this.state.novels || [];
+  },
+
+  getNovel(idx) {
+    return this.state.novels[idx] || null;
+  },
+
   get activeNovel() {
     return this.state.novels[this.state.activeNovelIdx] || null;
   },
@@ -101,6 +109,15 @@ const Store = {
       this.save();
       this.notify();
     }
+  },
+
+  setActiveNovel(title) {
+    const idx = this.state.novels.findIndex(n => n.title === title);
+    if (idx !== -1) {
+      this.switchNovel(idx);
+      return true;
+    }
+    return false;
   },
 
   updateNovelTitle(title) {

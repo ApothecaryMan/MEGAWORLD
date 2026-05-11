@@ -17,7 +17,7 @@ const MEGA_PAGES = {
           { label: 'غموض', icon: 'spy', action: () => alert('غموض') }
         ]
       },
-      { type: 'button', label: 'المكتبة', id: 'libLink', align: 'right', action: () => window.location.href = 'editor.html' },
+      { type: 'button', label: 'المحرر', id: 'libLink', align: 'right', action: () => window.location.href = 'editor.html' },
       { type: 'spacer' },
       { type: 'input', label: 'البحث', placeholder: 'ابحث عن رواية...', id: 'sq', align: 'center', icon: 'search', style: 'width: 500px; border-radius: 20px;', action: (val) => { if (typeof HomeEngine !== 'undefined') HomeEngine.showSearchResults(val); } },
       { type: 'spacer' },
@@ -27,7 +27,7 @@ const MEGA_PAGES = {
       { type: 'user', id: 'profile', align: 'left', label: 'أحمد محمد علي', avatar: 'public/ChatGPT Image May 7, 2026, 07_38_24 PM.png', status: 'عضو ذهبي', level: 'ليفل 45',
         menuItems: [
           { label: 'ملفي الشخصي', icon: 'ti-user-circle', action: () => window.location.href = 'profile.html' },
-          { label: 'المكتبة الخاصة', icon: 'ti-bookmarks', badge: '12', action: () => window.location.href = 'editor.html' },
+          { label: 'المكتبة الخاصة', icon: 'ti-bookmarks', badge: '0', action: () => window.location.href = 'library.html' },
           { label: 'سجل القراءة', icon: 'ti-history' },
           { sep: true },
           { label: 'إعدادات الحساب', icon: 'ti-settings' },
@@ -157,7 +157,33 @@ const MEGA_PAGES = {
         type: 'user', id: 'profile', align: 'left', label: 'أحمد محمد علي', avatar: 'public/ChatGPT Image May 7, 2026, 07_38_24 PM.png', status: 'عضو ذهبي', level: 'ليفل 45',
         menuItems: [
           { label: 'ملفي الشخصي', icon: 'ti-user-circle', action: () => window.location.href = 'profile.html' },
-          { label: 'المكتبة الخاصة', icon: 'ti-bookmarks', badge: '12', action: () => window.location.href = 'editor.html' },
+          { label: 'المكتبة الخاصة', icon: 'ti-bookmarks', badge: '0', action: () => window.location.href = 'library.html' },
+          { label: 'سجل القراءة', icon: 'ti-history' },
+          { sep: true },
+          { label: 'إعدادات الحساب', icon: 'ti-settings' },
+          { sep: true },
+          { label: 'مركز المساعدة', icon: 'ti-help-circle' }
+        ]
+      }
+    ]
+  },
+
+  // --- المكتبة الشخصية (Private Library) ---
+  'library.html': {
+    id: 'libraryPage',
+    title: 'المكتبة الشخصية',
+    toolbar: [
+      { type: 'custom', id: 'logo', label: 'MEGAWORLD', className: 'site-name', align: 'right', html: 'MEGAWORLD' },
+      { type: 'button', label: 'الرئيسية', id: 'backHome', align: 'right', action: () => window.location.href = 'index.html' },
+      
+      { type: 'custom', id: 'libTitle', label: 'المكتبة الشخصية', className: 'toolbar-title', align: 'center', html: 'المكتبــة الشخصيـة' },
+      
+      { type: 'custom', id: 'swatchWrap', label: 'الألوان', className: 'swatch-wrap', align: 'left' },
+      { 
+        type: 'user', id: 'profile', align: 'left', label: 'أحمد محمد علي', avatar: 'public/ChatGPT Image May 7, 2026, 07_38_24 PM.png', status: 'عضو ذهبي', level: 'ليفل 45',
+        menuItems: [
+          { label: 'ملفي الشخصي', icon: 'ti-user-circle', action: () => window.location.href = 'profile.html' },
+          { label: 'المكتبة الخاصة', icon: 'ti-bookmarks', badge: '0', action: () => window.location.href = 'library.html' },
           { label: 'سجل القراءة', icon: 'ti-history' },
           { sep: true },
           { label: 'إعدادات الحساب', icon: 'ti-settings' },
@@ -182,7 +208,7 @@ const MEGA_PAGES = {
         type: 'user', id: 'profile', align: 'left', label: 'أحمد محمد علي', avatar: 'public/ChatGPT Image May 7, 2026, 07_38_24 PM.png', status: 'عضو ذهبي', level: 'ليفل 45',
         menuItems: [
           { label: 'ملفي الشخصي', icon: 'ti-user-circle', action: () => window.location.href = 'profile.html' },
-          { label: 'المكتبة الخاصة', icon: 'ti-bookmarks', badge: '12', action: () => window.location.href = 'editor.html' },
+          { label: 'المكتبة الخاصة', icon: 'ti-bookmarks', badge: '0', action: () => window.location.href = 'library.html' },
           { label: 'سجل القراءة', icon: 'ti-history' },
           { sep: true },
           { label: 'إعدادات الحساب', icon: 'ti-settings' },

@@ -1,0 +1,360 @@
+/* ========================================== */
+/* MEGAWORLD - Library Page Styles             */
+/* ========================================== */
+
+/* الطريقة الصحيحة لعمل Layout ثابت بدون سكرول خارجي */
+body.library-view {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.library-page-container {
+  position: fixed;
+  top: 60px; /* ارتفاع التولبار */
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 20px 40px;
+  display: flex;
+  flex-direction: column;
+  background: var(--ui-bg);
+  overflow-y: auto; /* التمرير هنا ليشمل كل شيء */
+  scrollbar-width: thin;
+}
+
+.library-header {
+  margin-bottom: 40px;
+  text-align: center;
+}
+.library-header h1 {
+  font-size: 32px;
+  font-weight: 900;
+  margin-bottom: 10px;
+  color: var(--color-text-primary);
+}
+.library-header p {
+  opacity: 0.6;
+  font-size: 16px;
+}
+
+.library-full-container {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  width: 100%;
+}
+
+/* 1. Tabs Row */
+.library-tabs-row {
+  display: flex;
+  gap: 2px;
+  border-bottom: 1px solid var(--ui-border-light);
+  padding-bottom: 1px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.library-tabs-row::-webkit-scrollbar { display: none; }
+
+.lib-tab {
+  padding: 15px 30px;
+  background: transparent;
+  border: none;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  opacity: 0.5;
+  cursor: pointer;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+}
+.lib-tab.active {
+  opacity: 1;
+  color: var(--color-theme);
+}
+.lib-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--color-theme);
+}
+.tab-count {
+  font-size: 11px;
+  font-weight: bold;
+  background: var(--color-text-primary);
+  color: #000;
+  padding: 2px 8px;
+  border: none;
+  margin-inline-start: 8px;
+}
+
+/* 2. Library Toolbar */
+.library-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: nowrap;
+  background: var(--color-background-primary);
+  padding: 10px 0;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.lib-search-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 200px;
+}
+.lib-search-wrap i {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.4;
+}
+.lib-search-input {
+  width: 100%;
+  padding-inline-start: 40px !important;
+  height: 38px;
+  border: 1px solid var(--ui-border);
+  background: var(--ui-input-bg);
+  font-size: 14px;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.filter-label {
+  font-size: 12px;
+  font-weight: bold;
+  opacity: 0.5;
+  white-space: nowrap;
+}
+
+/* Dropdown System */
+.dropdown-wrap {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  user-select: none;
+}
+.dropdown-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 15px;
+  background: var(--color-background-primary);
+  border: 1px solid var(--ui-border);
+  font-size: 14px;
+  font-weight: 700;
+  min-width: 140px;
+}
+.dropdown-wrap.mini .dropdown-trigger {
+  min-width: 110px;
+  padding: 6px 12px;
+  font-size: 13px;
+  background: var(--ui-input-bg);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  min-width: 100%;
+  background: var(--color-background-primary);
+  border: 1px solid var(--ui-border);
+  display: none;
+  flex-direction: column;
+  z-index: 100;
+  margin-top: 2px;
+}
+.dropdown-wrap.open .dropdown-menu {
+  display: flex;
+}
+
+.dropdown-item {
+  width: 100%;
+  padding: 10px 15px;
+  background: transparent;
+  border: none;
+  text-align: right;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  cursor: pointer;
+}
+.dropdown-item:hover { background: var(--ui-hover-bg); }
+.dropdown-item.active { color: var(--color-theme); background: var(--ui-input-bg); }
+
+.view-toggle {
+  display: flex;
+  gap: 1px;
+  background: var(--ui-border-light);
+  padding: 1px;
+  border: 1px solid var(--ui-border-light);
+  flex-shrink: 0;
+}
+
+/* 3. Grid & Cards */
+.library-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 20px;
+  padding-bottom: 40px;
+}
+
+.lib-novel-card {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 15px;
+  background: var(--ui-input-bg);
+  border: 1px solid var(--ui-border-light);
+  position: relative;
+  gap: 0;
+}
+.lib-novel-card:hover { border-color: var(--color-theme); }
+
+.lib-card-cover-wrap {
+  width: 65px;
+  height: 90px;
+  flex-shrink: 0;
+  margin-inline-end: 20px;
+  background: var(--ui-hover-bg);
+  border: 1px solid var(--ui-border-light);
+  display: flex;
+  overflow: hidden;
+}
+.lib-card-cover { width: 100%; height: 100%; object-fit: cover; }
+
+.lib-card-cover-placeholder {
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+}
+/* تم الاعتماد على .placeholder-flat العالمي في المظهر */
+
+.lib-card-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #ff5f5f;
+  color: white;
+  font-size: 9px;
+  font-weight: 900;
+  padding: 4px 8px;
+  border: 1px solid #ff5f5f;
+  z-index: 5;
+}
+
+.lib-card-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 4px;
+}
+.lib-card-title {
+  font-size: 16px;
+  font-weight: 800;
+  margin: 0;
+  color: var(--color-text-primary);
+  padding-inline-end: 90px;
+}
+.lib-card-author { font-size: 12px; opacity: 0.5; }
+
+.lib-progress-section {
+  width: 100%;
+  margin: 15px 0 0 0;
+  order: 3;
+}
+.lib-progress-text {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.progress-flat-container {
+  width: 100%;
+  height: 6px;
+  background: var(--ui-border-light);
+  border: 1px solid var(--ui-border-light);
+}
+.progress-flat-fill { height: 100%; background: var(--color-theme); }
+
+.lib-card-footer {
+  display: flex;
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  gap: 8px;
+}
+
+/* List View Override */
+.library-full-container {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  width: 100%;
+  flex: 1; /* التمدد لملء الارتفاع */
+}
+
+.library-grid.list-view {
+  grid-template-columns: 1fr;
+}
+/* Already handled by flex-wrap logic in cards */
+
+/* 4. Empty State */
+.lib-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 100px 20px;
+  gap: 20px;
+  border: 1px dashed var(--ui-border-light);
+  position: relative;
+  overflow: hidden;
+  flex: 1; /* تأخذ الارتفاع المتبقي بالكامل */
+}
+.lib-empty-state i.ti-books { 
+  font-size: 120px; 
+  opacity: 0.05; 
+  position: absolute;
+  z-index: 0;
+}
+.lib-empty-state h3, .lib-empty-state p, .lib-empty-state a {
+  position: relative;
+  z-index: 1;
+}
+.lib-empty-state h3 { font-size: 24px; font-weight: 800; margin: 0; }
+.lib-empty-state p { font-size: 16px; opacity: 0.6; max-width: 500px; }
+
+.lib-empty-state .btn-flat {
+  text-decoration: none; /* إزالة الخط التحتي */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 25px;
+  font-size: 14px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .library-controls { flex-direction: column; align-items: stretch; gap: 10px; }
+  .lib-search-wrap { width: 100%; }
+  .library-grid { grid-template-columns: 1fr; }
+}
