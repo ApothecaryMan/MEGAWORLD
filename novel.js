@@ -1,9 +1,6 @@
-/**
- * MEGAWORLD Novel Details Engine
- * Renders the novel information and chapter list using the premium Unified Shell design.
- */
+import Store from './store.js';
 
-const NovelPage = {
+export const NovelPage = {
   novelIdx: null,
   novel: null,
 
@@ -192,6 +189,5 @@ const NovelPage = {
   }
 };
 
-window.addEventListener('DOMContentLoaded', () => {
-  setTimeout(() => NovelPage.init(), 50);
-});
+window.NovelPage = NovelPage;
+export default NovelPage;

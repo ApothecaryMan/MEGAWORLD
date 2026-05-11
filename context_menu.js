@@ -1,8 +1,4 @@
-/**
- * محرك القوائم المنبثقة الذكي (ContextMenu Engine)
- * مصمم ليكون خفيفاً، سريعاً، وسهل الاستدعاء في أي مكان.
- */
-const ContextMenu = {
+export const ContextMenu = {
   el: document.getElementById('contextMenu'),
 
   /**
@@ -110,5 +106,5 @@ const ContextMenu = {
   }
 };
 
-// الاستماع الافتراضي للقائمة العامة
-// تم إلغاء القائمة العامة بناءً على طلب المستخدم لإبقاء النظام بسيطاً ومركزاً على العناصر التفاعلية فقط.
+window.ContextMenu = ContextMenu;
+export default ContextMenu;

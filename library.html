@@ -97,23 +97,7 @@
     </main>
   </div>
 
-  <!-- Core Scripts -->
-  <script src="store.js"></script>
-  <script src="page_config.js"></script>
-  <script src="sidebar.js"></script>
-  <script src="context_menu.js"></script>
-  <script src="toolbar.js"></script>
-  <script src="app_layout.js"></script>
-  <script src="library_engine.js"></script>
-  
-  <script>
-    // Initialize Page
-    document.addEventListener('DOMContentLoaded', () => {
-      if (typeof LibraryEngine !== 'undefined') {
-        LibraryEngine.init();
-      }
-    });
-  </script>
+  <script type="module" src="app_layout.js"></script>
 
 </body>
 </html>

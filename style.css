@@ -67,24 +67,68 @@
   width: 4px;
   height: 4px;
 }
+/* تحسين شكل السكرول بار (Custom Thin Scrollbar) */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--ui-border);
-  border-radius: 0;
+  background: rgba(128, 128, 128, 0.2);
+  border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-theme);
 }
 
-body {
-  font-family: var(--ui-font-sans);
+/* إخفاء السكرول بار في العناصر التي لا تحتاج إليه */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
   background: var(--color-background-primary);
   color: var(--color-text-primary);
+  font-family: var(--ui-font-sans);
+  display: flex;
+  flex-direction: column;
+}
+
+.body-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* يمنع سكرول الحاوية الكلية */
+  min-width: 0;
+}
+
+.body-wrap {
+  flex: 1;
+  overflow-y: auto; /* يسمح بالسكرول للمحتوى فقط */
+  min-height: 0;
+}
+
+/* أي حاوية محتوى رئيسية يجب أن تتمدد وتسمح بالسكرول الداخلي */
+.main-layout, 
+#homeApp, 
+#libraryApp, 
+.profile-container {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+/* السكرول الافتراضي للـ body في الصفحات العادية */
+body {
   overflow-x: hidden;
-  overflow-y: overlay;
-  margin: 0;
+  overflow-y: auto;
 }
 
 /* --- Global Unified Components --- */
@@ -148,6 +192,9 @@ body {
 .main-layout {
   display: flex;
   flex: 1;
+  overflow: hidden;
+  position: relative;
+  min-height: 0; /* مهم جداً في الـ flex لضمان عمل السكرول الداخلي */
 }
 
 .body-area {
@@ -155,6 +202,8 @@ body {
   display: flex;
   flex-direction: column;
   min-width: 0;
+  height: 100%;
+  overflow-y: auto; /* سكرول داخلي فقط للمحتوى */
 }
 
 /* .root.side-open .body-area { padding-inline-end: 280px; } */
@@ -207,14 +256,6 @@ body {
   background: var(--color-background-primary);
   border-bottom: 1px solid var(--ui-border-light);
 }
-.tabs-bar {
-  display: flex; align-items: stretch; padding: 0;
-  height: var(--ui-tab-height); gap: 0;
-  overflow-x: auto; scrollbar-width: none;
-  border-bottom: 1px solid var(--ui-border-light);
-  background: var(--color-background-primary);
-}
-.tabs-bar::-webkit-scrollbar { display: none; }
 
 .nav-bar{
   display:flex;align-items:center;justify-content:space-between;
@@ -271,3 +312,7 @@ body {
 }
 .placeholder-flat i { font-size: 32px; }
 .placeholder-flat span { font-size: 11px; font-weight: bold; }
+
+
+
+

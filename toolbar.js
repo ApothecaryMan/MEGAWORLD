@@ -1,7 +1,8 @@
-/**
- * محرك شريط الأدوات الموحد (Unified Toolbar Engine)
- */
-const Toolbar = {
+import Store from './store.js';
+import { ContextMenu } from './context_menu.js';
+import { AuthModule } from './auth_module.js';
+
+export const Toolbar = {
   containerId: null,
   schema: [],
   storageKey: null,
@@ -71,11 +72,16 @@ const Toolbar = {
       // حالة عدم وجود مستخدم
       profileEl.className = 'btn-flat active';
       profileEl.style.height = '30px';
+      profileEl.style.display = 'flex';
       profileEl.innerHTML = `<span>دخول / تسجيل</span> <i class="ti ti-login"></i>`;
-      profileEl.onclick = () => window.AuthModule.renderLoginModal();
+      profileEl.onclick = () => {
+        if (window.AuthModule) window.AuthModule.renderLoginModal();
+        else console.error('AuthModule not loaded');
+      };
     } else {
       // حالة وجود مستخدم مسجل
-      profileEl.className = 'user-item-flat'; // الستايل اللي في CSS
+      profileEl.className = 'user-item-flat';
+      profileEl.style.display = 'flex';
       profileEl.innerHTML = `
         <div class="user-meta">
           <span class="user-name">${userData.display_name || 'مستخدم'}</span>
@@ -88,7 +94,10 @@ const Toolbar = {
           { label: 'ملفي الشخصي', icon: 'ti-user-circle', action: () => window.location.href = 'profile.html' },
           { label: 'المكتبة الخاصة', icon: 'ti-bookmarks', action: () => window.location.href = 'library.html' },
           { sep: true },
-          { label: 'تسجيل الخروج', icon: 'ti-logout', danger: true, action: () => window.AuthModule.signOut() }
+          { label: 'تسجيل الخروج', icon: 'ti-logout', danger: true, action: () => {
+              if (window.AuthModule) window.AuthModule.signOut();
+            } 
+          }
         ];
         if (typeof ContextMenu !== 'undefined') ContextMenu.show(e, menuItems);
       };
@@ -288,80 +297,22 @@ const Toolbar = {
   },
 
   makeUser(item) {
-    const wrap = this.makeElement('div', 'toolbar-user', item.id);
+    const wrap = this.makeElement('div', 'user-item-flat', item.id);
     if (item.className) wrap.classList.add(...item.className.split(' '));
     
+    // إعداد أولي (Loading State)
     wrap.innerHTML = `
-      <div class="user-avatar">
-        ${item.avatar ? `<img src="${item.avatar}" alt="User">` : '<i class="ti ti-user" style="opacity: 0.5;"></i>'}
+      <div class="user-meta">
+        <span class="user-name">${item.label || 'جاري التحميل...'}</span>
+        <span class="user-status">${item.status || '...'}</span>
       </div>
-      <span class="user-name">${item.label || 'مستخدم'}</span>
-      <i class="ti ti-chevron-down user-chevron"></i>
-      
-      <div class="profile-menu">
-        <div class="profile-header">
-          <div class="profile-avatar-big">
-            ${item.avatar ? `<img src="${item.avatar}" alt="User">` : '<i class="ti ti-user" style="opacity: 0.3; font-size: 32px;"></i>'}
-          </div>
-          <div class="profile-info-main">
-            <div class="profile-display-name">${item.label || 'مستخدم'}</div>
-            <div class="profile-status">
-              <span>${item.status || 'عضو ذهبي'}</span>
-              <span class="profile-level">${item.level || 'ليفل 45'}</span>
-            </div>
-          </div>
-        </div>
-        <div class="profile-menu-body"></div>
-        <div class="profile-footer">
-          <button class="btn-flat logout-btn">تسجيل الخروج</button>
-          <button class="btn-flat switch-btn">تبديل الحساب</button>
-        </div>
+      <div class="user-avatar-placeholder">
+        <i class="ti ti-user"></i>
       </div>
     `;
 
-    const menuBody = wrap.querySelector('.profile-menu-body');
-    const menuItems = item.menuItems || [
-      { label: 'ملفي الشخصي', icon: 'ti-user-circle' },
-      { label: 'المكتبة الخاصة', icon: 'ti-bookmarks', badge: '12' },
-      { label: 'سجل القراءة', icon: 'ti-history' },
-      { sep: true },
-      { label: 'إعدادات الحساب', icon: 'ti-settings' },
-      { sep: true },
-      { label: 'مركز المساعدة', icon: 'ti-help-circle' }
-    ];
-
-    menuItems.forEach(it => {
-      if (it.sep) {
-        const sep = document.createElement('div');
-        sep.className = 'profile-menu-sep';
-        menuBody.appendChild(sep);
-        return;
-      }
-
-      const btn = document.createElement('button');
-      btn.className = 'profile-menu-item';
-      btn.innerHTML = `
-        <i class="ti ${it.icon}"></i>
-        <span class="item-label">${it.label}</span>
-        ${it.badge ? `<span class="item-badge">${it.badge}</span>` : ''}
-      `;
-      btn.onclick = (e) => { 
-        e.stopPropagation(); 
-        if (it.action) it.action(); 
-        wrap.classList.remove('open'); 
-      };
-      menuBody.appendChild(btn);
-    });
-
-    wrap.onclick = (e) => {
-      e.stopPropagation();
-      const isOpen = wrap.classList.contains('open');
-      document.querySelectorAll('.toolbar-user, .dropdown-wrap').forEach(w => w.classList.remove('open'));
-      if (!isOpen) wrap.classList.add('open');
-    };
-
-    document.addEventListener('click', () => wrap.classList.remove('open'));
-    
+    // إذا كانت هناك بيانات أولية، نقوم بتطبيقها فوراً
+    // لكن AppLayout ستقوم باستدعاء setUser لاحقاً بالبيانات الحقيقية
     return wrap;
   }
 };
@@ -405,17 +356,18 @@ function buildSwatches() {
 
 
 function applyGlobalUI() {
-  const root = document.getElementById('root');
+  const root = document.getElementById('root') || document.body;
   if (!root) return;
   const settings = Store.state.settings;
   
   // تطبيق الثيم
   Store.palettes.forEach(p => root.classList.remove(p.id));
-  root.classList.add(settings.theme);
+  root.classList.add(settings.theme || 'dark');
 
   // تحديث الأزرار (مع استثناء التبويبات)
   document.querySelectorAll('.btn-flat:not(.tab)').forEach(b => b.classList.remove('active'));
   [settings.font, settings.align].forEach(id => {
+    if (!id) return;
     const btn = document.getElementById(id);
     if (btn) btn.classList.add('active');
   });
@@ -424,10 +376,10 @@ function applyGlobalUI() {
   if (szLbl) szLbl.textContent = settings.sz;
 
   const contBtn = document.getElementById('contBtn');
-  if (contBtn) contBtn.classList.toggle('active', settings.continuousMode);
+  if (contBtn) contBtn.classList.toggle('active', !!settings.continuousMode);
   
   // تحديث زر الألوان الديناميكي
-  if (typeof buildSwatches === 'function') buildSwatches();
+  buildSwatches();
 }
 
 function exportTxt() {
@@ -446,17 +398,32 @@ function exportTxt() {
 }
 
 function doSearch(val) {
+  // Logic varies by page. For Reader:
   const wrap = document.getElementById('bodyWrap');
-  if (!wrap || !val.trim()) {
-    if (typeof renderBody === 'function') renderBody();
+  if (wrap) {
+    if (!val.trim()) {
+      if (window.renderBody) window.renderBody();
+      return;
+    }
+    const text = wrap.innerHTML;
+    const clean = text.replace(/<mark>|<\/mark>/g, '');
+    const regex = new RegExp('(' + val.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+    wrap.innerHTML = clean.replace(regex, '<mark>$1</mark>');
     return;
   }
-  
-  // بحث بسيط بتظليل النص
-  const text = wrap.innerHTML;
-  const clean = text.replace(/<mark>|<\/mark>/g, '');
-  const regex = new RegExp('(' + val.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
-  wrap.innerHTML = clean.replace(regex, '<mark>$1</mark>');
+
+  // For Home Page:
+  if (window.HomeEngine && typeof window.HomeEngine.filterBySearch === 'function') {
+    window.HomeEngine.filterBySearch(val);
+  }
 }
 
-// Auto-init removed. Managed by AppLayout.
+// إتاحة الوظائف عالمياً للموديولات الأخرى
+window.Toolbar = Toolbar;
+window.applyGlobalUI = applyGlobalUI;
+window.buildSwatches = buildSwatches;
+window.exportTxt = exportTxt;
+window.doSearch = doSearch;
+
+export { applyGlobalUI, buildSwatches, exportTxt, doSearch };
+export default Toolbar;

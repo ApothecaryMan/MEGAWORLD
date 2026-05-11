@@ -18,23 +18,7 @@
     <!-- المحتوى سيتم توليده ديناميكياً بواسطة HomeEngine -->
   </div>
 
-  <!-- Core Config & Storage (Global) -->
-  <script type="module" src="store.js"></script>
-  <script src="context_menu.js"></script>
-  
-  <!-- Modules -->
-  <script type="module">
-    import { AuthModule } from './auth_module.js';
-    import { supabase } from './supabase_client.js';
-    window.AuthModule = AuthModule; // إتاحتها عالمياً للـ onClick
-    window.supabase = supabase;
-  </script>
-
-  <!-- Application Engines -->
-  <script src="toolbar.js"></script>
-  <script src="stats_engine.js"></script>
-  <script src="home_engine.js"></script>
-  <script src="page_config.js"></script>
+  <!-- Main Application Entry Point -->
   <script type="module" src="app_layout.js"></script>
 
 </body>

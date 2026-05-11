@@ -1,9 +1,7 @@
-/**
- * MEGAWORLD - Library Engine
- * Manages the Private Library page interactions and data rendering.
- */
+import Store from './store.js';
+import ContextMenu from './context_menu.js';
 
-const LibraryEngine = {
+export const LibraryEngine = {
   currentTab: 'reading',
   currentView: 'grid',
   searchQuery: '',
@@ -304,3 +302,4 @@ const LibraryEngine = {
 };
 
 window.LibraryEngine = LibraryEngine;
+export default LibraryEngine;

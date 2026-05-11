@@ -2,7 +2,8 @@
  * MEGAWORLD Page Configurations
  * Centralized schemas for all platform pages.
  */
-const MEGA_PAGES = {
+export const MEGA_PAGES = {
+  // ... (rest of the object stays the same)
   // --- الرئيسية (Home Page) ---
   'index.html': {
     id: 'home',
@@ -62,7 +63,7 @@ const MEGA_PAGES = {
     title: 'المحرر',
     toolbar: [
       { type: 'button', label: 'الرئيسية', id: 'homeBtn', align: 'right', action: () => window.location.href = 'index.html' },
-      { type: 'button', label: 'القائمة', id: 'sideToggleBtn', align: 'right', action: () => typeof toggleSidebar === 'function' && toggleSidebar() },
+      { type: 'button', label: 'القائمة', id: 'sideToggleBtn', align: 'right', action: () => typeof window.toggleSidebar === 'function' && window.toggleSidebar() },
       { 
         type: 'custom', id: 'statsBox', label: 'الإحصائيات', className: 'stats-box', align: 'right',
         html: `<div class="stat"><span id="wc">0</span>&nbsp;كلمة</div><div class="stats-divider"></div>
@@ -104,11 +105,11 @@ const MEGA_PAGES = {
       },
       { type: 'button', label: 'متواصل', id: 'contBtn', action: () => { Store.updateSettings('continuousMode', !Store.state.settings.continuousMode); applyGlobalUI(); if (typeof renderBody === 'function') renderBody(); } },
       { type: 'button', label: 'تركيز', id: 'focusBtn', action: () => document.body.classList.toggle('focus-mode') },
-      { type: 'button', label: 'تصدير', id: 'exportBtn', action: () => exportTxt() },
+      { type: 'button', label: 'تصدير', id: 'exportBtn', action: () => typeof window.exportTxt === 'function' && window.exportTxt() },
       { type: 'button', label: 'تجربة', id: 'testBtn', align: 'left', action: () => window.location.href = 'test.html' },
       { type: 'button', label: 'الإدارة', id: 'adminBtn', align: 'left', action: () => window.location.href = 'admin.html' },
       { type: 'custom', id: 'swatchWrap', label: 'الألوان', className: 'swatch-wrap', align: 'left' },
-      { type: 'input', label: 'البحث', placeholder: 'بحث...', id: 'sq', align: 'left', action: (val) => { if (typeof doSearch === 'function') doSearch(val); } },
+      { type: 'input', label: 'البحث', placeholder: 'بحث...', id: 'sq', align: 'left', action: (val) => { if (typeof window.doSearch === 'function') window.doSearch(val); } },
       { 
         type: 'custom', id: 'novelTitleWrap', label: 'اسم الرواية', align: 'left',
         className: 'site-name', html: `<input type="text" id="novelTitleInput" class="input-flat borderless" placeholder="اسم الرواية..." oninput="Store.updateNovelTitle(this.value)">` 
@@ -223,3 +224,7 @@ const MEGA_PAGES = {
     ]
   }
 };
+
+// Bridge for non-module scripts
+window.MEGA_PAGES = MEGA_PAGES;
+export default MEGA_PAGES;

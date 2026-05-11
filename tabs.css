@@ -1,0 +1,80 @@
+/* 
+   MEGAWORLD Tabs System
+   Pure Flat Architecture (No Shadows, No Transitions)
+*/
+
+.tabs-bar {
+  display: flex;
+  align-items: stretch;
+  padding: 0;
+  height: var(--ui-tab-height);
+  gap: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  border-bottom: 1px solid var(--ui-border-light);
+  background: var(--color-background-primary);
+}
+
+.tabs-bar::-webkit-scrollbar { 
+  display: none; 
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  border: none !important;
+  border-inline-end: 1px solid var(--ui-border-light) !important;
+  opacity: 0.6;
+  height: var(--ui-tab-height);
+  background: transparent !important;
+  color: inherit !important;
+  cursor: pointer;
+  white-space: nowrap;
+  font-size: 13px;
+}
+
+.tab:last-of-type {
+  border-inline-end: none !important;
+}
+
+.tab:hover {
+  opacity: 1;
+  background: rgba(128, 128, 128, 0.08) !important;
+  color: inherit !important;
+}
+
+.tab.active {
+  opacity: 1;
+  border-bottom: 2px solid currentColor !important;
+  background: transparent !important;
+  color: inherit !important;
+  font-weight: bold;
+}
+
+.tab.dragging {
+  opacity: 0.4;
+}
+
+.tab.drag-over {
+  border-inline-start: 2px solid var(--color-theme) !important;
+}
+
+.tab-close {
+  font-size: 14px;
+  opacity: 0.4;
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  padding: 0 4px;
+  margin-inline-start: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tab-close:hover {
+  opacity: 1;
+  color: var(--color-error);
+}

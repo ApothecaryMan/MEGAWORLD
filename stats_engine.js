@@ -1,8 +1,6 @@
-/**
- * محرك الإحصائيات (Stats Engine)
- * مسؤول عن حساب وتحديث بيانات الفصل في التولبار.
- */
-const StatsEngine = {
+import Store from './store.js';
+
+export const StatsEngine = {
   init() {
     Store.subscribe((event) => {
       // تحديث الإحصائيات عند تغيير المحتوى أو الفصل
@@ -131,7 +129,6 @@ const StatsEngine = {
   }
 };
 
-// تشغيل المحرك
-window.addEventListener('DOMContentLoaded', () => {
-  setTimeout(() => StatsEngine.init(), 100);
-});
+
+window.StatsEngine = StatsEngine;
+export default StatsEngine;

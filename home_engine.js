@@ -1,8 +1,8 @@
-/**
- * MEGAWORLD Home & Admin Engine
- * Generates dynamic page sections based on a provided schema.
- */
-const HomeEngine = {
+import Store from './store.js';
+import StatsEngine from './stats_engine.js';
+import ContextMenu from './context_menu.js';
+
+export const HomeEngine = {
   containerId: null,
   schema: [],
 
@@ -452,7 +452,7 @@ const HomeEngine = {
                 </div>
 
                 <div class="rank-item-m-actions">
-                  <button class="btn-flat active mini" onclick="event.stopPropagation(); Store.switchNovel(${this.getNovelId(item.title)}); window.location.href='reader.html'">إقرأ</button>
+                  <button class="btn-flat active mini" onclick="event.stopPropagation(); Store.switchNovel(${this.getNovelId(item.title)}); window.location.href='editor.html'">إقرأ</button>
                   <button class="btn-flat mini" onclick="event.stopPropagation(); window.location.href='novel.html?id=${this.getNovelId(item.title)}'">تفاصيل</button>
                   <button class="btn-flat mini-icon" title="حفظ"><i class="ti ti-bookmark"></i></button>
                 </div>
@@ -629,3 +629,6 @@ const HomeEngine = {
     return idx !== -1 ? idx : 0;
   }
 };
+
+window.HomeEngine = HomeEngine;
+export default HomeEngine;

@@ -2,6 +2,7 @@
 .sticky-bar{
   position:sticky;top:0;z-index:100;
   height: 48px;
+  flex-shrink: 0; /* منع الاختفاء في نظام الـ flex */
   display:flex;flex-wrap:nowrap;align-items:center;
   justify-content: space-between;
   padding:0 12px;
@@ -133,38 +134,7 @@
   opacity: 0.55;
 }
 
-/* Tabs Bar */
-.tabs-bar::-webkit-scrollbar{display:none;}
 
-.tab{
-  border: none !important;
-  border-inline-end: 1px solid var(--ui-border-light) !important;
-  opacity: 0.6;
-  height: var(--ui-tab-height);
-  background: transparent !important;
-  color: inherit !important;
-}
-.tab:last-of-type{border-inline-end:none !important;}
-.tab:hover{
-  opacity: 1;
-  background: rgba(128, 128, 128, 0.08) !important;
-  color: inherit !important;
-}
-.tab.active{
-  opacity: 1;
-  border-bottom: 2px solid currentColor !important;
-  background: transparent !important;
-  color: inherit !important;
-  font-weight: bold;
-}
-.tab-close{font-size:11px;opacity:.4;background:none;border:none;color:inherit;cursor:pointer;padding:0 2px;}
-.tab-close:hover{opacity:1;}
-
-.tabs-bar.hide-tabs{
-  transform:translateY(-100%);
-  opacity:0;
-  pointer-events:none;
-}
 
 /* Quote Editor Specific */
 .tool-group {
@@ -260,8 +230,8 @@
   opacity: 0.6;
 }
 
-/* --- Toolbar User Profile (Pure Flat) --- */
-.toolbar-user {
+/* --- Toolbar User Profile (Pure Flat - MDL) --- */
+.user-item-flat {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -275,18 +245,37 @@
   position: relative;
 }
 
-.toolbar-user:hover {
+.user-item-flat:hover {
   background: var(--ui-hover-bg);
   border-color: var(--ui-border);
 }
 
-.toolbar-user.active,
-.toolbar-user.open {
+.user-item-flat.active {
   background: var(--ui-active-bg);
   border-color: var(--color-theme);
 }
 
-.user-avatar {
+.user-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  text-align: start;
+}
+
+.user-name {
+  font-size: 11px;
+  font-weight: bold;
+  line-height: 1.2;
+}
+
+.user-status {
+  font-size: 9px;
+  opacity: 0.6;
+  text-transform: uppercase;
+}
+
+.user-avatar, .user-avatar-placeholder {
   width: 24px;
   height: 24px;
   background: var(--ui-input-bg);

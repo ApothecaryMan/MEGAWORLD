@@ -1,22 +1,33 @@
 import { supabase, getUserProfile } from './supabase_client.js';
+import Store from './store.js';
+import Toolbar, { applyGlobalUI } from './toolbar.js';
+import ContextMenu from './context_menu.js';
+import { MEGA_PAGES } from './page_config.js';
+import { AuthModule } from './auth_module.js';
+import HomeEngine from './home_engine.js';
+import StatsEngine from './stats_engine.js';
+import { initSidebar } from './sidebar.js';
+import LibraryEngine from './library_engine.js';
+import NovelPage from './novel.js';
+import Editor from './editor.js';
 
 const AppLayout = {
   async init() {
+    // 0. تهيئة المحركات الأساسية غير البصرية
+    StatsEngine.init();
+    
+    // 1. ضمان وجود المكونات العالمية
+    this.ensureGlobalElements();
+
     const pageKey = this.getCurrentPageKey();
     const config = MEGA_PAGES[pageKey];
 
-    if (!config) {
-      console.warn(`No configuration found for page: ${pageKey}`);
-      return;
-    }
+    if (!config) return;
 
-    // 0. ضمان وجود المكونات العالمية (الحقن التلقائي)
-    this.ensureGlobalElements();
-
-    // 1. تحديث عنوان الصفحة
+    // 2. تحديث عنوان الصفحة
     document.title = `MEGAWORLD | ${config.title}`;
 
-    // 2. تهيئة التولبار (إذا وجد له حاوية)
+    // 3. تهيئة التولبار
     if (document.getElementById('mainToolbar') && config.toolbar) {
       // حقن التصنيفات الحقيقية
       const catDrop = config.toolbar.find(item => item.id === 'catDrop');
@@ -26,8 +37,8 @@ const AppLayout = {
           label: g,
           icon: 'hash',
           action: () => {
-            if (typeof HomeEngine !== 'undefined' && typeof HomeEngine.filterByGenre === 'function') {
-              HomeEngine.filterByGenre(g);
+            if (window.HomeEngine && typeof window.HomeEngine.filterByGenre === 'function') {
+              window.HomeEngine.filterByGenre(g);
             }
           }
         }));
@@ -35,7 +46,7 @@ const AppLayout = {
 
       Toolbar.init('mainToolbar', config.toolbar);
       
-      // --- التحقق من حالة المستخدم (Auth Check) ---
+      // التحقق من حالة المستخدم
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
         const profile = await getUserProfile(session.user.id);
@@ -45,17 +56,38 @@ const AppLayout = {
       }
     }
 
-    // 3. تهيئة محتوى الصفحة (إذا وجد له حاوية ومكونات)
+    // 4. تهيئة محركات الصفحات (إذا كانت محملة)
     if (document.getElementById('homeApp') && config.content) {
       HomeEngine.init('homeApp', config.content);
     }
-
-    // 4. تطبيق التنسيقات العالمية (الثيمات)
-    if (typeof applyGlobalUI === 'function') {
-      applyGlobalUI();
+    
+    if (document.getElementById('library-display')) {
+      LibraryEngine.init();
+    }
+    
+    if (document.getElementById('novelApp')) {
+      NovelPage.init();
     }
 
-    console.log(`Page initialized: ${config.title}`);
+    if (document.getElementById('tabsBar') || document.getElementById('bodyWrap')) {
+      Editor.renderTabs();
+      Editor.renderBody();
+    }
+
+    // 5. تهيئة السايدبار (إذا كان موجوداً)
+    if (document.getElementById('sidebar')) {
+      initSidebar();
+    }
+
+    // 6. تطبيق التنسيقات العالمية
+    applyGlobalUI();
+
+    // 7. إعادة مزامنة حالة السايدبار (لضمان بقاء الأزرار متزامنة بعد الـ reset في الخطوة السابقة)
+    if (typeof window.applySidebarState === 'function') {
+      window.applySidebarState();
+    }
+
+    console.log(`MEGAWORLD Layout Engine: ${config.title} Ready.`);
   },
 
   getCurrentPageKey() {
@@ -67,15 +99,22 @@ const AppLayout = {
   ensureGlobalElements() {
     if (!document.body.id) document.body.id = 'root';
     if (!document.body.classList.contains('root')) document.body.classList.add('root');
+    
+    // اكتشاف نمط التطبيق (App Mode) لتعطيل سكرول الصفحة العام
+    if (document.querySelector('.main-layout')) {
+      document.body.classList.add('app-mode');
+    }
 
+    // Context Menu
     if (!document.getElementById('contextMenu')) {
       const cm = document.createElement('div');
       cm.id = 'contextMenu';
       cm.className = 'context-menu';
       document.body.appendChild(cm);
-      if (typeof ContextMenu !== 'undefined') ContextMenu.el = cm;
+      ContextMenu.el = cm;
     }
 
+    // Progress Bar
     if (!document.getElementById('progressBar')) {
       const pWrap = document.createElement('div');
       pWrap.className = 'progress-wrap';
@@ -83,6 +122,7 @@ const AppLayout = {
       document.body.appendChild(pWrap);
     }
 
+    // Modal
     if (!document.getElementById('modalBg')) {
       const modal = document.createElement('div');
       modal.id = 'modalBg';
@@ -91,7 +131,6 @@ const AppLayout = {
         <div class="modal" id="modal">
           <div class="modal-hdr">
             <h2 id="modalTitle"></h2>
-            <button class="btn-icon" onclick="document.getElementById('modalBg').classList.remove('open')"><i class="ti ti-x"></i></button>
           </div>
           <div id="modalBody" style="padding: 10px 0;"></div>
           <div class="modal-btns" id="modalBtns"></div>
@@ -101,6 +140,9 @@ const AppLayout = {
     }
   }
 };
+
+// إتاحة الكائن عالمياً
+window.AppLayout = AppLayout;
 
 // تشغيل المحرك فوراً
 AppLayout.init();

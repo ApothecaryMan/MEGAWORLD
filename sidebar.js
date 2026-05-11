@@ -1,4 +1,7 @@
-function toggleSidebar() {
+import Store from './store.js';
+import ContextMenu from './context_menu.js';
+
+export function toggleSidebar() {
   const newState = !Store.state.settings.sidebarVisible;
   Store.updateSettings('sidebarVisible', newState);
 }
@@ -7,11 +10,26 @@ function applySidebarState() {
   const sb = document.getElementById('sidebar');
   const btn = document.getElementById('sideToggleBtn');
   const root = document.getElementById('root');
-  const isVisible = Store.state.settings.sidebarVisible;
+  const isVisible = !!Store.state.settings.sidebarVisible;
   
-  if (sb) sb.classList.toggle('hidden', !isVisible);
-  if (root) root.classList.toggle('side-open', isVisible);
-  if (btn) btn.classList.toggle('on', isVisible);
+  if (sb) {
+    sb.classList.toggle('hidden', !isVisible);
+    // تأمين العرض المباشر في حالة الـ Flex
+    if (isVisible) {
+      sb.style.display = 'flex';
+      sb.style.flexDirection = 'column';
+    } else {
+      sb.style.display = 'none';
+    }
+  }
+  
+  if (root) {
+    root.classList.toggle('side-open', isVisible);
+  }
+  
+  if (btn) {
+    btn.classList.toggle('active', isVisible);
+  }
 }
 
 // Multi-Novel Library Functions
@@ -25,7 +43,7 @@ function renderLibrary() {
     const item = document.createElement('button');
     item.className = 'list-item-flat' + (i === Store.state.activeNovelIdx ? ' active' : '');
     item.innerHTML = `
-      <span>${novel.title || 'رواية بدون عنوان'}</span>
+      <span class="truncate">${novel.title || 'رواية بدون عنوان'}</span>
       <i class="ti ti-edit side-edit-btn" title="تعديل البيانات"></i>
     `;
     item.onclick = () => Store.switchNovel(i);
@@ -305,22 +323,49 @@ function highlightSeparators(el) {
   }
 }
 
-function saveNovelDetails() {
-  const idx = Store.state.activeNovelIdx;
-  const genresEl = document.getElementById('side-genres');
-  const genresVal = genresEl ? genresEl.innerText : '';
-  const genres = genresVal ? genresVal.split('-').map(g => g.trim()).filter(Boolean) : [];
+async function saveNovelDetails() {
+  const btn = document.getElementById('saveNovelBtn');
+  const originalHtml = btn.innerHTML;
   
-  const data = {
-    title: document.getElementById('side-title').value,
-    author: document.getElementById('side-author').value,
-    status: document.getElementById('side-status').value,
-    description: document.getElementById('side-desc').value,
-    genres: genres
-  };
-  
-  Store.updateNovel(idx, data);
-  toggleNovelDataPanel(false); // إغلاق بعد الحفظ
+  try {
+    // حالة التحميل
+    btn.disabled = true;
+    btn.innerHTML = '<i class="ti ti-loader-2"></i>'; // أيقونة تحميل
+    
+    const idx = Store.state.activeNovelIdx;
+    const genresEl = document.getElementById('side-genres');
+    const genresVal = genresEl ? genresEl.innerText : '';
+    const genres = genresVal ? genresVal.split('-').map(g => g.trim()).filter(Boolean) : [];
+    
+    const data = {
+      title: document.getElementById('side-title').value,
+      author: document.getElementById('side-author').value,
+      status: document.getElementById('side-status').value,
+      description: document.getElementById('side-desc').value,
+      genres: genres
+    };
+    
+    // تنفيذ الحفظ والمزامنة
+    await Store.updateNovel(idx, data);
+    
+    // نجاح
+    btn.innerHTML = '<i class="ti ti-check"></i>';
+    setTimeout(() => {
+      toggleNovelDataPanel(false);
+      btn.disabled = false;
+      btn.innerHTML = originalHtml;
+    }, 500);
+
+  } catch (error) {
+    console.error('Save Error:', error);
+    btn.innerHTML = '<i class="ti ti-alert-circle"></i>';
+    btn.style.color = 'red';
+    setTimeout(() => {
+      btn.disabled = false;
+      btn.innerHTML = originalHtml;
+      btn.style.color = '';
+    }, 2000);
+  }
 }
 
 // Initialize Library on Load
@@ -341,14 +386,33 @@ function initSidebar() {
   }
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-  // استخدام setTimeout بسيط لضمان انتهاء Toolbar.init أولاً
-  setTimeout(initSidebar, 50);
-});
-
 // الاشتراك في تحديثات الـ Store لإعادة الرسم تلقائياً
 Store.subscribe(() => {
   renderLibrary();
   renderNovelData();
   applySidebarState();
 });
+
+// الجسر العالمي للتوافق مع HTML
+window.toggleSidebar = toggleSidebar;
+window.addNovel = addNovel;
+window.renderLibrary = renderLibrary;
+window.saveNovelDetails = saveNovelDetails;
+window.toggleNovelDataPanel = toggleNovelDataPanel;
+window.setNovelStatus = setNovelStatus;
+window.removeNovelCover = removeNovelCover;
+window.changeNovelCover = changeNovelCover;
+window.applySidebarState = applySidebarState;
+window.initSidebar = initSidebar;
+
+export { 
+  applySidebarState, 
+  renderLibrary, 
+  addNovel, 
+  switchNovel, 
+  updateNovelTitle, 
+  initSidebar,
+  renderNovelData,
+  saveNovelDetails,
+  toggleNovelDataPanel
+};

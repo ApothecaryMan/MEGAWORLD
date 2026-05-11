@@ -1,26 +1,56 @@
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+}
+
 .sidebar{
   width:240px;
-  border-inline-end:1px solid var(--ui-border-light);
+  border-inline-start: 1px solid var(--ui-border-light); /* البوردر ناحية المحتوى */
   padding:16px 12px;
   background: var(--color-background-primary);
   flex-shrink:0;
-  overflow-y:auto;
-  height:calc(100vh - 45px);
-  position:fixed;
-  top:45px;
-  inset-inline-start:0;
-  z-index:15;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+  position: relative;
+  display: none;
+  z-index: 10;
   user-select:none;-webkit-user-select:none;
+  
+  /* جعل السكرول بار يظهر على اليمين في السايدبار الأيمن (رغم الـ RTL) */
+  direction: ltr; 
 }
+.sidebar > * {
+  direction: rtl; /* إعادة المحتوى للـ RTL */
+}
+
+/* إظهار السايدبار الأيمن عند وجود الكلاس في الـ root */
+.root.side-open #sidebar {
+  display: block;
+}
+
+/* فئة الإخفاء الصريحة (للطوارئ) */
+.sidebar.hidden {
+  display: none !important;
+}
+
 .sidebar-left {
-  inset-inline-start: auto;
-  inset-inline-end: 0;
   border-inline-end: none;
   border-inline-start: 1px solid var(--ui-border-light);
-  display: none;
+  width: 320px;
+  display: none; 
+  direction: rtl; /* السايدبار الأيسر السكرول بتاعه طبيعي يكون على الشمال */
 }
-.root.data-open .sidebar-left {
-  display: block;
+.sidebar-left > * {
+  direction: rtl;
+}
+
+/* إظهار السايدبار الأيسر عند وجود الكلاس في الـ root */
+.root.data-open #novelDataPanel {
+  display: flex;
+  flex-direction: column;
 }
 
 .sidebar-section{
@@ -79,15 +109,17 @@
 }
 
 @media (max-width: 800px) {
-  .sidebar { display: none; }
+  .sidebar {
+    position: fixed;
+    top: 48px;
+    bottom: 0;
+    z-index: 2000;
+  }
+  .sidebar-left {
+    inset-inline-end: 0;
+  }
 }
 
-.root.side-open .body-area {
-  margin-inline-start: 240px;
-}
-.root.side-open.data-open .body-area {
-  margin-inline-end: 240px;
-}
 
 .side-item-group {
   display: flex;
@@ -157,6 +189,27 @@
   background: var(--color-theme);
   color: var(--color-on-theme);
   border-color: var(--color-theme);
+}
+
+/* تحسين شكل السكرول بار (Custom Thin Scrollbar) */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(128, 128, 128, 0.2);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-theme);
+}
+
+/* إخفاء السكرول بار في العناصر التي لا تحتاج إليه */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 .side-cover-delete {
   position: absolute;

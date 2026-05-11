@@ -236,7 +236,8 @@ const Store = {
         if (data.status) dbData.status = data.status;
         if (data.genres) dbData.genres = data.genres;
         
-        await supabase.from('mw_novels').update(dbData).eq('id', novel.id);
+        const { error } = await supabase.from('mw_novels').update(dbData).eq('id', novel.id);
+        if (error) throw error;
       }
       
       this.notify();
@@ -366,11 +367,11 @@ const Store = {
     }
   },
 
-  setChapter(idx) {
+  setChapter(idx, eventType = 'chapter-changed') {
     if (this.activeNovel && idx >= 0 && idx < this.activeNovel.chapters.length) {
       this.activeNovel.activeChapterIdx = idx;
       this.save();
-      this.notify('chapter-changed');
+      this.notify(eventType);
     }
   },
 
