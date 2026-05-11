@@ -80,27 +80,99 @@ export const Toolbar = {
       };
     } else {
       // حالة وجود مستخدم مسجل
-      profileEl.className = 'user-item-flat';
+      // استخراج البيانات بذكاء من البروفايل أو الميتاداتا
+      const meta = userData.user_metadata || {};
+      const name = userData.display_name || userData.displayName || meta.full_name || meta.display_name || meta.name || 'مستخدم جديد';
+      const status = userData.membership || (userData.role === 'authenticated' ? 'عضو عادي' : (userData.role === 'admin' ? 'مدير النظام' : 'عضو جديد'));
+      const avatar = userData.avatar_url || userData.avatar || meta.avatar_url || 'public/ChatGPT Image May 7, 2026, 07_38_24 PM.png';
+
+      profileEl.className = 'user-item-flat toolbar-user'; // أضفنا toolbar-user للتحكم في القائمة
       profileEl.style.display = 'flex';
+      
+      const libraryCount = (Store.state.novels || []).length;
+
       profileEl.innerHTML = `
         <div class="user-meta">
-          <span class="user-name">${userData.display_name || 'مستخدم'}</span>
-          <span class="user-status">${userData.role || 'عضو'}</span>
+          <span class="user-name">${name}</span>
+          <span class="user-status">${status}</span>
         </div>
-        <img src="${userData.avatar_url || 'public/ChatGPT Image May 7, 2026, 07_38_24 PM.png'}" class="user-avatar">
+        <img src="${avatar}" class="user-avatar">
+        <i class="ti ti-chevron-down user-chevron"></i>
+
+        <!-- النافذة المخصصة (Profile Menu) -->
+        <div class="profile-menu">
+          <div class="profile-header">
+            <div class="profile-avatar-big">
+              <img src="${avatar}" alt="User">
+            </div>
+            <div class="profile-info-main">
+              <div class="profile-display-name">${name}</div>
+              <div class="profile-status">
+                <span class="membership-label">${status}</span>
+                <span class="profile-level">ليفل ${userData.level || 1}</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="profile-menu-body">
+            <button class="profile-menu-item" onclick="window.location.href='profile.html'">
+              <i class="ti ti-user-circle"></i>
+              <span class="item-label">ملفي الشخصي</span>
+            </button>
+            <button class="profile-menu-item" onclick="window.location.href='library.html'">
+              <i class="ti ti-bookmarks"></i>
+              <span class="item-label">المكتبة الخاصة</span>
+              <span class="item-badge">${libraryCount}</span>
+            </button>
+            <button class="profile-menu-item">
+              <i class="ti ti-history"></i>
+              <span class="item-label">سجل القراءة</span>
+            </button>
+            
+            <div class="profile-menu-sep"></div>
+            
+            <button class="profile-menu-item">
+              <i class="ti ti-settings"></i>
+              <span class="item-label">إعدادات الحساب</span>
+            </button>
+            <button class="profile-menu-item">
+              <i class="ti ti-help-circle"></i>
+              <span class="item-label">مركز المساعدة</span>
+            </button>
+          </div>
+          
+          <div class="profile-footer">
+            <button class="btn-flat logout-btn" id="logoutBtn">تسجيل الخروج</button>
+            <button class="btn-flat">تبديل الحساب</button>
+          </div>
+        </div>
       `;
+
+      // منطق الفتح والغلق
       profileEl.onclick = (e) => {
-        const menuItems = [
-          { label: 'ملفي الشخصي', icon: 'ti-user-circle', action: () => window.location.href = 'profile.html' },
-          { label: 'المكتبة الخاصة', icon: 'ti-bookmarks', action: () => window.location.href = 'library.html' },
-          { sep: true },
-          { label: 'تسجيل الخروج', icon: 'ti-logout', danger: true, action: () => {
-              if (window.AuthModule) window.AuthModule.signOut();
-            } 
-          }
-        ];
-        if (typeof ContextMenu !== 'undefined') ContextMenu.show(e, menuItems);
+        e.stopPropagation();
+        const isOpen = profileEl.classList.contains('open');
+        
+        // إغلاق أي قوائم أخرى مفتوحة أولاً
+        document.querySelectorAll('.toolbar-user').forEach(el => el.classList.remove('open'));
+        
+        if (!isOpen) profileEl.classList.add('open');
       };
+
+      // ربط زر تسجيل الخروج
+      const logoutBtn = profileEl.querySelector('#logoutBtn');
+      if (logoutBtn) {
+        logoutBtn.onclick = async (e) => {
+          e.stopPropagation();
+          await supabase.auth.signOut();
+          window.location.reload();
+        };
+      }
+
+      // إغلاق المنيو عند الضغط في أي مكان خارجها
+      document.addEventListener('click', () => {
+        profileEl.classList.remove('open');
+      }, { once: false });
     }
   },
 

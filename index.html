@@ -9,6 +9,22 @@
   <link rel="stylesheet" href="home.css">
   <link rel="stylesheet" href="context_menu.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script>
+    // تطبيق الثيم المحفوظ فوراً لمنع الوميض الأبيض
+    (function() {
+      const data = localStorage.getItem('novel_reader_v9');
+      if (data) {
+        try {
+          const settings = JSON.parse(data).settings;
+          if (settings && settings.theme) {
+            document.documentElement.classList.add(settings.theme);
+            document.body.classList.add(settings.theme);
+          }
+        } catch (e) {}
+      }
+    })();
+  </script>
 </head>
 <body>
 

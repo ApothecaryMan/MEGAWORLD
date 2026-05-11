@@ -1,6 +1,7 @@
 import Store from './store.js';
 import StatsEngine from './stats_engine.js';
 import ContextMenu from './context_menu.js';
+import { supabase } from './supabase_client.js';
 
 export const HomeEngine = {
   containerId: null,
@@ -148,7 +149,48 @@ export const HomeEngine = {
   },
 
   makeProfileIdentity(data) {
-    const user = Store.state.user || {};
+    // محاولة جلب المستخدم من الـ Store أو من جلسة Supabase مباشرة
+    let user = Store.state.user;
+    const session = supabase.auth.getSession().then(({data}) => data.session); // للتحقق المستقبلي
+    
+    // إذا لم يوجد بروفايل، نحاول استخدام بيانات الجلسة الحالية من جوجل
+    if (!user) {
+      const sessionData = JSON.parse(localStorage.getItem('sb-zsmjyzdiocsbmhdptils-auth-token'));
+      if (sessionData && sessionData.user) {
+        const u = sessionData.user;
+        user = {
+          id: u.id,
+          display_name: u.user_metadata.full_name || u.user_metadata.display_name || u.email,
+          username: u.user_metadata.username || u.email.split('@')[0],
+          avatar_url: u.user_metadata.avatar_url,
+          membership: 'عضو جديد',
+          level: 1,
+          join_date: new Date(u.created_at).toLocaleDateString('ar-EG')
+        };
+      }
+    }
+    
+    if (!user) {
+      const section = document.createElement('div');
+      section.className = 'profile-login-required';
+      section.innerHTML = `
+        <div class="login-prompt-card">
+          <i class="ti ti-user-circle" style="font-size: 64px; opacity: 0.2;"></i>
+          <h2>سجل دخولك لاستعراض ملفك الشخصي</h2>
+          <p>تحتاج لتسجيل الدخول للوصول إلى إحصائياتك الشخصية، مكتبتك السحابية، وإنجازاتك.</p>
+          <button class="btn-flat active" onclick="AuthModule.renderLoginModal()" style="height: 45px; padding: 0 40px; margin-top: 20px;">دخول / تسجيل حساب جديد</button>
+        </div>
+      `;
+      return section;
+    }
+
+    // توحيد المسميات (Normalizing fields)
+    const name = user.display_name || user.displayName || '---';
+    const username = user.username || '---';
+    const avatar = user.avatar_url || user.avatar || null;
+    const membership = user.membership || 'عضو عادي';
+    const level = user.level || '1';
+    const joinDate = user.join_date || user.joinDate || '---';
     const stats = user.stats || {};
     const libraryCount = (Store.state.novels || []).length;
     
@@ -158,7 +200,7 @@ export const HomeEngine = {
         <!-- 1. Header: Avatar & Basic Info -->
         <div class="profile-identity-header">
           <div class="profile-avatar-editable">
-            ${user.avatar ? `<img id="profileAvatarImg" src="${user.avatar}" style="width:100%; height:100%; object-fit:cover;">` : `<span class="avatar-fallback">${(user.displayName || 'م')[0]}</span>`}
+            ${avatar ? `<img id="profileAvatarImg" src="${avatar}" style="width:100%; height:100%; object-fit:cover;">` : `<span class="avatar-fallback">${name[0]}</span>`}
             ${this.profileEditMode ? `<button class="avatar-edit-hint" onclick="HomeEngine.triggerAvatarFile()"><i class="ti ti-camera"></i></button>` : ''}
             <input type="file" id="avatarFileInput" style="display:none" accept="image/*" onchange="HomeEngine.handleAvatarFile(this)">
           </div>
@@ -166,18 +208,18 @@ export const HomeEngine = {
           <div class="profile-main-meta">
             <div class="profile-name-group" style="display: flex; gap: 10px; align-items: center;">
               ${this.profileEditMode ? `
-                <input type="text" id="editDisplayName" class="input-flat" style="font-size: 20px; font-weight: 800; width: 200px;" value="${user.displayName || ''}" placeholder="الاسم المعروض">
-                <input type="text" id="editUsername" class="input-flat" style="font-size: 14px; width: 150px; opacity: 0.8;" value="@${user.username || ''}" placeholder="اسم المستخدم">
+                <input type="text" id="editDisplayName" class="input-flat" style="font-size: 20px; font-weight: 800; width: 200px;" value="${name}" placeholder="الاسم المعروض">
+                <input type="text" id="editUsername" class="input-flat" style="font-size: 14px; width: 150px; opacity: 0.8;" value="@${username}" placeholder="اسم المستخدم">
               ` : `
-                <h1 class="profile-display-name">${user.displayName || '---'}</h1>
-                <span class="profile-username">@${user.username || '---'}</span>
+                <h1 class="profile-display-name">${name}</h1>
+                <span class="profile-username">@${username}</span>
               `}
             </div>
             
             <div class="profile-badges-row">
-              <span class="badge-flat gold"><i class="ti ti-award"></i> ${user.membership || 'عضو عادي'}</span>
-              <span class="badge-flat silver">ليفل ${user.level || '0'}</span>
-              <span class="profile-join-date">انضم في: ${user.joinDate || '---'}</span>
+              <span class="badge-flat gold"><i class="ti ti-award"></i> ${membership}</span>
+              <span class="badge-flat silver">ليفل ${level}</span>
+              <span class="profile-join-date">انضم في: ${joinDate}</span>
             </div>
           </div>
 

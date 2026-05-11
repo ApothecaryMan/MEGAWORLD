@@ -310,3 +310,38 @@
     grid-template-columns: 1fr 1fr;
   }
 }
+
+/* --- Login Required Prompt --- */
+.profile-login-required {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  width: 100%;
+}
+
+.login-prompt-card {
+  background: var(--ui-input-bg);
+  border: 1px solid var(--ui-border-light);
+  padding: 60px 40px;
+  text-align: center;
+  max-width: 450px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.login-prompt-card h2 {
+  font-size: 20px;
+  font-weight: 800;
+  margin: 10px 0 0 0;
+}
+
+.login-prompt-card p {
+  font-size: 13px;
+  opacity: 0.6;
+  line-height: 1.6;
+  margin: 0;
+}
+

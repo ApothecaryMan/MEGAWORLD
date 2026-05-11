@@ -401,7 +401,11 @@ const Store = {
     const data = localStorage.getItem('novel_reader_v9');
     if (data) {
       try {
-        this.state = JSON.parse(data);
+        const savedState = JSON.parse(data);
+        // دمج الإعدادات بدلاً من استبدال الكائن بالكامل
+        this.state.settings = { ...this.state.settings, ...savedState.settings };
+        if (savedState.novels) this.state.novels = savedState.novels;
+        if (savedState.activeNovelIdx !== undefined) this.state.activeNovelIdx = savedState.activeNovelIdx;
       } catch (e) {
         console.error('Failed to load data', e);
       }

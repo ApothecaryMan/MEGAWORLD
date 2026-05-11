@@ -1,0 +1,73 @@
+/* --- MEGAWORLD Global Modal Component --- */
+.modal-bg {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.6);
+  align-items: center; justify-content: center; 
+  z-index: 10000;
+  backdrop-filter: blur(2px);
+}
+.modal-bg.open { display: flex; }
+
+.modal {
+  background: var(--color-background-primary);
+  color: var(--color-text-primary);
+  border: 1px solid var(--ui-border);
+  padding: 0;
+  width: 90%;
+  max-width: 850px;
+  display: flex; flex-direction: column;
+  /* Pure Flat - No Shadows */
+  box-shadow: none;
+}
+
+.modal-hdr {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 15px 20px;
+  border-bottom: 1px solid var(--ui-border-light);
+  background: var(--ui-input-bg);
+}
+
+.modal-hdr h2 {
+  font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+}
+
+.modal-close {
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  line-height: 1;
+  color: inherit;
+  opacity: 0.5;
+  cursor: pointer;
+  padding: 0;
+  display: flex; align-items: center; justify-content: center;
+  width: 30px; height: 30px;
+}
+.modal-close:hover { opacity: 1; background: var(--ui-hover-bg); }
+
+.modal-small {
+  max-width: 400px;
+}
+
+#modalBody {
+  padding: 20px;
+}
+
+/* Auth Specific UI Fixes */
+.input-wrap {
+  width: 100%;
+}
+.input-wrap .input-icon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.5;
+}
+
+.modal-btns {
+  padding: 15px 20px;
+  display: flex; justify-content: flex-end; gap: 10px;
+  border-top: 1px solid var(--ui-border-light);
+}
+.modal-btns:empty { display: none; }
+

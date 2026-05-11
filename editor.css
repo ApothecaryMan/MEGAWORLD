@@ -1,31 +1,5 @@
-.modal-bg{
-  display:none;position:fixed;inset:0;
-  background:rgba(0,0,0,.5);
-  align-items:center;justify-content:center;z-index:100;
-}
-.modal-bg.open{display:flex;}
-.modal{
-  border:1px solid var(--ui-border);border-radius:0;
-  padding:20px;
-  width:90%;
-  max-width:850px;
-  display:flex;flex-direction:column;gap:12px;
-  /* الربط بالثيم المركزي */
-  background: var(--color-background-primary);
-  color: var(--color-text-primary);
-}
-.modal-hdr{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  width:100%;
-}
-.modal-title{
-  font-size:13px;
-  font-weight:bold;
-  opacity:0.6;
-  white-space:nowrap;
-}
+/* Global Modal styles moved to style.css */
+
 
 textarea.ta{
   width:100%;
@@ -44,8 +18,4 @@ textarea.ta{
 textarea.ta:focus{
   border-color: var(--ui-border);
 }
-.modal-btns{
-  display:flex;
-  justify-content:flex-end;
-  gap:8px;
-}
+

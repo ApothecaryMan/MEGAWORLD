@@ -10,11 +10,15 @@ import { initSidebar } from './sidebar.js';
 import LibraryEngine from './library_engine.js';
 import NovelPage from './novel.js';
 import Editor from './editor.js';
+import Modal from './components/modal/modal.js';
 
 const AppLayout = {
   async init() {
     // 0. تهيئة المحركات الأساسية غير البصرية
     StatsEngine.init();
+    
+    // تهيئة ميزة الدخول الذكي من جوجل
+    AuthModule.initOneTap();
     
     // 1. ضمان وجود المكونات العالمية
     this.ensureGlobalElements();
@@ -123,21 +127,7 @@ const AppLayout = {
     }
 
     // Modal
-    if (!document.getElementById('modalBg')) {
-      const modal = document.createElement('div');
-      modal.id = 'modalBg';
-      modal.className = 'modal-bg';
-      modal.innerHTML = `
-        <div class="modal" id="modal">
-          <div class="modal-hdr">
-            <h2 id="modalTitle"></h2>
-          </div>
-          <div id="modalBody" style="padding: 10px 0;"></div>
-          <div class="modal-btns" id="modalBtns"></div>
-        </div>
-      `;
-      document.body.appendChild(modal);
-    }
+    Modal.init();
   }
 };
 
