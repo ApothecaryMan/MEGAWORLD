@@ -1,47 +1,19 @@
-/**
- * العقل المركزي للتطبيق (The Store)
- * يدير البيانات، الحالة، والحفظ التلقائي.
- */
+import { supabase } from './supabase_client.js';
+
 const Store = {
   // --- الحالة (State) ---
   state: {
     novels: [],
     activeNovelIdx: 0,
     settings: {
-      font: 'fn',
-      sz: 22,
-      align: 'ar',
-      continuousMode: false,
-      theme: 'bg-def',
-      sidebarVisible: true,
-      chapterSortOrder: 'asc'
+      font: 'fn', sz: 22, align: 'ar',
+      continuousMode: false, theme: 'bg-def',
+      sidebarVisible: true, chapterSortOrder: 'asc'
     },
-    user: {
-      displayName: 'أحمد محمد علي',
-      username: 'ahmed_dev',
-      avatar: 'public/ChatGPT Image May 7, 2026, 07_38_24 PM.png',
-      bio: 'محب للقراءة والكتابة، مهتم بروايات الخيال العلمي والفانتازيا. أسعى لإنهاء 100 رواية هذا العام!',
-      joinDate: 'مايو 2024',
-      membership: 'عضو ذهبي',
-      level: 45,
-      stats: {
-        completedNovels: 24,
-        totalChaptersRead: 1240,
-        readingHours: 320,
-        commentsCount: 15,
-        followingCount: 8
-      },
-      favoriteGenres: ['فانتازيا', 'رومانسي', 'إثارة', 'Isekai'],
-      achievements: [
-        { id: 'reader100', icon: 'ti-book', label: 'قرأ 100 فصل', unlocked: true },
-        { id: 'firstComment', icon: 'ti-message', label: 'أول تعليق', unlocked: true },
-        { id: 'activeMember', icon: 'ti-bolt', label: 'عضو نشط', unlocked: true },
-        { id: 'reader1000', icon: 'ti-lock', label: 'قرأ 1000 فصل', unlocked: false }
-      ]
-    }
+    user: null // سيتم جلبه من Supabase
   },
 
-  // --- البيانات الثابتة (Constants) ---
+  // ... (palettes stay same)
   palettes: [
     { id: 'bg-def', label: 'ورقي', bg: '#f5f3f0', text: '#2d2d2d' },
     { id: 'bg-ivory', label: 'عاجي', bg: '#fdf6e3', text: '#3b3020' },
@@ -58,11 +30,100 @@ const Store = {
   ],
 
   // --- التهيئة (Initialization) ---
-  init() {
-    this.load();
+  async init() {
+    this.load(); // تحميل من localStorage أولاً للسرعة
     this.migrate();
+    
+    // التحقق من الجلسة السحابية
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) {
+      await this.syncWithCloud(session.user.id);
+    }
+
     this.autoSave();
     this.notify();
+  },
+
+  /**
+   * مزامنة البيانات مع السحاب
+   */
+  async syncWithCloud(userId) {
+    console.log('Syncing with Supabase...');
+    
+    // 1. جلب الروايات من السحاب
+    const { data: cloudNovels, error } = await supabase
+      .from('mw_novels')
+      .select('*, chapters:mw_chapters(*)');
+
+    if (error) {
+      console.error('Cloud sync failed:', error);
+      return;
+    }
+
+    if (cloudNovels && cloudNovels.length > 0) {
+      // تحويل هيكلية السحاب لهيكلية الـ Store
+      this.state.novels = cloudNovels.map(n => ({
+        id: n.id,
+        title: n.title,
+        author: n.author_name,
+        description: n.description,
+        cover: n.cover_url,
+        status: n.status,
+        genres: n.genres,
+        chapters: n.chapters.sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0)),
+        activeChapterIdx: 0
+      }));
+      
+      // جلب البروفايل وتخزينه في الـ Store
+      const { data: profile } = await supabase.from('mw_profiles').select('*').eq('id', userId).single();
+      this.state.user = profile;
+
+      this.save(); // تحديث الـ local cache
+    } else if (this.state.novels.length > 0) {
+      // إذا كان السحاب فارغ والـ local فيه بيانات، ارفع البيانات (First Time Sync)
+      await this.uploadLocalDataToCloud(userId);
+    }
+  },
+
+  /**
+   * رفع البيانات المحلية للسيرفر (لمرة واحدة عند أول تسجيل)
+   */
+  async uploadLocalDataToCloud(userId) {
+    for (const novel of this.state.novels) {
+      const { data: nData, error: nErr } = await supabase
+        .from('mw_novels')
+        .insert({
+          author_id: userId,
+          title: novel.title,
+          author_name: novel.author,
+          description: novel.description,
+          cover_url: novel.cover,
+          status: novel.status,
+          genres: novel.genres
+        })
+        .select()
+        .single();
+
+      if (nErr) continue;
+      
+      novel.id = nData.id; // تحديث الـ ID محلياً فوراً
+
+      // رفع فصول الرواية
+      const chaptersToInsert = novel.chapters.map((ch, idx) => ({
+        novel_id: nData.id,
+        title: ch.title,
+        content: ch.content,
+        sort_order: idx,
+        views: ch.views || 0
+      }));
+
+      const { data: chData } = await supabase.from('mw_chapters').insert(chaptersToInsert).select();
+      if (chData) {
+        // تحديث الـ IDs الخاصة بالفصول محلياً برضه
+        novel.chapters = chData.sort((a, b) => a.sort_order - b.sort_order);
+      }
+    }
+    this.save(); // حفظ التغييرات النهائية (الـ IDs الجديدة)
   },
 
   // --- إدارة الروايات (Novel Management) ---
@@ -86,7 +147,7 @@ const Store = {
     return this.activeNovel ? this.activeNovel.activeChapterIdx : 0;
   },
 
-  addNovel(title = 'رواية جديدة', author = 'مؤلف مجهول', cover = '', chapters = null) {
+  async addNovel(title = 'رواية جديدة', author = 'مؤلف مجهول', cover = '', chapters = null) {
     const novel = {
       title,
       author,
@@ -97,9 +158,35 @@ const Store = {
       chapters: chapters || [{ title: 'فصل 1', content: '' }],
       activeChapterIdx: 0
     };
+    
     this.state.novels.push(novel);
     this.state.activeNovelIdx = this.state.novels.length - 1;
     this.save();
+
+    // مزامنة مع السيرفر إذا كان مسجلاً
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) {
+       const { data, error } = await supabase.from('mw_novels').insert({
+          author_id: session.user.id,
+          title: novel.title,
+          author_name: novel.author,
+          cover_url: novel.cover
+       }).select().single();
+       
+       if (data) {
+         novel.id = data.id;
+         // ارفع الفصول الأولية (الفصل 1)
+         const chs = novel.chapters.map((ch, i) => ({
+            novel_id: data.id,
+            title: ch.title,
+            content: ch.content,
+            sort_order: i
+         }));
+         const { data: chData } = await supabase.from('mw_chapters').insert(chs).select();
+         if (chData) novel.chapters = chData;
+       }
+    }
+
     this.notify();
   },
 
@@ -120,18 +207,38 @@ const Store = {
     return false;
   },
 
-  updateNovelTitle(title) {
+  async updateNovelTitle(title) {
     if (this.activeNovel) {
       this.activeNovel.title = title;
       this.save();
+      
+      if (this.activeNovel.id) {
+        await supabase.from('mw_novels').update({ title }).eq('id', this.activeNovel.id);
+      }
+      
       this.notify();
     }
   },
 
-  updateNovel(idx, data) {
-    if (this.state.novels[idx]) {
-      this.state.novels[idx] = { ...this.state.novels[idx], ...data };
+  async updateNovel(idx, data) {
+    const novel = this.state.novels[idx];
+    if (novel) {
+      Object.assign(novel, data);
       this.save();
+      
+      if (novel.id) {
+        // خريطة تحويل الأسماء من Frontend لـ Database
+        const dbData = {};
+        if (data.title) dbData.title = data.title;
+        if (data.author) dbData.author_name = data.author;
+        if (data.description) dbData.description = data.description;
+        if (data.cover) dbData.cover_url = data.cover;
+        if (data.status) dbData.status = data.status;
+        if (data.genres) dbData.genres = data.genres;
+        
+        await supabase.from('mw_novels').update(dbData).eq('id', novel.id);
+      }
+      
       this.notify();
     }
   },
@@ -144,13 +251,21 @@ const Store = {
     }
   },
 
-  deleteNovel(idx) {
+  async deleteNovel(idx) {
+    const novelToDelete = this.state.novels[idx];
+    
     if (this.state.novels.length > 1) {
       this.state.novels.splice(idx, 1);
       if (this.state.activeNovelIdx >= this.state.novels.length) {
         this.state.activeNovelIdx = this.state.novels.length - 1;
       }
       this.save();
+      
+      // حذف من السحاب
+      if (novelToDelete && novelToDelete.id) {
+        await supabase.from('mw_novels').delete().eq('id', novelToDelete.id);
+      }
+
       this.notify();
     }
   },
@@ -164,15 +279,31 @@ const Store = {
   },
 
   // --- إدارة الفصول (Chapter Management) ---
-  addChapter() {
+  async addChapter() {
     if (this.activeNovel) {
-      const idx = this.activeNovel.chapters.push({
+      const newCh = {
         title: 'فصل ' + (this.activeNovel.chapters.length + 1),
         content: '',
-        views: 0
-      }) - 1;
+        views: 0,
+        sort_order: this.activeNovel.chapters.length
+      };
+      
+      const idx = this.activeNovel.chapters.push(newCh) - 1;
       this.activeNovel.activeChapterIdx = idx;
       this.save();
+
+      // مزامنة الفصل مع السيرفر
+      if (this.activeNovel.id) {
+        const { data, error } = await supabase.from('mw_chapters').insert({
+           novel_id: this.activeNovel.id,
+           title: newCh.title,
+           content: newCh.content,
+           sort_order: newCh.sort_order
+        }).select().single();
+        
+        if (data) this.activeNovel.chapters[idx].id = data.id;
+      }
+
       this.notify('chapter-added');
     }
   },
@@ -182,28 +313,40 @@ const Store = {
       const ch = this.activeNovel.chapters[idx];
       ch.views = (ch.views || 0) + 1;
       
-      // تسجيل المشاهدة بالتاريخ المحلي للحسابات الزمنية بدقة
+      // تسجيل المشاهدة محلياً
       const now = new Date();
       const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-      
       if (!ch.viewLog) ch.viewLog = {};
       ch.viewLog[today] = (ch.viewLog[today] || 0) + 1;
       
       this.save();
+      
+      // مزامنة المشاهدة مع السيرفر (يمكن عملها بـ RPC لاحقاً لزيادة العداد)
+      if (ch.id) {
+        supabase.from('mw_chapters').update({ views: ch.views }).eq('id', ch.id).then();
+      }
     }
   },
 
-  updateChapter(idx, data) {
+  async updateChapter(idx, data) {
     if (this.activeNovel && this.activeNovel.chapters[idx]) {
-      Object.assign(this.activeNovel.chapters[idx], data);
+      const ch = this.activeNovel.chapters[idx];
+      Object.assign(ch, data);
       this.save();
+
+      if (ch.id) {
+        await supabase.from('mw_chapters').update(data).eq('id', ch.id);
+      }
+      
       this.notify();
     }
   },
 
-  deleteChapter(idx) {
+  async deleteChapter(idx) {
     if (this.activeNovel) {
       const chs = this.activeNovel.chapters;
+      const chToDelete = chs[idx];
+      
       if (chs.length === 1) {
         chs[0] = { title: 'فصل 1', content: '' };
       } else {
@@ -213,6 +356,12 @@ const Store = {
         }
       }
       this.save();
+
+      // حذف من السيرفر
+      if (chToDelete && chToDelete.id) {
+        await supabase.from('mw_chapters').delete().eq('id', chToDelete.id);
+      }
+
       this.notify();
     }
   },
@@ -306,6 +455,10 @@ const Store = {
     this.listeners.forEach(cb => cb(event));
   }
 };
+
+// إتاحة الـ Store عالمياً للملفات غير الموديول
+window.Store = Store;
+export default Store;
 
 // تهيئة العقل المركزي فور تحميل الملف
 Store.init();
